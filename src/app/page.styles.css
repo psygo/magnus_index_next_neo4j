@@ -1,0 +1,16 @@
+#explore-form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+
+  & input {
+    padding: 10px;
+  }
+
+  & button {
+    max-width: max-content;
+    padding: 5px;
+    padding-left: 7.5px;
+    padding-right: 7.5px;
+  }
+}
