@@ -1,7 +1,19 @@
 {
   "name": "web_graph_explorer",
-  "version": "0.1.0",
+  "version": "0.0.1",
   "private": true,
+  "description": "Expore the Web with 3D Graphs!",
+  "author": "Philippe Fanaro",
+  "contributors": [
+    {
+      "name": "Philippe Fanaro",
+      "email": "philippefanaro@gmail.com"
+    }
+  ],
+  "license": "ISC",
+  "keywords": [
+    "graph"
+  ],
   "scripts": {
     "dev": "next dev",
     "build": "next build",
