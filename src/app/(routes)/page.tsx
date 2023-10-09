@@ -15,8 +15,15 @@ export default function Home() {
       setIsSubmitted(true);
 
       const res = await fetch(
-        "http://localhost:3000/api/web-scrape"
+        "http://localhost:3000/api/scrape",
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+        }
       );
+      const data = await res.json();
+
+      console.log(data);
     }
   }
 

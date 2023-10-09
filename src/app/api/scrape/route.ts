@@ -20,8 +20,11 @@ export async function POST() {
 
     return NextResponse.json({ links }, { status: 201 });
   } catch (e) {
-    return new NextResponse("Not able to get the data", {
-      status: 204,
-    });
+    return new NextResponse(
+      "Not able to scrape the website",
+      {
+        status: 204,
+      }
+    );
   }
 }
