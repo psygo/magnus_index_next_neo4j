@@ -18,21 +18,19 @@ async function recursiveExploreWebsite(
   level: number = 1,
   graph: Graph = { nodes: [], edges: [] }
 ) {
-  if (level < 3 && link.includes("https://fanaro.io")) {
+  if (level < 5 && link.includes("https://fanaro.io")) {
     console.log(level);
     console.log(link);
 
     const page = await browser.newPage();
-    await page.goto(link, {
-      waitUntil: "networkidle0",
-    });
+    await page.goto(link, {});
 
     const newLinks = await page.evaluate(() =>
       Array.from(document.links).map((l) => l.href)
     );
-    const slicedNewLinks = newLinks.slice(0, 5);
+    const slicedNewLinks = newLinks.slice(0, 20);
 
-    const newEdges = newLinks.map((l) => [link, l]);
+    const newEdges = slicedNewLinks.map((l) => [link, l]);
     const mergedNodes = _.merge(
       graph.nodes,
       slicedNewLinks
@@ -62,17 +60,21 @@ export async function POST() {
       headless: "new",
     });
 
-    const graph = await recursiveExploreWebsite(
+    const graph: Graph = {
+      nodes: [],
+      edges: [],
+    };
+
+    const g = await recursiveExploreWebsite(
       "https://fanaro.io",
-      browser
+      browser,
+      1,
+      graph
     );
 
     await browser.close();
 
-    return NextResponse.json(
-      { data: graph },
-      { status: 201 }
-    );
+    return NextResponse.json({ data: g }, { status: 201 });
   } catch (e) {
     return new NextResponse(
       "Not able to scrape the website",
