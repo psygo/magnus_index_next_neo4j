@@ -1,28 +1,27 @@
 import { NextResponse } from "next/server";
 
 import { neo4jSession } from "../../lib/db";
+import {
+  getAllNodes,
+  getAllRelationships,
+} from "../../lib/neo4j_utils";
 
 export async function GET() {
   try {
-  } catch (e) {
-    console.error(e);
-  }
-}
-
-export async function POST() {
-  try {
-    await neo4jSession.executeWrite((tx) => {
+    const results = await neo4jSession.executeRead((tx) => {
       return tx.run(/* cypher */ `
-        CREATE (dumbo:Person:Actor{name: 'Dumbo'});
+        MATCH  (n)-[r]-(m)
+        RETURN  n,  r,  m
       `);
     });
 
-    return NextResponse.json({ data: "created" });
+    const nodes = getAllNodes(results);
+    const links = getAllRelationships(results);
+
+    return NextResponse.json({ nodes, links });
   } catch (e) {
     console.error(e);
 
-    return new NextResponse("Not able to create item", {
-      status: 500,
-    });
+    return new NextResponse("Error retrieving graph");
   }
 }
