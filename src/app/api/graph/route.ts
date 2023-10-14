@@ -2,6 +2,13 @@ import { NextResponse } from "next/server";
 
 import { neo4jSession } from "../../lib/db";
 
+export async function GET() {
+  try {
+  } catch (e) {
+    console.error(e);
+  }
+}
+
 export async function POST() {
   try {
     await neo4jSession.executeWrite((tx) => {
@@ -9,7 +16,7 @@ export async function POST() {
         CREATE (dumbo:Person:Actor{name: 'Dumbo'});
       `);
     });
-    
+
     return NextResponse.json({ data: "created" });
   } catch (e) {
     console.error(e);
