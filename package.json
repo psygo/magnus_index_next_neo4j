@@ -1,8 +1,8 @@
 {
-  "name": "web_graph_explorer",
+  "name": "magnus_index_next_neo4j",
   "version": "0.0.1",
   "private": true,
-  "description": "Expore the Web with 3D Graphs!",
+  "description": "Magnus Index with NextJS and Neo4j",
   "author": "Philippe Fanaro",
   "contributors": [
     {
@@ -12,7 +12,8 @@
   ],
   "license": "ISC",
   "keywords": [
-    "graph"
+    "graph",
+    "index"
   ],
   "scripts": {
     "dev": "next dev",

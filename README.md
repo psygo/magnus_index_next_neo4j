@@ -1,8 +1,8 @@
-# Web Graph Explorer
+# Magnus Index with NextJS and Neo4j
 
-Explore websites with graphs.
+## Previous Versions of Magnus Index
 
-## References
-
-- Can't web scrape from the client due to cross-site scripting (CORS): [How to Webscrape from React Client with `<script>`s Being Run?](https://stackoverflow.com/q/77254048/4756173)
-- [React Force 3D](https://github.com/vasturiano/react-force-graph)
+- [No Framework](https://github.com/psygo/magnus-index-archive)
+- [Rust + SolidJS](https://github.com/psygo/magnus-index-rs-solid)
+- [PostgreSQL + React](https://github.com/psygo/magnus_index_pg)
+- [React + Express + Neo4j](https://github.com/psygo/magnus_index_neo4j)
