@@ -1,5 +1,11 @@
 # Magnus Index with NextJS and Neo4j
 
+## The Current Stack
+
+- NextJS (React)
+- Neo4j
+- [React Force Graph](https://github.com/vasturiano/react-force-graph)
+
 ## Previous Versions of Magnus Index
 
 - [No Framework](https://github.com/psygo/magnus-index-archive)
