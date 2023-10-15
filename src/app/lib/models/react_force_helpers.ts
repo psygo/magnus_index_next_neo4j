@@ -1,5 +1,5 @@
 export type NodeObject<NodeType = {}> = NodeType & {
-  id?: string | number;
+  id: string | number;
   x?: number;
   y?: number;
   z?: number;
@@ -16,8 +16,8 @@ export type LinkObject<
   NodeType = {},
   LinkType = {}
 > = LinkType & {
-  source?: string | number | NodeObject<NodeType>;
-  target?: string | number | NodeObject<NodeType>;
+  source: string | number | NodeObject<NodeType>;
+  target: string | number | NodeObject<NodeType>;
   [others: string]: any;
 };
 

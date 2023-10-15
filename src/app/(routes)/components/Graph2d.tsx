@@ -1,12 +1,12 @@
 import { useCallback, useMemo, useState } from "react";
+
+import ForceGraph2D from "react-force-graph-2d";
+
 import {
   GraphProps,
   NodeObject,
-} from "../../lib/models/react_force_helpers";
-
-import ForceGraph2D, {
   LinkObject,
-} from "react-force-graph-2d";
+} from "../../lib/models/react_force_helpers";
 
 const NODE_R = 8;
 
@@ -14,7 +14,6 @@ export function Graph2d({ data }: GraphProps) {
   const dataD = useMemo(() => {
     const gData = data;
 
-    // cross-link node objects
     gData.links.forEach((link) => {
       const a = gData.nodes.filter(
         (n) => n.id === link.source
@@ -22,6 +21,7 @@ export function Graph2d({ data }: GraphProps) {
       const b = gData.nodes.filter(
         (n) => n.id === link.target
       )[0];
+
       !a.neighbors && (a.neighbors = []);
       !b.neighbors && (b.neighbors = []);
       a.neighbors.push(b);
@@ -37,12 +37,12 @@ export function Graph2d({ data }: GraphProps) {
   }, [data]);
 
   const [highlightNodes, setHighlightNodes] = useState(
-    new Set()
+    new Set<NodeObject>()
   );
   const [highlightLinks, setHighlightLinks] = useState(
-    new Set()
+    new Set<LinkObject>()
   );
-  const [hoverNode, setHoverNode] = useState(null);
+  const [hoverNode, setHoverNode] = useState<NodeObject>();
 
   const updateHighlight = () => {
     setHighlightNodes(highlightNodes);
@@ -52,6 +52,7 @@ export function Graph2d({ data }: GraphProps) {
   const handleNodeHover = (node: NodeObject) => {
     highlightNodes.clear();
     highlightLinks.clear();
+
     if (node) {
       highlightNodes.add(node);
       node.neighbors.forEach((neighbor: NodeObject) =>
@@ -62,7 +63,6 @@ export function Graph2d({ data }: GraphProps) {
       );
     }
 
-    // @ts-ignore
     setHoverNode(node || null);
     updateHighlight();
   };
@@ -73,7 +73,9 @@ export function Graph2d({ data }: GraphProps) {
 
     if (link) {
       highlightLinks.add(link);
+      // @ts-ignore
       highlightNodes.add(link.source);
+      // @ts-ignore
       highlightNodes.add(link.target);
     }
 
@@ -82,7 +84,6 @@ export function Graph2d({ data }: GraphProps) {
 
   const paintRing = useCallback(
     (node: NodeObject, ctx: any) => {
-      // add ring just for highlighted nodes
       ctx.beginPath();
       ctx.arc(
         node.x,
