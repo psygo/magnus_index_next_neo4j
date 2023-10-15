@@ -2,9 +2,10 @@
 
 import { useEffect, useState } from "react";
 
-import ForceGraph3D from "react-force-graph-3d";
+import { Graph3d } from "../api/graph/components/Graph3d";
+import { Graph2d } from "../api/graph/components/Graph2d";
 
-export default function Page() {
+export function useGraphData() {
   const [data, setData] = useState();
 
   useEffect(() => {
@@ -20,9 +21,11 @@ export default function Page() {
     getGraphData();
   }, []);
 
-  return (
-    <main>
-      <ForceGraph3D graphData={data} />,
-    </main>
-  );
+  return data;
+}
+
+export default function Page() {
+  const data = useGraphData();
+
+  return <main>{data && <Graph2d data={data} />}</main>;
 }
