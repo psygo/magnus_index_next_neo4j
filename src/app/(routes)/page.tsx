@@ -2,7 +2,6 @@
 
 import { useEffect, useState } from "react";
 
-import { Graph3d } from "../api/graph/components/Graph3d";
 import { Graph2d } from "../api/graph/components/Graph2d";
 
 export function useGraphData() {
