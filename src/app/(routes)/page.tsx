@@ -2,16 +2,19 @@
 
 import { useEffect, useState } from "react";
 
-import { Graph2d } from "../api/graph/components/Graph2d";
+import { API_URL } from "../lib/config/api_config";
+
+import { Graph2d } from "./components/Graph2d";
 
 export function useGraphData() {
   const [data, setData] = useState();
 
   useEffect(() => {
     async function getGraphData() {
-      const res = await fetch(
-        "http://localhost:3000/api/graph"
-      );
+      const res = await fetch(`${API_URL}/graph`, {
+        method: "GET",
+        headers: { "Content-Type": "application/json" },
+      });
       const data = await res.json();
 
       setData(data);
