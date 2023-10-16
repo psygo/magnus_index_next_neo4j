@@ -3,14 +3,13 @@
 # 0. Config
 
 @PORT={{$dotenv NEXTJS_PORT}}
-# @PORT=3000
 @LOCAL_ADDR=http://localhost:{{PORT}}
 
 ############################################################
 
 # 0. Misc
 
-###
+### 0.1. Health
 
 GET {{LOCAL_ADDR}}/api/health
 
@@ -18,8 +17,18 @@ GET {{LOCAL_ADDR}}/api/health
 
 # 1. Graph
 
-### Get Everything
+### 1.1. Get Everything
 
 GET {{LOCAL_ADDR}}/api/graph
+
+############################################################
+
+# 2. Items
+
+### 2.1. User's Items
+
+@USER_ID=3
+
+GET {{LOCAL_ADDR}}/api/items/{{USER_ID}}
 
 ############################################################
