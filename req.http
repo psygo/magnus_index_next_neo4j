@@ -25,10 +25,16 @@ GET {{LOCAL_ADDR}}/api/graph
 
 # 2. Items
 
-### 2.1. User's Items
+### 2.1. Get Item
+
+@ITEM_ID=1
+
+GET {{LOCAL_ADDR}}/api/items/{{ITEM_ID}}
+
+### 2.2. User's Items
 
 @USER_ID=3
 
-GET {{LOCAL_ADDR}}/api/items/{{USER_ID}}
+GET {{LOCAL_ADDR}}/api/items/users/{{USER_ID}}
 
 ############################################################

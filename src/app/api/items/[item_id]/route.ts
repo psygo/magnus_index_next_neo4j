@@ -9,21 +9,21 @@ import {
 
 export async function GET(req: NextRequest) {
   try {
-    const userId = req.nextUrl.href.split("/").at(-1);
+    const itemId = parseInt(
+      req.nextUrl.href.split("/").at(-1)!
+    );
 
     const itemsResults = await neo4jSession.executeRead(
       (tx) => {
         return tx.run(
           /* cypher */ `
-                MATCH  (u      :User)
-                      -[created:CREATED]->
-                       (item   :Item)
-                
-                WHERE id(u) = 3
+            MATCH (i:Item)
+            
+            WHERE id(i) = $itemId
 
-                RETURN u, created, item
-              `,
-          { userId }
+            RETURN i
+          `,
+          { itemId }
         );
       }
     );
