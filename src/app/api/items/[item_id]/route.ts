@@ -7,14 +7,21 @@ import {
   getAllRelationships,
 } from "../../../lib/utils/neo4j_utils";
 
+type GetItemParams = {
+  params: {
+    item_id: string;
+  };
+};
+
 /**
- * Item
+ * Get Item
  */
-export async function GET(req: NextRequest) {
+export async function GET(
+  _: NextRequest,
+  { params }: GetItemParams
+) {
   try {
-    const itemId = parseInt(
-      req.nextUrl.href.split("/").at(-1)!
-    );
+    const itemId = parseInt(params.item_id);
 
     const itemsResults = await neo4jSession.executeRead(
       (tx) => {

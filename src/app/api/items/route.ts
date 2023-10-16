@@ -3,6 +3,9 @@ import { NextRequest, NextResponse } from "next/server";
 import { neo4jSession } from "../../lib/config/db";
 import { getAllNodes } from "../../lib/utils/neo4j_utils";
 
+/**
+ * Create Item
+ */
 export async function POST(req: NextRequest) {
   try {
     const {
