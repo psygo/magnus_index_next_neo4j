@@ -15,21 +15,21 @@ export async function POST(req: NextRequest) {
       (tx) => {
         return tx.run(
           /* cypher */ `
-          MATCH  (u:User)
-          
-          WHERE id(u) = $userId
+            MATCH  (u:User)
+            
+            WHERE id(u) = $userId
 
-          CREATE (u)-[:CREATED]->(
-              i:Item{
-                  created_at: timestamp(),
-                  deleted:    FALSE,
-                  title:      $title,
-                  content:    $content
-              }
-          )
-          
-          RETURN i
-        `,
+            CREATE (u)-[:CREATED]->(
+                i:Item{
+                    created_at: timestamp(),
+                    deleted:    FALSE,
+                    title:      $title,
+                    content:    $content
+                }
+            )
+            
+            RETURN i
+          `,
           {
             userId,
             title,
