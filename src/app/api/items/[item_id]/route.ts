@@ -1,11 +1,11 @@
 import { NextRequest, NextResponse } from "next/server";
 
-import { neo4jSession } from "../../../lib/config/db";
+import { neo4jSession } from "@/lib/config/db";
 
 import {
   getAllNodes,
   getAllRelationships,
-} from "../../../lib/utils/neo4j_utils";
+} from "@/lib/utils/neo4j_utils";
 
 type GetItemParams = {
   params: {
@@ -47,7 +47,7 @@ export async function GET(
 
     return new NextResponse(
       "Couldn't get the user's items",
-      { status: 204 }
+      { status: 500 }
     );
   }
 }

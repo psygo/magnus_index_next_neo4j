@@ -41,11 +41,21 @@ GET {{LOCAL_ADDR}}/api/items/users/{{USER_ID}}
 
 POST {{LOCAL_ADDR}}/api/items
 Content-Type: "application/json"
+user_id: 4
 
 {
-    "user_id": 4,
     "title": "Test 1",
     "content": "This is a test item"
+}
+
+### 2.4. Connect Items
+
+POST {{LOCAL_ADDR}}/api/items/20/connections/21
+Content-Type: "application/json"
+user_id: 4
+
+{
+    "title": "Test Connection"
 }
 
 ############################################################

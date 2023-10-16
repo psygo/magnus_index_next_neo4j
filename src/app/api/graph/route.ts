@@ -6,6 +6,9 @@ import {
   getAllRelationships,
 } from "../../lib/utils/neo4j_utils";
 
+/**
+ * Get All Graph Nodes
+ */
 export async function GET() {
   try {
     const results = await neo4jSession.executeRead((tx) => {

@@ -1,24 +1,23 @@
 import { NextRequest, NextResponse } from "next/server";
 
-import { neo4jSession } from "../../lib/config/db";
-import { getAllNodes } from "../../lib/utils/neo4j_utils";
+import { neo4jSession } from "@/lib/config/db";
+
+import { getAllNodes } from "@/lib/utils/neo4j_utils";
 
 /**
  * Create Item
  */
 export async function POST(req: NextRequest) {
   try {
-    const {
-      user_id: userId,
-      title,
-      content,
-    } = await req.json();
+    const { title, content } = await req.json();
+
+    const userId = parseInt(req.headers.get("user_id")!);
 
     const results = await neo4jSession.executeWrite(
       (tx) => {
         return tx.run(
           /* cypher */ `
-            MATCH  (u:User)
+            MATCH (u:User)
             
             WHERE id(u) = $userId
 
