@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 
-import { API_URL } from "../lib/config/api_config";
+import { API_URL } from "@/lib/config/api_config";
 
 import { Graph2d } from "./components/Graph2d";
 

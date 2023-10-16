@@ -6,7 +6,7 @@ import ForceGraph3D, {
   NodeObject,
 } from "react-force-graph-3d";
 
-import { GraphProps } from "../../lib/models/react_force_helpers";
+import { GraphProps } from "@/lib/models/react_force_helpers";
 
 export function Graph3d({ data }: GraphProps) {
   const [highlightNodes, setHighlightNodes] = useState(

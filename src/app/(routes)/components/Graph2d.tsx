@@ -6,7 +6,7 @@ import {
   GraphProps,
   NodeObject,
   LinkObject,
-} from "../../lib/models/react_force_helpers";
+} from "@/lib/models/react_force_helpers";
 
 const NODE_R = 8;
 

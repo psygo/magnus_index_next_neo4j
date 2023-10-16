@@ -1,10 +1,11 @@
 import { NextResponse } from "next/server";
 
-import { neo4jSession } from "../../lib/config/db";
+import { neo4jSession } from "@/lib/config/db";
+
 import {
   getAllNodes,
   getAllRelationships,
-} from "../../lib/utils/neo4j_utils";
+} from "@/lib/utils/neo4j_utils";
 
 /**
  * Get All Graph Nodes
