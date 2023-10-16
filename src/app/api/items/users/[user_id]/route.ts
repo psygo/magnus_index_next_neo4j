@@ -7,6 +7,9 @@ import {
   getAllRelationships,
 } from "../../../../lib/utils/neo4j_utils";
 
+/**
+ * User's Items
+ */
 export async function GET(req: NextRequest) {
   try {
     const userId = parseInt(
