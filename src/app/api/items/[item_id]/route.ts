@@ -7,7 +7,7 @@ import {
   getAllRelationships,
 } from "@/lib/utils/neo4j_utils";
 
-type GetItemParams = {
+export type GetItemParams = {
   params: {
     item_id: string;
   };

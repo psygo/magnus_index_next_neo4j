@@ -50,13 +50,29 @@ user_id: 4
 
 ### 2.4. Connect Items
 
-POST {{LOCAL_ADDR}}/api/items/20/connections/21
+@CONNECTED_ITEM_ID=20
+@CONNECTEE_ITEM_ID=21
+
+POST {{LOCAL_ADDR}}/api/items/{{CONNECTED_ITEM_ID}}/connections/{{CONNECTEE_ITEM_ID}}
 Content-Type: "application/json"
 user_id: 4
 
 {
     "title": "Test Connection"
 }
+
+### 2.5. Get Item Votes
+
+@GET_VOTES_ITEM_ID=20
+
+GET {{LOCAL_ADDR}}/api/items/{{GET_VOTES_ITEM_ID}}/votes
+
+### 2.6. Post Item Vote
+
+@POST_VOTE_ITEM_ID=20
+
+POST {{LOCAL_ADDR}}/api/items/{{POST_VOTE_ITEM_ID}}/votes
+user_id: 3
 
 ############################################################
 
