@@ -59,3 +59,27 @@ user_id: 4
 }
 
 ############################################################
+
+# 3. Users
+
+### 3.1. Get All Users
+
+GET {{LOCAL_ADDR}}/api/users
+
+### 3.2. Get User
+
+@GET_USER_ID=3
+
+GET {{LOCAL_ADDR}}/api/users/{{GET_USER_ID}}
+
+### 3.3. Create User
+
+POST {{LOCAL_ADDR}}/api/users
+Content-Type: "application/json"
+
+{
+    "name": "Test User",
+    "email": "test@user.com"
+}
+
+############################################################
