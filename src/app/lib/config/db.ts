@@ -12,9 +12,6 @@ function neo4jSetup() {
 
   const remoteUser = process.env.AURA_USERNAME!;
   const remotePassword = process.env.AURA_PASSWORD!;
-  
-  console.log(remoteUser)
-  console.log(remotePassword)
 
   const driver = neo4j.driver(
     remoteUri,
