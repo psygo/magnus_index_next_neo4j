@@ -41,7 +41,7 @@ GET {{LOCAL_ADDR}}/api/items/users/{{USER_ID}}
 
 POST {{LOCAL_ADDR}}/api/items
 Content-Type: "application/json"
-user_id: 4
+user_id: 0
 
 {
     "title": "Test 1",
