@@ -98,4 +98,18 @@ Content-Type: "application/json"
     "email": "test@user.com"
 }
 
+### 3.4. Get User Follows
+
+@GET_FOLLOWS_USER_ID=3
+
+GET {{LOCAL_ADDR}}/api/users/{{GET_FOLLOWS_USER_ID}}/follows
+
+### 3.5. Create Follow
+
+@FOLLOWED_USER_ID=3
+@FOLLOWER_USER_ID=4
+
+POST {{LOCAL_ADDR}}/api/users/{{FOLLOWED_USER_ID}}/follows
+user_id: {{FOLLOWER_USER_ID}}
+
 ############################################################

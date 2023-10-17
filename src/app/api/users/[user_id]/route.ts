@@ -7,7 +7,7 @@ import {
   getAllRelationships,
 } from "@/lib/utils/neo4j_utils";
 
-type UserParams = {
+export type UserParams = {
   params: {
     user_id: string;
   };
