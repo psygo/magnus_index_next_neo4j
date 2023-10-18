@@ -7,6 +7,18 @@ import ForceGraph2D, {
   LinkObject,
   NodeObject,
 } from "react-force-graph-2d";
+import {
+  Connection,
+  Item,
+  NodeBase,
+  User,
+} from "../../lib/models/graph";
+import {
+  ConnectionFloatingText,
+  ItemFloatingText,
+  UserFloatingText,
+  WhichHoverFloating,
+} from "./Floating";
 
 const NODE_R = 8;
 
@@ -69,6 +81,7 @@ export function Graph2d({ data }: GraphProps) {
     };
 
     if (node) {
+      document.body.style.cursor = "pointer"
       canvas.addEventListener(
         "mousemove",
         updateHoverNodePos
@@ -82,6 +95,7 @@ export function Graph2d({ data }: GraphProps) {
         highlightLinks.add(link)
       );
     } else {
+      document.body.style.cursor = "auto"
       canvas.removeEventListener(
         "mousemove",
         updateHoverNodePos
@@ -136,13 +150,22 @@ export function Graph2d({ data }: GraphProps) {
             p: 2,
           }}
         >
-          <Typography>{hoverNode.labels}</Typography>
+          <WhichHoverFloating hoverNode={hoverNode} />
         </Paper>
       ) : null}
       <Box sx={{ position: "absolute" }}>
         <ForceGraph2D
           graphData={dataMemo}
           nodeRelSize={NODE_R}
+          nodeColor={(node) => {
+            const n = node as NodeObject<NodeBase>;
+
+            return n.labels.includes("User")
+              ? "purple"
+              : n.labels.includes("Item")
+              ? "green"
+              : "blue";
+          }}
           autoPauseRedraw={false}
           linkWidth={(link) =>
             highlightLinks.has(link) ? 5 : 1
