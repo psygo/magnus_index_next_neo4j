@@ -4,6 +4,12 @@ import { useGraphData } from "./utils/use_graph_data";
 
 import dynamic from "next/dynamic";
 
+/**
+ * References:
+ * 
+ * - [React Force Graph Issue #136](https://github.com/vasturiano/react-force-graph/issues/136)
+ * - [NextJS Issue #33848](https://github.com/vercel/next.js/issues/33848)
+ */
 const NoSSRForceGraph2D = dynamic(
   () =>
     import("./components/Graph2d").then(

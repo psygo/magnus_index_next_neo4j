@@ -1,21 +1,33 @@
 import * as neo4j from "neo4j-driver";
 
-function neo4jSetup() {
-  const neo4jPort = parseInt(process.env.NEO4J_PORT!);
-  const uri = `neo4j://localhost:${neo4jPort}`;
+import { Env } from "./env";
 
-  const remoteUriPrefix = "neo4j+s://";
-  const remoteUri = `${remoteUriPrefix}2a8bc089.databases.neo4j.io:7687`;
+function getUriUserAndPassword(env: Env = Env.Dev) {
+  switch (env) {
+    case Env.Dev:
+      const neo4jPort = parseInt(process.env.NEO4J_PORT!);
+      return {
+        uri: `neo4j://localhost:${neo4jPort}`,
+        user: process.env.NEO4J_USER!,
+        password: process.env.NEO4J_PASSWORD!,
+      };
+    case Env.Prod:
+      const remoteUriPrefix = "neo4j+s://";
+      return {
+        uri: `${remoteUriPrefix}2a8bc089.databases.neo4j.io:7687`,
+        user: process.env.AURA_USERNAME!,
+        password: process.env.AURA_PASSWORD!,
+      };
+  }
+}
 
-  const user = process.env.NEO4J_USER!;
-  const password = process.env.NEO4J_PASSWORD!;
-
-  const remoteUser = process.env.AURA_USERNAME!;
-  const remotePassword = process.env.AURA_PASSWORD!;
+function neo4jSetup(env: Env = Env.Dev) {
+  const { uri, user, password } =
+    getUriUserAndPassword(env);
 
   const driver = neo4j.driver(
-    remoteUri,
-    neo4j.auth.basic(remoteUser, remotePassword)
+    uri,
+    neo4j.auth.basic(user, password)
   );
   const session = driver.session();
 
