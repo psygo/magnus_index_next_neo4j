@@ -71,6 +71,13 @@ export function Graph2d({ data }: GraphProps) {
     setHighlightLinks(highlightLinks);
   }
 
+  const [clickedNode, setClickedNode] =
+    useState<NodeObject<{}> | null>();
+
+  function handleNodeClick(node: NodeObject | null) {
+    setClickedNode(node);
+  }
+
   function handleNodeHover(node: NodeObject | null) {
     highlightNodes.clear();
     highlightLinks.clear();
@@ -81,7 +88,7 @@ export function Graph2d({ data }: GraphProps) {
     };
 
     if (node) {
-      document.body.style.cursor = "pointer"
+      document.body.style.cursor = "pointer";
       canvas.addEventListener(
         "mousemove",
         updateHoverNodePos
@@ -95,7 +102,7 @@ export function Graph2d({ data }: GraphProps) {
         highlightLinks.add(link)
       );
     } else {
-      document.body.style.cursor = "auto"
+      document.body.style.cursor = "auto";
       canvas.removeEventListener(
         "mousemove",
         updateHoverNodePos
@@ -120,20 +127,25 @@ export function Graph2d({ data }: GraphProps) {
   }
 
   const paintRing = useCallback(
-    (node: NodeObject, ctx: any) => {
+    (node: NodeObject, ctx: CanvasRenderingContext2D) => {
       ctx.beginPath();
       ctx.arc(
-        node.x,
-        node.y,
+        node.x!,
+        node.y!,
         NODE_R * 1.4,
         0,
         2 * Math.PI,
         false
       );
-      ctx.fillStyle = node === hoverNode ? "red" : "orange";
+      if (clickedNode)
+        ctx.fillStyle =
+          node === clickedNode ? "black" : "transparent";
+      else
+        ctx.fillStyle =
+          node === hoverNode ? "red" : "orange";
       ctx.fill();
     },
-    [hoverNode]
+    [hoverNode, clickedNode]
   );
 
   return (
@@ -174,12 +186,15 @@ export function Graph2d({ data }: GraphProps) {
           linkDirectionalParticleWidth={(link) =>
             highlightLinks.has(link) ? 4 : 0
           }
-          nodeCanvasObjectMode={(node) =>
-            highlightNodes.has(node) ? "before" : undefined
-          }
+          nodeCanvasObjectMode={(node) => {
+            if (highlightNodes.has(node)) return "before";
+            else if (clickedNode) return "after";
+            else return "undefined";
+          }}
           nodeCanvasObject={paintRing}
           onNodeHover={handleNodeHover}
           onLinkHover={handleLinkHover}
+          onNodeClick={handleNodeClick}
         />
       </Box>
     </Box>
