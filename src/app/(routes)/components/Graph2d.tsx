@@ -1,24 +1,17 @@
 import { useCallback, useMemo, useState } from "react";
 
-import { Box, Paper, Typography } from "@mui/material";
+import { Box, Button, Paper, Stack } from "@mui/material";
 
 import ForceGraph2D, {
   GraphData,
   LinkObject,
   NodeObject,
 } from "react-force-graph-2d";
-import {
-  Connection,
-  Item,
-  NodeBase,
-  User,
-} from "../../lib/models/graph";
-import {
-  ConnectionFloatingText,
-  ItemFloatingText,
-  UserFloatingText,
-  WhichHoverFloating,
-} from "./Floating";
+
+import { NodeBase } from "../../lib/models/graph";
+
+import { WhichHoverFloating } from "./Floating";
+import { API_URL } from "../../lib/config/api_config";
 
 const NODE_R = 8;
 
@@ -171,8 +164,63 @@ export function Graph2d({ data }: GraphProps) {
     [hoverNode, lastClickedNode, clickedNodes]
   );
 
+  async function connectTwoItems() {
+    const id1 = (clickedNodes[0]!.id as string)
+      .split(":")
+      .at(-1);
+    const id2 = (clickedNodes[1]!.id as string)
+      .split(":")
+      .at(-1);
+
+    const res = await fetch(
+      `${API_URL}/items/${id1}/connections/${id2}`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          user_id: "4",
+        },
+        body: JSON.stringify({
+          title: "Test from Frontend",
+        }),
+      }
+    );
+
+    const json = await res.json();
+
+    console.log(json);
+  }
+
   return (
     <Box>
+      <Stack
+        sx={{
+          position: "absolute",
+          display: clickedNodes[1] ? "block" : "none",
+          top: 10,
+          right: 10,
+          zIndex: 10,
+          maxWidth: "300px",
+          p: 2,
+        }}
+        spacing={2}
+      >
+        {clickedNodes[1] ? (
+          <Paper>
+            <WhichHoverFloating
+              hoverNode={clickedNodes[1]}
+            />
+          </Paper>
+        ) : null}
+        {clickedNodes[0] ? (
+          <Paper>
+            <WhichHoverFloating
+              hoverNode={clickedNodes[0]}
+            />
+          </Paper>
+        ) : null}
+        <Button onClick={connectTwoItems}>+</Button>
+      </Stack>
       {hoverNode ? (
         <Paper
           sx={{
