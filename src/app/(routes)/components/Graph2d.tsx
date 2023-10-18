@@ -1,24 +1,26 @@
 import { useCallback, useMemo, useState } from "react";
 
-import ForceGraph2D from "react-force-graph-2d";
-
-import {
-  GraphProps,
-  NodeObject,
+import ForceGraph2D, {
+  GraphData,
   LinkObject,
-} from "@/lib/models/react_force_helpers";
+  NodeObject,
+} from "react-force-graph-2d";
 
 const NODE_R = 8;
 
-export function Graph2d({ data }: GraphProps) {
-  const dataD = useMemo(() => {
-    const gData = data;
+type GraphProps = {
+  data: GraphData;
+};
 
-    gData.links.forEach((link) => {
-      const a = gData.nodes.filter(
+export function Graph2d({ data }: GraphProps) {
+  const dataMemo = useMemo(() => {
+    const dataWithNeighbors = data;
+
+    dataWithNeighbors.links.forEach((link) => {
+      const a = dataWithNeighbors.nodes.filter(
         (n) => n.id === link.source
       )[0];
-      const b = gData.nodes.filter(
+      const b = dataWithNeighbors.nodes.filter(
         (n) => n.id === link.target
       )[0];
 
@@ -33,23 +35,24 @@ export function Graph2d({ data }: GraphProps) {
       b.links.push(link);
     });
 
-    return gData;
+    return dataWithNeighbors;
   }, [data]);
 
   const [highlightNodes, setHighlightNodes] = useState(
-    new Set<NodeObject>()
+    new Set()
   );
   const [highlightLinks, setHighlightLinks] = useState(
     new Set<LinkObject>()
   );
-  const [hoverNode, setHoverNode] = useState<NodeObject>();
+  const [hoverNode, setHoverNode] =
+    useState<NodeObject | null>();
 
-  const updateHighlight = () => {
+  function updateHighlight() {
     setHighlightNodes(highlightNodes);
     setHighlightLinks(highlightLinks);
-  };
+  }
 
-  const handleNodeHover = (node: NodeObject) => {
+  function handleNodeHover(node: NodeObject | null) {
     highlightNodes.clear();
     highlightLinks.clear();
 
@@ -65,22 +68,20 @@ export function Graph2d({ data }: GraphProps) {
 
     setHoverNode(node || null);
     updateHighlight();
-  };
+  }
 
-  const handleLinkHover = (link: LinkObject) => {
+  function handleLinkHover(link: LinkObject | null) {
     highlightNodes.clear();
     highlightLinks.clear();
 
     if (link) {
       highlightLinks.add(link);
-      // @ts-ignore
       highlightNodes.add(link.source);
-      // @ts-ignore
       highlightNodes.add(link.target);
     }
 
     updateHighlight();
-  };
+  }
 
   const paintRing = useCallback(
     (node: NodeObject, ctx: any) => {
@@ -101,7 +102,7 @@ export function Graph2d({ data }: GraphProps) {
 
   return (
     <ForceGraph2D
-      graphData={dataD}
+      graphData={dataMemo}
       nodeRelSize={NODE_R}
       autoPauseRedraw={false}
       linkWidth={(link) =>
@@ -115,9 +116,7 @@ export function Graph2d({ data }: GraphProps) {
         highlightNodes.has(node) ? "before" : undefined
       }
       nodeCanvasObject={paintRing}
-      // @ts-ignore
       onNodeHover={handleNodeHover}
-      // @ts-ignore
       onLinkHover={handleLinkHover}
     />
   );
