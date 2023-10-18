@@ -71,11 +71,33 @@ export function Graph2d({ data }: GraphProps) {
     setHighlightLinks(highlightLinks);
   }
 
-  const [clickedNode, setClickedNode] =
+  const [lastClickedNode, setLastClickedNode] =
     useState<NodeObject<{}> | null>();
+  const [clickedNodes, setClickedNodes] = useState<
+    [NodeObject<{}> | null, NodeObject<{}> | null]
+  >([null, null]);
+
+  function whereToPutNewlyClickedNode() {
+    if (
+      (clickedNodes[0] === null &&
+        clickedNodes[1] === null) ||
+      (clickedNodes[0] !== null && clickedNodes[1] !== null)
+    ) {
+      return 0;
+    } else if (clickedNodes[0] !== null) {
+      return 1;
+    } else return 0;
+  }
 
   function handleNodeClick(node: NodeObject | null) {
-    setClickedNode(node);
+    setLastClickedNode(node);
+
+    clickedNodes.push(node);
+    const newClickedNodes = clickedNodes.slice(1) as [
+      NodeObject<{}> | null,
+      NodeObject<{}> | null
+    ];
+    setClickedNodes(newClickedNodes);
   }
 
   function handleNodeHover(node: NodeObject | null) {
@@ -137,15 +159,16 @@ export function Graph2d({ data }: GraphProps) {
         2 * Math.PI,
         false
       );
-      if (clickedNode)
-        ctx.fillStyle =
-          node === clickedNode ? "black" : "transparent";
+      if (lastClickedNode)
+        ctx.fillStyle = clickedNodes.includes(node)
+          ? "black"
+          : "transparent";
       else
         ctx.fillStyle =
           node === hoverNode ? "red" : "orange";
       ctx.fill();
     },
-    [hoverNode, clickedNode]
+    [hoverNode, lastClickedNode, clickedNodes]
   );
 
   return (
@@ -188,7 +211,7 @@ export function Graph2d({ data }: GraphProps) {
           }
           nodeCanvasObjectMode={(node) => {
             if (highlightNodes.has(node)) return "before";
-            else if (clickedNode) return "after";
+            else if (lastClickedNode) return "after";
             else return "undefined";
           }}
           nodeCanvasObject={paintRing}
