@@ -41,7 +41,7 @@ export async function POST(
             
             CREATE   (i)
                     -[connected:CONNECTED]
-                   ->(c:CONNECTION{
+                   ->(c:Connection{
                         created_at: timestamp(),
                         deleted:    FALSE,
                         title:      $title

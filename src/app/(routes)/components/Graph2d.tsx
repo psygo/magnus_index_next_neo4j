@@ -1,5 +1,7 @@
 import { useCallback, useMemo, useState } from "react";
 
+import { Box, Paper, Typography } from "@mui/material";
+
 import ForceGraph2D, {
   GraphData,
   LinkObject,
@@ -45,7 +47,12 @@ export function Graph2d({ data }: GraphProps) {
     new Set<LinkObject>()
   );
   const [hoverNode, setHoverNode] =
-    useState<NodeObject | null>();
+    useState<NodeObject<{}> | null>();
+
+  const [hoverNodePos, setHoverNodePos] = useState<{
+    x: number;
+    y: number;
+  }>({ x: 0, y: 0 });
 
   function updateHighlight() {
     setHighlightNodes(highlightNodes);
@@ -56,13 +63,28 @@ export function Graph2d({ data }: GraphProps) {
     highlightNodes.clear();
     highlightLinks.clear();
 
+    const canvas = document.body.querySelector("canvas")!;
+    const updateHoverNodePos = (e: MouseEvent) => {
+      setHoverNodePos({ x: e.clientX!, y: e.clientY! });
+    };
+
     if (node) {
+      canvas.addEventListener(
+        "mousemove",
+        updateHoverNodePos
+      );
+
       highlightNodes.add(node);
       node.neighbors.forEach((neighbor: NodeObject) =>
         highlightNodes.add(neighbor)
       );
       node.links.forEach((link: LinkObject) =>
         highlightLinks.add(link)
+      );
+    } else {
+      canvas.removeEventListener(
+        "mousemove",
+        updateHoverNodePos
       );
     }
 
@@ -101,23 +123,42 @@ export function Graph2d({ data }: GraphProps) {
   );
 
   return (
-    <ForceGraph2D
-      graphData={dataMemo}
-      nodeRelSize={NODE_R}
-      autoPauseRedraw={false}
-      linkWidth={(link) =>
-        highlightLinks.has(link) ? 5 : 1
-      }
-      linkDirectionalParticles={4}
-      linkDirectionalParticleWidth={(link) =>
-        highlightLinks.has(link) ? 4 : 0
-      }
-      nodeCanvasObjectMode={(node) =>
-        highlightNodes.has(node) ? "before" : undefined
-      }
-      nodeCanvasObject={paintRing}
-      onNodeHover={handleNodeHover}
-      onLinkHover={handleLinkHover}
-    />
+    <Box>
+      {hoverNode ? (
+        <Paper
+          sx={{
+            position: "absolute",
+            display: hoverNode ? "block" : "none",
+            top: hoverNodePos!.y - 60,
+            left: hoverNodePos!.x + 15,
+            zIndex: 10,
+            maxWidth: "300px",
+            p: 2,
+          }}
+        >
+          <Typography>{hoverNode.labels}</Typography>
+        </Paper>
+      ) : null}
+      <Box sx={{ position: "absolute" }}>
+        <ForceGraph2D
+          graphData={dataMemo}
+          nodeRelSize={NODE_R}
+          autoPauseRedraw={false}
+          linkWidth={(link) =>
+            highlightLinks.has(link) ? 5 : 1
+          }
+          linkDirectionalParticles={4}
+          linkDirectionalParticleWidth={(link) =>
+            highlightLinks.has(link) ? 4 : 0
+          }
+          nodeCanvasObjectMode={(node) =>
+            highlightNodes.has(node) ? "before" : undefined
+          }
+          nodeCanvasObject={paintRing}
+          onNodeHover={handleNodeHover}
+          onLinkHover={handleLinkHover}
+        />
+      </Box>
+    </Box>
   );
 }
