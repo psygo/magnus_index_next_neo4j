@@ -13,6 +13,7 @@ import { API_URL } from "../../lib/config/api_config";
 import { LinkBase, NodeBase } from "../../lib/models/graph";
 
 import { WhichHoverFloating } from "./Floating";
+import _ from "lodash";
 
 const NODE_R = 8;
 
@@ -26,30 +27,36 @@ type GraphProps = {
 };
 
 export function Graph2d({ data }: GraphProps) {
+  const [gData, setGData] = useState(data);
+
   const dataMemo = useMemo(() => {
-    const dataWithNeighbors = data;
+    const dataWithNeighbors = gData;
 
     dataWithNeighbors.links.forEach((link) => {
       const a = dataWithNeighbors.nodes.filter(
-        (n) => n.id === link.source
+        (n) =>
+          // @ts-ignore
+          n.id === link.source || n.id === link.source!.id
       )[0];
       const b = dataWithNeighbors.nodes.filter(
-        (n) => n.id === link.target
+        (n) =>
+          // @ts-ignore
+          n.id === link.target || n.id === link.source!.id
       )[0];
 
-      !a.neighbors && (a.neighbors = []);
-      !b.neighbors && (b.neighbors = []);
+      if (a.neighbors === undefined) a.neighbors = [];
+      if (b.neighbors === undefined) b.neighbors = [];
       a.neighbors.push(b);
       b.neighbors.push(a);
 
-      !a.links && (a.links = []);
-      !b.links && (b.links = []);
+      if (a.links === undefined) a.links = [];
+      if (b.links === undefined) b.links = [];
       a.links.push(link);
       b.links.push(link);
     });
 
     return dataWithNeighbors;
-  }, [data]);
+  }, [gData]);
 
   const [highlightNodes, setHighlightNodes] = useState(
     new Set<NodeObject<NodeBase> | string | number>()
@@ -167,6 +174,40 @@ export function Graph2d({ data }: GraphProps) {
     [hoverNode, lastClickedNode, clickedNodes]
   );
 
+  const handleConnectTwoItems = useCallback(async () => {
+    const id1 = (clickedNodes[0]!.id as string)
+      .split(":")
+      .at(-1);
+    const id2 = (clickedNodes[1]!.id as string)
+      .split(":")
+      .at(-1);
+
+    const res = await fetch(
+      `${API_URL}/items/${id1}/connections/${id2}`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          user_id: "4",
+        },
+        body: JSON.stringify({
+          title: "Test from Frontend",
+        }),
+      }
+    );
+
+    const newData = await res.json();
+
+    const mergedData = {
+      nodes: _.unionBy(gData.nodes, newData.nodes, "id"),
+      links: _.unionBy(gData.links, newData.links, "id"),
+    };
+
+    console.log(mergedData);
+
+    setGData(mergedData);
+  }, [clickedNodes, gData, setGData]);
+
   async function connectTwoItems() {
     const id1 = (clickedNodes[0]!.id as string)
       .split(":")
@@ -189,41 +230,64 @@ export function Graph2d({ data }: GraphProps) {
       }
     );
 
-    const json = await res.json();
+    const newData = await res.json();
 
-    console.log(json);
+    const mergedData = {
+      nodes: _.unionBy(gData.nodes, newData.nodes, "id"),
+      links: _.unionBy(gData.links, newData.links, "id"),
+    };
+
+    console.log(mergedData);
+
+    setGData(mergedData);
   }
 
   return (
     <Box>
-      <Stack
-        sx={{
-          position: "absolute",
-          display: clickedNodes[1] ? "block" : "none",
-          top: 10,
-          right: 10,
-          zIndex: 10,
-          maxWidth: "300px",
-          p: 2,
-        }}
-        spacing={2}
-      >
-        {clickedNodes[1] ? (
-          <Paper>
-            <WhichHoverFloating
-              hoverNode={clickedNodes[1]}
-            />
-          </Paper>
-        ) : null}
-        {clickedNodes[0] ? (
-          <Paper>
-            <WhichHoverFloating
-              hoverNode={clickedNodes[0]}
-            />
-          </Paper>
-        ) : null}
-        <Button onClick={connectTwoItems}>+</Button>
-      </Stack>
+      <form>
+        <Stack
+          sx={{
+            position: "absolute",
+            display: clickedNodes[1] ? "block" : "none",
+            top: 10,
+            right: 10,
+            zIndex: 10,
+            maxWidth: "300px",
+            p: 2,
+          }}
+          spacing={2}
+        >
+          {clickedNodes[1] ? (
+            <Paper>
+              <WhichHoverFloating
+                hoverNode={clickedNodes[1]}
+              />
+            </Paper>
+          ) : null}
+          {clickedNodes[0] ? (
+            <Paper>
+              <WhichHoverFloating
+                hoverNode={clickedNodes[0]}
+              />
+            </Paper>
+          ) : null}
+          {clickedNodes[0] && clickedNodes[1] && (
+            <Button
+              type="submit"
+              onClick={async (e) => {
+                e.preventDefault();
+                await handleConnectTwoItems();
+              }}
+              // onClick={(e) => {
+              //   e.preventDefault();
+              //   connectTwoItems();
+              // }}
+            >
+              +
+            </Button>
+          )}
+        </Stack>
+      </form>
       {hoverNode ? (
         <Paper
           sx={{
