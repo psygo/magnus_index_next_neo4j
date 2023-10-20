@@ -8,12 +8,18 @@ import ForceGraph2D, {
   NodeObject,
 } from "react-force-graph-2d";
 
+import { API_URL } from "../../lib/config/api_config";
+
 import { LinkBase, NodeBase } from "../../lib/models/graph";
 
 import { WhichHoverFloating } from "./Floating";
-import { API_URL } from "../../lib/config/api_config";
 
 const NODE_R = 8;
+
+type NodePos = {
+  x: number;
+  y: number;
+};
 
 type GraphProps = {
   data: GraphData<NodeBase, LinkBase>;
@@ -52,12 +58,11 @@ export function Graph2d({ data }: GraphProps) {
     new Set<LinkObject>()
   );
   const [hoverNode, setHoverNode] =
-    useState<NodeObject<{}> | null>();
+    useState<NodeObject<NodeBase> | null>();
 
-  const [hoverNodePos, setHoverNodePos] = useState<{
-    x: number;
-    y: number;
-  }>({ x: 0, y: 0 });
+  const [hoverNodePos, setHoverNodePos] = useState<NodePos>(
+    { x: 0, y: 0 }
+  );
 
   function updateHighlight() {
     setHighlightNodes(highlightNodes);
@@ -65,18 +70,20 @@ export function Graph2d({ data }: GraphProps) {
   }
 
   const [lastClickedNode, setLastClickedNode] =
-    useState<NodeObject<{}> | null>();
+    useState<NodeObject<NodeBase> | null>();
   const [clickedNodes, setClickedNodes] = useState<
     [NodeObject<{}> | null, NodeObject<{}> | null]
   >([null, null]);
 
-  function handleNodeClick(node: NodeObject | null) {
+  function handleNodeClick(
+    node: NodeObject<NodeBase> | null
+  ) {
     setLastClickedNode(node);
 
     clickedNodes.push(node);
     const newClickedNodes = clickedNodes.slice(1) as [
-      NodeObject<{}> | null,
-      NodeObject<{}> | null
+      NodeObject<NodeBase> | null,
+      NodeObject<NodeBase> | null
     ];
     setClickedNodes(newClickedNodes);
   }
@@ -135,7 +142,10 @@ export function Graph2d({ data }: GraphProps) {
   }
 
   const paintRing = useCallback(
-    (node: NodeObject, ctx: CanvasRenderingContext2D) => {
+    (
+      node: NodeObject<NodeBase>,
+      ctx: CanvasRenderingContext2D
+    ) => {
       ctx.beginPath();
       ctx.arc(
         node.x!,
