@@ -1,9 +1,9 @@
 import { Box, Typography } from "@mui/material";
 
 import {
-  Connection,
-  Item,
-  User,
+  ConnectionProperties,
+  ItemProperties,
+  UserProperties,
 } from "../../lib/models/graph";
 import { NodeObject } from "react-force-graph-2d";
 
@@ -13,7 +13,7 @@ export function WhichHoverFloating({
   hoverNode: NodeObject;
 }) {
   if (hoverNode.labels.includes("User")) {
-    const userProps = hoverNode.properties as User;
+    const userProps = hoverNode.properties as UserProperties;
     return (
       <UserFloatingText
         name={userProps.name}
@@ -21,7 +21,7 @@ export function WhichHoverFloating({
       />
     );
   } else if (hoverNode.labels.includes("Item")) {
-    const itemProps = hoverNode.properties as Item;
+    const itemProps = hoverNode.properties as ItemProperties;
     return (
       <ItemFloatingText
         title={itemProps.title}
@@ -30,7 +30,7 @@ export function WhichHoverFloating({
     );
   } else {
     const connectionProps =
-      hoverNode.properties as Connection;
+      hoverNode.properties as ConnectionProperties;
     return (
       <ConnectionFloatingText
         title={connectionProps.title}
@@ -39,7 +39,7 @@ export function WhichHoverFloating({
   }
 }
 
-export function UserFloatingText({ email, name }: User) {
+export function UserFloatingText({ email, name }: UserProperties) {
   return (
     <Box>
       <Typography>{email}</Typography>
@@ -48,7 +48,7 @@ export function UserFloatingText({ email, name }: User) {
   );
 }
 
-export function ItemFloatingText({ title, content }: Item) {
+export function ItemFloatingText({ title, content }: ItemProperties) {
   return (
     <Box>
       <Typography>{title}</Typography>
@@ -59,7 +59,7 @@ export function ItemFloatingText({ title, content }: Item) {
 
 export function ConnectionFloatingText({
   title,
-}: Connection) {
+}: ConnectionProperties) {
   return (
     <Box>
       <Typography>{title}</Typography>

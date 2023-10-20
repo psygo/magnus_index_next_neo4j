@@ -8,7 +8,7 @@ import ForceGraph2D, {
   NodeObject,
 } from "react-force-graph-2d";
 
-import { NodeBase } from "../../lib/models/graph";
+import { LinkBase, NodeBase } from "../../lib/models/graph";
 
 import { WhichHoverFloating } from "./Floating";
 import { API_URL } from "../../lib/config/api_config";
@@ -16,7 +16,7 @@ import { API_URL } from "../../lib/config/api_config";
 const NODE_R = 8;
 
 type GraphProps = {
-  data: GraphData;
+  data: GraphData<NodeBase, LinkBase>;
 };
 
 export function Graph2d({ data }: GraphProps) {
@@ -46,7 +46,7 @@ export function Graph2d({ data }: GraphProps) {
   }, [data]);
 
   const [highlightNodes, setHighlightNodes] = useState(
-    new Set()
+    new Set<NodeObject<NodeBase> | string | number>()
   );
   const [highlightLinks, setHighlightLinks] = useState(
     new Set<LinkObject>()
@@ -70,18 +70,6 @@ export function Graph2d({ data }: GraphProps) {
     [NodeObject<{}> | null, NodeObject<{}> | null]
   >([null, null]);
 
-  function whereToPutNewlyClickedNode() {
-    if (
-      (clickedNodes[0] === null &&
-        clickedNodes[1] === null) ||
-      (clickedNodes[0] !== null && clickedNodes[1] !== null)
-    ) {
-      return 0;
-    } else if (clickedNodes[0] !== null) {
-      return 1;
-    } else return 0;
-  }
-
   function handleNodeClick(node: NodeObject | null) {
     setLastClickedNode(node);
 
@@ -93,7 +81,9 @@ export function Graph2d({ data }: GraphProps) {
     setClickedNodes(newClickedNodes);
   }
 
-  function handleNodeHover(node: NodeObject | null) {
+  function handleNodeHover(
+    node: NodeObject<NodeBase> | null
+  ) {
     highlightNodes.clear();
     highlightLinks.clear();
 
@@ -110,8 +100,9 @@ export function Graph2d({ data }: GraphProps) {
       );
 
       highlightNodes.add(node);
-      node.neighbors.forEach((neighbor: NodeObject) =>
-        highlightNodes.add(neighbor)
+      node.neighbors.forEach(
+        (neighbor: NodeObject<NodeBase>) =>
+          highlightNodes.add(neighbor)
       );
       node.links.forEach((link: LinkObject) =>
         highlightLinks.add(link)
@@ -128,14 +119,16 @@ export function Graph2d({ data }: GraphProps) {
     updateHighlight();
   }
 
-  function handleLinkHover(link: LinkObject | null) {
+  function handleLinkHover(
+    link: LinkObject<NodeBase, LinkBase> | null
+  ) {
     highlightNodes.clear();
     highlightLinks.clear();
 
     if (link) {
       highlightLinks.add(link);
-      highlightNodes.add(link.source);
-      highlightNodes.add(link.target);
+      highlightNodes.add(link.source!);
+      highlightNodes.add(link.target!);
     }
 
     updateHighlight();
