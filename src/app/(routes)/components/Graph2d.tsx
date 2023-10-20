@@ -2,6 +2,8 @@ import { useCallback, useMemo, useState } from "react";
 
 import { Box, Button, Paper, Stack } from "@mui/material";
 
+import _ from "lodash";
+
 import ForceGraph2D, {
   GraphData,
   LinkObject,
@@ -13,7 +15,6 @@ import { API_URL } from "../../lib/config/api_config";
 import { LinkBase, NodeBase } from "../../lib/models/graph";
 
 import { WhichHoverFloating } from "./Floating";
-import _ from "lodash";
 
 const NODE_R = 8;
 
@@ -203,44 +204,8 @@ export function Graph2d({ data }: GraphProps) {
       links: _.unionBy(gData.links, newData.links, "id"),
     };
 
-    console.log(mergedData);
-
     setGData(mergedData);
   }, [clickedNodes, gData, setGData]);
-
-  async function connectTwoItems() {
-    const id1 = (clickedNodes[0]!.id as string)
-      .split(":")
-      .at(-1);
-    const id2 = (clickedNodes[1]!.id as string)
-      .split(":")
-      .at(-1);
-
-    const res = await fetch(
-      `${API_URL}/items/${id1}/connections/${id2}`,
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          user_id: "4",
-        },
-        body: JSON.stringify({
-          title: "Test from Frontend",
-        }),
-      }
-    );
-
-    const newData = await res.json();
-
-    const mergedData = {
-      nodes: _.unionBy(gData.nodes, newData.nodes, "id"),
-      links: _.unionBy(gData.links, newData.links, "id"),
-    };
-
-    console.log(mergedData);
-
-    setGData(mergedData);
-  }
 
   return (
     <Box>
