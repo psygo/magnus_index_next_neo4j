@@ -1,4 +1,10 @@
-import { useCallback, useMemo, useState } from "react";
+import {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 
 import { Box, Button, Paper, Stack } from "@mui/material";
 
@@ -207,6 +213,15 @@ export function Graph2d({ data }: GraphProps) {
     setGData(mergedData);
   }, [clickedNodes, gData, setGData]);
 
+  const fgRef = useRef();
+
+  useEffect(() => {
+    const fg = fgRef.current;
+    if (fg)
+      // @ts-ignore
+      fg.d3Force("charge").strength(-100).distanceMax(1000);
+  }, []);
+
   return (
     <Box>
       <form>
@@ -270,6 +285,10 @@ export function Graph2d({ data }: GraphProps) {
       ) : null}
       <Box sx={{ position: "absolute" }}>
         <ForceGraph2D
+          ref={fgRef}
+          onNodeRightClick={(e) => {
+            console.log("here");
+          }}
           graphData={dataMemo}
           nodeRelSize={NODE_R}
           nodeColor={(node) => {
