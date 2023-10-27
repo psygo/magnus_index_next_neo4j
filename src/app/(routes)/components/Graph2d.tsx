@@ -18,7 +18,11 @@ import ForceGraph2D, {
 
 import { API_URL } from "../../lib/config/api_config";
 
-import { LinkBase, NodeBase } from "../../lib/models/graph";
+import {
+  NeoNodeLabel,
+  OutLinkBase,
+  OutNodeBase,
+} from "../../lib/models/graph";
 
 import { WhichHoverFloating } from "./Floating";
 
@@ -30,7 +34,7 @@ type NodePos = {
 };
 
 type GraphProps = {
-  data: GraphData<NodeBase, LinkBase>;
+  data: GraphData<OutNodeBase, OutLinkBase>;
 };
 
 export function Graph2d({ data }: GraphProps) {
@@ -66,13 +70,13 @@ export function Graph2d({ data }: GraphProps) {
   }, [gData]);
 
   const [highlightNodes, setHighlightNodes] = useState(
-    new Set<NodeObject<NodeBase> | string | number>()
+    new Set<NodeObject<OutNodeBase> | string | number>()
   );
   const [highlightLinks, setHighlightLinks] = useState(
     new Set<LinkObject>()
   );
   const [hoverNode, setHoverNode] =
-    useState<NodeObject<NodeBase> | null>();
+    useState<NodeObject<OutNodeBase> | null>();
 
   const [hoverNodePos, setHoverNodePos] = useState<NodePos>(
     { x: 0, y: 0 }
@@ -84,26 +88,26 @@ export function Graph2d({ data }: GraphProps) {
   }
 
   const [lastClickedNode, setLastClickedNode] =
-    useState<NodeObject<NodeBase> | null>();
+    useState<NodeObject<OutNodeBase> | null>();
   const [clickedNodes, setClickedNodes] = useState<
     [NodeObject<{}> | null, NodeObject<{}> | null]
   >([null, null]);
 
   function handleNodeClick(
-    node: NodeObject<NodeBase> | null
+    node: NodeObject<OutNodeBase> | null
   ) {
     setLastClickedNode(node);
 
     clickedNodes.push(node);
     const newClickedNodes = clickedNodes.slice(1) as [
-      NodeObject<NodeBase> | null,
-      NodeObject<NodeBase> | null
+      NodeObject<OutNodeBase> | null,
+      NodeObject<OutNodeBase> | null
     ];
     setClickedNodes(newClickedNodes);
   }
 
   function handleNodeHover(
-    node: NodeObject<NodeBase> | null
+    node: NodeObject<OutNodeBase> | null
   ) {
     highlightNodes.clear();
     highlightLinks.clear();
@@ -122,7 +126,7 @@ export function Graph2d({ data }: GraphProps) {
 
       highlightNodes.add(node);
       node.neighbors.forEach(
-        (neighbor: NodeObject<NodeBase>) =>
+        (neighbor: NodeObject<OutNodeBase>) =>
           highlightNodes.add(neighbor)
       );
       node.links.forEach((link: LinkObject) =>
@@ -141,7 +145,7 @@ export function Graph2d({ data }: GraphProps) {
   }
 
   function handleLinkHover(
-    link: LinkObject<NodeBase, LinkBase> | null
+    link: LinkObject<OutNodeBase, OutLinkBase> | null
   ) {
     highlightNodes.clear();
     highlightLinks.clear();
@@ -157,7 +161,7 @@ export function Graph2d({ data }: GraphProps) {
 
   const paintRing = useCallback(
     (
-      node: NodeObject<NodeBase>,
+      node: NodeObject<OutNodeBase>,
       ctx: CanvasRenderingContext2D
     ) => {
       ctx.beginPath();
@@ -258,10 +262,6 @@ export function Graph2d({ data }: GraphProps) {
                 e.preventDefault();
                 await handleConnectTwoItems();
               }}
-              // onClick={(e) => {
-              //   e.preventDefault();
-              //   connectTwoItems();
-              // }}
             >
               +
             </Button>
@@ -286,17 +286,14 @@ export function Graph2d({ data }: GraphProps) {
       <Box sx={{ position: "absolute" }}>
         <ForceGraph2D
           ref={fgRef}
-          onNodeRightClick={(e) => {
-            console.log("here");
-          }}
           graphData={dataMemo}
           nodeRelSize={NODE_R}
           nodeColor={(node) => {
-            const n = node as NodeObject<NodeBase>;
+            const n = node as NodeObject<OutNodeBase>;
 
-            return n.labels.includes("User")
+            return n.type === NeoNodeLabel.User
               ? "purple"
-              : n.labels.includes("Item")
+              : n.type === NeoNodeLabel.Item
               ? "green"
               : "blue";
           }}

@@ -27,7 +27,8 @@ function neo4jSetup(env: Env = Env.Dev) {
 
   const driver = neo4j.driver(
     uri,
-    neo4j.auth.basic(user, password)
+    neo4j.auth.basic(user, password),
+    { disableLosslessIntegers: true }
   );
   const session = driver.session();
 

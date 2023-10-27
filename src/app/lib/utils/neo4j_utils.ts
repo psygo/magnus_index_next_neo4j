@@ -7,14 +7,13 @@ import {
   Relationship,
 } from "neo4j-driver";
 
-type Neo4jGraphElement = { elementId: string };
-
-type NodeBase = Neo4jGraphElement & { id: string };
-
-type RelationshipBase = Neo4jGraphElement & {
-  startNodeElementId: string;
-  endNodeElementId: string;
-};
+import {
+  Neo4jGraphElement,
+  NeoLinkBase,
+  NeoNodeBase,
+  OutLinkBase,
+  OutNodeBase,
+} from "../models/graph";
 
 export function flattenRecords(
   results: QueryResult<RecordShape>
@@ -28,35 +27,46 @@ export function getAllNodes(
   results: QueryResult<RecordShape>
 ) {
   const flattenedRecords = flattenRecords(results);
+
   const allNodes = flattenedRecords.filter(
     (fr) => fr instanceof Node
-  ) as NodeBase[];
-  const remappedNodes = allNodes.map((n) => ({
-    ...n,
+  ) as NeoNodeBase[];
+
+  const remappedNodes = allNodes.map<OutNodeBase>((n) => ({
+    type: n.labels[0],
     id: n.elementId,
+    properties: n.properties,
   }));
+
   const nodesSet = _.uniqBy(remappedNodes, "id");
-  return nodesSet as NodeBase[];
+
+  return nodesSet;
 }
 
 export function getAllRelationships(
   results: QueryResult<RecordShape>
 ) {
   const flattenedRecords = flattenRecords(results);
+
   const allRelationships = flattenedRecords.filter(
     (fr) => fr instanceof Relationship
-  ) as RelationshipBase[];
-  const remappedRelationships = allRelationships.map(
-    (r) => ({
-      ...r,
+  ) as NeoLinkBase[];
+
+  console.log(allRelationships);
+
+  const remappedRelationships =
+    allRelationships.map<OutLinkBase>((r) => ({
+      type: r.type,
       id: r.elementId,
       source: r.startNodeElementId,
       target: r.endNodeElementId,
-    })
-  );
+      properties: r.properties,
+    }));
+
   const relationshipsSet = _.uniqBy(
     remappedRelationships,
     "id"
   );
-  return relationshipsSet as RelationshipBase[];
+
+  return relationshipsSet;
 }
