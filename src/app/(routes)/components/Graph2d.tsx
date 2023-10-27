@@ -16,13 +16,15 @@ import ForceGraph2D, {
   NodeObject,
 } from "react-force-graph-2d";
 
-import { API_URL } from "../../lib/config/api_config";
+import {} from "@/lib/utils/array";
+
+import { API_URL } from "@/lib/config/api_config";
 
 import {
   NeoNodeLabel,
   OutLinkBase,
   OutNodeBase,
-} from "../../lib/models/graph";
+} from "@/lib/models/graph";
 
 import { WhichHoverFloating } from "./Floating";
 
@@ -186,12 +188,12 @@ export function Graph2d({ data }: GraphProps) {
   );
 
   const handleConnectTwoItems = useCallback(async () => {
-    const id1 = (clickedNodes[0]!.id as string)
+    const id1 = (clickedNodes.first()!.id as string)
       .split(":")
-      .at(-1);
-    const id2 = (clickedNodes[1]!.id as string)
+      .last();
+    const id2 = (clickedNodes.second()!.id as string)
       .split(":")
-      .at(-1);
+      .last();
 
     const res = await fetch(
       `${API_URL}/items/${id1}/connections/${id2}`,
@@ -232,7 +234,9 @@ export function Graph2d({ data }: GraphProps) {
         <Stack
           sx={{
             position: "absolute",
-            display: clickedNodes[1] ? "block" : "none",
+            display: clickedNodes.second()
+              ? "block"
+              : "none",
             top: 10,
             right: 10,
             zIndex: 10,
@@ -241,31 +245,32 @@ export function Graph2d({ data }: GraphProps) {
           }}
           spacing={2}
         >
-          {clickedNodes[1] ? (
+          {clickedNodes.second() && (
             <Paper>
               <WhichHoverFloating
-                hoverNode={clickedNodes[1]}
+                hoverNode={clickedNodes.second()!}
               />
             </Paper>
-          ) : null}
-          {clickedNodes[0] ? (
-            <Paper>
-              <WhichHoverFloating
-                hoverNode={clickedNodes[0]}
-              />
-            </Paper>
-          ) : null}
-          {clickedNodes[0] && clickedNodes[1] && (
-            <Button
-              type="submit"
-              onClick={async (e) => {
-                e.preventDefault();
-                await handleConnectTwoItems();
-              }}
-            >
-              +
-            </Button>
           )}
+          {clickedNodes.first() && (
+            <Paper>
+              <WhichHoverFloating
+                hoverNode={clickedNodes.first()!}
+              />
+            </Paper>
+          )}
+          {clickedNodes.first() &&
+            clickedNodes.second() && (
+              <Button
+                type="submit"
+                onClick={async (e) => {
+                  e.preventDefault();
+                  await handleConnectTwoItems();
+                }}
+              >
+                +
+              </Button>
+            )}
         </Stack>
       </form>
       {hoverNode ? (

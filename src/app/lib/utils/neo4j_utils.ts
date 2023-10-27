@@ -33,7 +33,7 @@ export function getAllNodes(
   ) as NeoNodeBase[];
 
   const remappedNodes = allNodes.map<OutNodeBase>((n) => ({
-    type: n.labels[0],
+    type: n.labels.first(),
     id: n.elementId,
     properties: n.properties,
   }));
