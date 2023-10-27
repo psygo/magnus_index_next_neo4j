@@ -26,14 +26,13 @@ import {
   OutNodeBase,
 } from "@/lib/models/graph";
 
-import { FloatingText, HoverBubble } from "./Floating";
+import {
+  FloatingText,
+  HoverBubble,
+  NodePos,
+} from "./Floating";
 
 const NODE_R = 8;
-
-type NodePos = {
-  x: number;
-  y: number;
-};
 
 type GraphProps = {
   data: GraphData<OutNodeBase, OutLinkBase>;
@@ -280,8 +279,7 @@ export function Graph2d({ data }: GraphProps) {
       {hoverNode && (
         <HoverBubble
           hoverNode={hoverNode}
-          x={hoverNodePos.x}
-          y={hoverNodePos.y}
+          nodePos={hoverNodePos}
         />
       )}
       <Box sx={{ position: "absolute" }}>

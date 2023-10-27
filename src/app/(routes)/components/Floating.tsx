@@ -13,23 +13,26 @@ type FloatingTextProps = {
   hoverNode: NodeObject;
 };
 
-type HoverBubbleProps = FloatingTextProps & {
+export type NodePos = {
   x: number;
   y: number;
 };
 
+type HoverBubbleProps = FloatingTextProps & {
+  nodePos: NodePos;
+};
+
 export function HoverBubble({
   hoverNode,
-  x,
-  y,
+  nodePos,
 }: HoverBubbleProps) {
   return (
     <Paper
       sx={{
         position: "absolute",
         display: hoverNode ? "block" : "none",
-        top: y - 60,
-        left: x + 15,
+        top: nodePos.y - 60,
+        left: nodePos.x + 15,
         zIndex: 10,
         maxWidth: "300px",
         p: 2,
