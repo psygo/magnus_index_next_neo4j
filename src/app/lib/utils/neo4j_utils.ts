@@ -52,8 +52,6 @@ export function getAllRelationships(
     (fr) => fr instanceof Relationship
   ) as NeoLinkBase[];
 
-  console.log(allRelationships);
-
   const remappedRelationships =
     allRelationships.map<OutLinkBase>((r) => ({
       type: r.type,

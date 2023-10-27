@@ -26,7 +26,7 @@ import {
   OutNodeBase,
 } from "@/lib/models/graph";
 
-import { WhichHoverFloating } from "./Floating";
+import { FloatingText, HoverBubble } from "./Floating";
 
 const NODE_R = 8;
 
@@ -46,16 +46,20 @@ export function Graph2d({ data }: GraphProps) {
     const dataWithNeighbors = gData;
 
     dataWithNeighbors.links.forEach((link) => {
-      const a = dataWithNeighbors.nodes.filter(
-        (n) =>
-          // @ts-ignore
-          n.id === link.source || n.id === link.source!.id
-      )[0];
-      const b = dataWithNeighbors.nodes.filter(
-        (n) =>
-          // @ts-ignore
-          n.id === link.target || n.id === link.source!.id
-      )[0];
+      const a = dataWithNeighbors.nodes
+        .filter(
+          (n) =>
+            // @ts-ignore
+            n.id === link.source || n.id === link.source!.id
+        )
+        .first();
+      const b = dataWithNeighbors.nodes
+        .filter(
+          (n) =>
+            // @ts-ignore
+            n.id === link.target || n.id === link.source!.id
+        )
+        .first();
 
       if (a.neighbors === undefined) a.neighbors = [];
       if (b.neighbors === undefined) b.neighbors = [];
@@ -247,14 +251,14 @@ export function Graph2d({ data }: GraphProps) {
         >
           {clickedNodes.second() && (
             <Paper>
-              <WhichHoverFloating
+              <FloatingText
                 hoverNode={clickedNodes.second()!}
               />
             </Paper>
           )}
           {clickedNodes.first() && (
             <Paper>
-              <WhichHoverFloating
+              <FloatingText
                 hoverNode={clickedNodes.first()!}
               />
             </Paper>
@@ -273,21 +277,13 @@ export function Graph2d({ data }: GraphProps) {
             )}
         </Stack>
       </form>
-      {hoverNode ? (
-        <Paper
-          sx={{
-            position: "absolute",
-            display: hoverNode ? "block" : "none",
-            top: hoverNodePos!.y - 60,
-            left: hoverNodePos!.x + 15,
-            zIndex: 10,
-            maxWidth: "300px",
-            p: 2,
-          }}
-        >
-          <WhichHoverFloating hoverNode={hoverNode} />
-        </Paper>
-      ) : null}
+      {hoverNode && (
+        <HoverBubble
+          hoverNode={hoverNode}
+          x={hoverNodePos.x}
+          y={hoverNodePos.y}
+        />
+      )}
       <Box sx={{ position: "absolute" }}>
         <ForceGraph2D
           ref={fgRef}

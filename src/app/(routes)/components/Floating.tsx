@@ -1,4 +1,4 @@
-import { Box, Typography } from "@mui/material";
+import { Box, Paper, Typography } from "@mui/material";
 
 import { NodeObject } from "react-force-graph-2d";
 
@@ -9,11 +9,40 @@ import {
   UserProperties,
 } from "@/lib/models/graph";
 
-export function WhichHoverFloating({
-  hoverNode,
-}: {
+type FloatingTextProps = {
   hoverNode: NodeObject;
-}) {
+};
+
+type HoverBubbleProps = FloatingTextProps & {
+  x: number;
+  y: number;
+};
+
+export function HoverBubble({
+  hoverNode,
+  x,
+  y,
+}: HoverBubbleProps) {
+  return (
+    <Paper
+      sx={{
+        position: "absolute",
+        display: hoverNode ? "block" : "none",
+        top: y - 60,
+        left: x + 15,
+        zIndex: 10,
+        maxWidth: "300px",
+        p: 2,
+      }}
+    >
+      <FloatingText hoverNode={hoverNode} />
+    </Paper>
+  );
+}
+
+export function FloatingText({
+  hoverNode,
+}: FloatingTextProps) {
   if (hoverNode.type === NeoNodeLabel.User) {
     const userProps =
       hoverNode.properties as UserProperties;
