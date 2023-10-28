@@ -14,8 +14,10 @@ export async function GET() {
   try {
     const results = await neo4jSession.executeRead((tx) => {
       return tx.run(/* cypher */ `
-        // MATCH (n)-[r]-(m)
-        // RETURN n, r, m
+        MATCH (n)-[rell]-(m)
+
+        WHERE NOT (n:Connection)
+          AND NOT (m:Connection)
 
         MATCH   (n1:Item)
                -[:CONNECTION_ORIGIN]
@@ -24,7 +26,8 @@ export async function GET() {
               ->(n2:Item),
               (r)-[:CONNECTED_BY]-(u:User)
 
-        WITH u, 
+        WITH n, rell, m,
+             u, 
              n1, 
              n2,
              apoc.create.vRelationship(
@@ -37,7 +40,8 @@ export async function GET() {
                n2
              ) AS rel
 
-        RETURN u,
+        RETURN n, rell, m,
+               u,
                n1,
                n2,
                apoc.path.create(n1, [rel]) AS CONNECTION
