@@ -14,11 +14,13 @@ export async function GET() {
   try {
     const results = await neo4jSession.executeRead((tx) => {
       return tx.run(/* cypher */ `
+        // 1. All things except paths we're going to collapse.
         MATCH (n)-[rell]-(m)
 
         WHERE NOT (n:Connection)
           AND NOT (m:Connection)
 
+        // 2. Collapsing Connections
         MATCH   (n1:Item)
                -[:CONNECTION_ORIGIN]
               ->(r:Connection)
@@ -27,9 +29,8 @@ export async function GET() {
               (r)-[:CONNECTED_BY]-(u:User)
 
         WITH n, rell, m,
-             u, 
-             n1, 
-             n2,
+             u, n1, n2,
+             // 3. Aggregating collapsed data
              apoc.create.vRelationship(
                n1, 
                "CONNECTION", 
@@ -41,14 +42,10 @@ export async function GET() {
              ) AS rel
 
         RETURN n, rell, m,
-               u,
-               n1,
-               n2,
+               u, n1, n2,
                apoc.path.create(n1, [rel]) AS CONNECTION
       `);
     });
-    
-    // console.log(results.records)
 
     const nodes = getAllNodes(results);
     const links = getAllRelationships(results);
