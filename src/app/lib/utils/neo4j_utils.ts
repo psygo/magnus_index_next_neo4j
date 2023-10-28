@@ -2,17 +2,19 @@ import _ from "lodash";
 
 import {
   Node,
+  Path,
   QueryResult,
   RecordShape,
   Relationship,
 } from "neo4j-driver";
 
 import {
+  LinkProperties,
   Neo4jGraphElement,
-  NeoLinkBase,
   NeoNodeBase,
   OutLinkBase,
   OutNodeBase,
+  stringToNeoLinkLabel,
 } from "../models/graph";
 
 export function flattenRecords(
@@ -48,17 +50,27 @@ export function getAllRelationships(
 ) {
   const flattenedRecords = flattenRecords(results);
 
-  const allRelationships = flattenedRecords.filter(
-    (fr) => fr instanceof Relationship
-  ) as NeoLinkBase[];
+  const allRelationshipsAndPaths = flattenedRecords.filter(
+    (fr) => fr instanceof Relationship || fr instanceof Path
+  ) as (Relationship | Path)[];
+
+  const allRelationships = allRelationshipsAndPaths.map(
+    (rp) => {
+      if (rp instanceof Relationship) {
+        return rp;
+      } else {
+        return rp.segments.first().relationship;
+      }
+    }
+  );
 
   const remappedRelationships =
     allRelationships.map<OutLinkBase>((r) => ({
-      type: r.type,
+      type: stringToNeoLinkLabel(r.type),
       id: r.elementId,
       source: r.startNodeElementId,
       target: r.endNodeElementId,
-      properties: r.properties,
+      properties: r.properties as LinkProperties,
     }));
 
   const relationshipsSet = _.uniqBy(

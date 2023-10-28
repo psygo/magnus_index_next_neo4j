@@ -9,8 +9,24 @@ export enum NeoNodeLabel {
   Connection = "Connection",
 }
 
+export function stringToNeoNodeLabel(
+  s: string
+): NeoNodeLabel {
+  return Object.values(NeoNodeLabel).find(
+    (nodeLabel) => nodeLabel === s
+  )!;
+}
+
 export enum NeoLinkLabel {
   Follow = "FOLLOWS",
+}
+
+export function stringToNeoLinkLabel(
+  s: string
+): NeoLinkLabel {
+  return Object.values(NeoLinkLabel).find(
+    (linkLabel) => linkLabel === s
+  )!;
 }
 
 export type Neo4jGraphElement = {
@@ -77,10 +93,17 @@ export type ConnectionProperties = {
 //----------------------------------------------------------
 // Link Properties
 
-export type LinkProperties = FollowsProperties;
+export type LinkProperties =
+  | FollowsProperties
+  | ConnectionLinkProperties;
 
 export type FollowsProperties = {
   created_at: number;
+};
+
+export type ConnectionLinkProperties = {
+  title: string;
+  connected_by: string;
 };
 
 //----------------------------------------------------------
