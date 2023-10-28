@@ -8,13 +8,7 @@ import {
   useState,
 } from "react";
 
-import {
-  Box,
-  Button,
-  Paper,
-  Stack,
-  TextField,
-} from "@mui/material";
+import { Box } from "@mui/material";
 
 import ForceGraph2D, {
   GraphData,
@@ -37,6 +31,7 @@ import {
   HoverBubble,
   NodePos,
 } from "./Floating";
+import { CreateConnection } from "./CreateConnections";
 
 const NODE_R = 8;
 
@@ -58,6 +53,7 @@ type GraphProps = {
 export function Graph2d({ data }: GraphProps) {
   const [gData, setGData] = useState(data);
 
+  // TODO: Create Context for `dataMemo`
   const dataMemo = useMemo(() => {
     const dataWithNeighbors = gData;
 
@@ -203,6 +199,10 @@ export function Graph2d({ data }: GraphProps) {
       .split(":")
       .last();
 
+    const body = {
+      title: "Test from Frontend",
+    };
+
     const res = await fetch(
       `${API_URL}/items/${id1}/connections/${id2}`,
       {
@@ -211,9 +211,7 @@ export function Graph2d({ data }: GraphProps) {
           "Content-Type": "application/json",
           user_id: "4",
         },
-        body: JSON.stringify({
-          title: "Test from Frontend",
-        }),
+        body: JSON.stringify(body),
       }
     );
 
@@ -227,8 +225,8 @@ export function Graph2d({ data }: GraphProps) {
     setGData(mergedData);
   }, [clickedNodes, gData, setGData]);
 
-  const [connectionTitle, setConnectionTitle] =
-    useState("");
+  // const [connectionTitle, setConnectionTitle] =
+  //   useState("");
 
   const fgRef = useRef();
 
@@ -241,59 +239,10 @@ export function Graph2d({ data }: GraphProps) {
 
   return (
     <Box>
-      <form>
-        <Stack
-          sx={{
-            position: "absolute",
-            display: clickedNodes.second()
-              ? "block"
-              : "none",
-            top: 10,
-            right: 10,
-            zIndex: 10,
-            maxWidth: "300px",
-            p: 2,
-          }}
-          spacing={2}
-        >
-          <TextField
-            id="connection-title"
-            type="text"
-            label="Connection Title"
-            variant="outlined"
-            value={connectionTitle}
-            onChange={(e) => {
-              setConnectionTitle(e.target.value);
-            }}
-          />
-          {clickedNodes.second() && (
-            <Paper>
-              <FloatingText
-                hoverNode={clickedNodes.second()!}
-              />
-            </Paper>
-          )}
-          {clickedNodes.first() && (
-            <Paper>
-              <FloatingText
-                hoverNode={clickedNodes.first()!}
-              />
-            </Paper>
-          )}
-          {clickedNodes.first() &&
-            clickedNodes.second() && (
-              <Button
-                type="submit"
-                onClick={async (e) => {
-                  e.preventDefault();
-                  await handleConnectTwoItems();
-                }}
-              >
-                Connect
-              </Button>
-            )}
-        </Stack>
-      </form>
+      <CreateConnection
+        clickedNodes={clickedNodes}
+        connectTwoItems={handleConnectTwoItems}
+      />
       {hoverNode && (
         <HoverBubble
           hoverNode={hoverNode}
