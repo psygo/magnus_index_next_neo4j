@@ -1,3 +1,5 @@
+import _ from "lodash";
+
 import {
   useCallback,
   useEffect,
@@ -6,9 +8,13 @@ import {
   useState,
 } from "react";
 
-import { Box, Button, Paper, Stack } from "@mui/material";
-
-import _ from "lodash";
+import {
+  Box,
+  Button,
+  Paper,
+  Stack,
+  TextField,
+} from "@mui/material";
 
 import ForceGraph2D, {
   GraphData,
@@ -33,6 +39,17 @@ import {
 } from "./Floating";
 
 const NODE_R = 8;
+
+export type NodeObj = NodeObject<OutNodeBase>;
+export type LinkObj = LinkObject<OutNodeBase, OutLinkBase>;
+
+export type NodeOrNull = NodeObj | null;
+export type LinkOrNull = LinkObject<
+  OutNodeBase,
+  OutLinkBase
+> | null;
+
+export type ClickedNodesPair = [NodeOrNull, NodeOrNull];
 
 type GraphProps = {
   data: GraphData<OutNodeBase, OutLinkBase>;
@@ -75,13 +92,12 @@ export function Graph2d({ data }: GraphProps) {
   }, [gData]);
 
   const [highlightNodes, setHighlightNodes] = useState(
-    new Set<NodeObject<OutNodeBase> | string | number>()
+    new Set<NodeObj | string | number>()
   );
   const [highlightLinks, setHighlightLinks] = useState(
     new Set<LinkObject>()
   );
-  const [hoverNode, setHoverNode] =
-    useState<NodeObject<OutNodeBase> | null>();
+  const [hoverNode, setHoverNode] = useState<NodeOrNull>();
 
   const [hoverNodePos, setHoverNodePos] = useState<NodePos>(
     { x: 0, y: 0 }
@@ -93,27 +109,22 @@ export function Graph2d({ data }: GraphProps) {
   }
 
   const [lastClickedNode, setLastClickedNode] =
-    useState<NodeObject<OutNodeBase> | null>();
-  const [clickedNodes, setClickedNodes] = useState<
-    [NodeObject<{}> | null, NodeObject<{}> | null]
-  >([null, null]);
+    useState<NodeOrNull>();
 
-  function handleNodeClick(
-    node: NodeObject<OutNodeBase> | null
-  ) {
+  const [clickedNodes, setClickedNodes] =
+    useState<ClickedNodesPair>([null, null]);
+
+  function handleNodeClick(node: NodeOrNull) {
     setLastClickedNode(node);
 
     clickedNodes.push(node);
-    const newClickedNodes = clickedNodes.slice(1) as [
-      NodeObject<OutNodeBase> | null,
-      NodeObject<OutNodeBase> | null
-    ];
+    const newClickedNodes = clickedNodes.slice(
+      1
+    ) as ClickedNodesPair;
     setClickedNodes(newClickedNodes);
   }
 
-  function handleNodeHover(
-    node: NodeObject<OutNodeBase> | null
-  ) {
+  function handleNodeHover(node: NodeOrNull) {
     highlightNodes.clear();
     highlightLinks.clear();
 
@@ -130,11 +141,10 @@ export function Graph2d({ data }: GraphProps) {
       );
 
       highlightNodes.add(node);
-      node.neighbors.forEach(
-        (neighbor: NodeObject<OutNodeBase>) =>
-          highlightNodes.add(neighbor)
+      node.neighbors.forEach((neighbor: NodeObj) =>
+        highlightNodes.add(neighbor)
       );
-      node.links.forEach((link: LinkObject) =>
+      node.links.forEach((link: LinkObj) =>
         highlightLinks.add(link)
       );
     } else {
@@ -149,9 +159,7 @@ export function Graph2d({ data }: GraphProps) {
     updateHighlight();
   }
 
-  function handleLinkHover(
-    link: LinkObject<OutNodeBase, OutLinkBase> | null
-  ) {
+  function handleLinkHover(link: LinkOrNull) {
     highlightNodes.clear();
     highlightLinks.clear();
 
@@ -165,10 +173,7 @@ export function Graph2d({ data }: GraphProps) {
   }
 
   const paintRing = useCallback(
-    (
-      node: NodeObject<OutNodeBase>,
-      ctx: CanvasRenderingContext2D
-    ) => {
+    (node: NodeObj, ctx: CanvasRenderingContext2D) => {
       ctx.beginPath();
       ctx.arc(
         node.x!,
@@ -222,6 +227,9 @@ export function Graph2d({ data }: GraphProps) {
     setGData(mergedData);
   }, [clickedNodes, gData, setGData]);
 
+  const [connectionTitle, setConnectionTitle] =
+    useState("");
+
   const fgRef = useRef();
 
   useEffect(() => {
@@ -248,6 +256,16 @@ export function Graph2d({ data }: GraphProps) {
           }}
           spacing={2}
         >
+          <TextField
+            id="connection-title"
+            type="text"
+            label="Connection Title"
+            variant="outlined"
+            value={connectionTitle}
+            onChange={(e) => {
+              setConnectionTitle(e.target.value);
+            }}
+          />
           {clickedNodes.second() && (
             <Paper>
               <FloatingText
@@ -271,7 +289,7 @@ export function Graph2d({ data }: GraphProps) {
                   await handleConnectTwoItems();
                 }}
               >
-                +
+                Connect
               </Button>
             )}
         </Stack>

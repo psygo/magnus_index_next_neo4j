@@ -1,15 +1,15 @@
 ############################################################
 
-# 0. Config
+# 0.1. Config
 
 @PORT={{$dotenv NEXTJS_PORT}}
 @LOCAL_ADDR=http://localhost:{{PORT}}
 
 ############################################################
 
-# 0. Misc
+# 0.2. Misc
 
-### 0.1. Health
+### 0.2.1. Health
 
 GET {{LOCAL_ADDR}}/api/health
 
