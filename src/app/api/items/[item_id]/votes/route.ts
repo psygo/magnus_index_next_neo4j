@@ -63,25 +63,34 @@ export async function POST(
 
     const userId = parseInt(req.headers.get("user_id")!);
 
+    const { points } = await req.json();
+
     const itemsResults = await neo4jSession.executeWrite(
       (tx) => {
         return tx.run(
           /* cypher */ `
-            MATCH (u:User), (i:Item)
+            MATCH (voter:User), (ic),
+                  (creator:User)-[r]->(ic)
 
-            WHERE id(u) = $userId
-              AND id(i) = $itemId
+            WHERE (ic:Item OR ic:Connection)
+              AND id(voter) = $userId
+              AND id(ic) = $itemId
+              AND (r:CREATED OR r:CONNECTED_BY)
 
-            CREATE   (u)
-                    -[v:VOTES_ON{
+            CREATE   (voter)
+                    -[vote:VOTES_ON{
                          created_at: timestamp(),
+                         points:     $points,
                          deleted:    FALSE
                      }]
-                   ->(i)
+                   ->(ic)
+            
+            SET ic.points = COALESCE(ic.points, 0) + $points
+            SET creator.points = COALESCE(creator.points, 0) + $points
                    
-            RETURN u, v, i
+            RETURN voter, vote, ic
           `,
-          { itemId, userId }
+          { itemId, userId, points }
         );
       }
     );

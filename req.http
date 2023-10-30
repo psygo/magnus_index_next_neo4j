@@ -69,10 +69,15 @@ GET {{LOCAL_ADDR}}/api/items/{{GET_VOTES_ITEM_ID}}/votes
 
 ### 2.6. Post Item Vote
 
-@POST_VOTE_ITEM_ID=20
+@POST_VOTE_ITEM_OR_CONNECTION_ID=2
 
-POST {{LOCAL_ADDR}}/api/items/{{POST_VOTE_ITEM_ID}}/votes
+POST {{LOCAL_ADDR}}/api/items/{{POST_VOTE_ITEM_OR_CONNECTION_ID}}/votes
 user_id: 3
+Content-Type: "application/json"
+
+{
+    "points": 7
+}
 
 ############################################################
 

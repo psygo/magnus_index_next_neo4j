@@ -19,6 +19,10 @@ export function stringToNeoNodeLabel(
 
 export enum NeoLinkLabel {
   Follow = "FOLLOWS",
+  VotesOn = "VOTES_ON",
+  ConnectedBy = "CONNECTED_BY",
+  ConnectionOrigin = "CONNECTION_ORIGIN",
+  ConnectionDestination = "CONNECTION_DESTINATION",
 }
 
 export function stringToNeoLinkLabel(

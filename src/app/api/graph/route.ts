@@ -12,40 +12,30 @@ import {
  */
 export async function GET() {
   try {
-    const results = await neo4jSession.executeRead((tx) => {
-      return tx.run(/* cypher */ `
-        // 1. All things except paths we're going to collapse.
-        MATCH (n)-[rell]-(m)
+    const results = await neo4jSession.executeWrite(
+      (tx) => {
+        return tx.run(/* cypher */ `
+        // 1. All nodes and links, except Connections,
+        //    Items, and Votes
+        MATCH (n)-[r]-(m)
+        
+        WHERE NOT ((n:Connection) AND (n:Item))
+          AND NOT ((m:Connection) AND (m:Item))
+          AND NOT (r:VOTES_ON)
+          
+        // 2. Aggreggating Votes
+        MATCH (:User)-[v:VOTES_ON]->(ic)
 
-        WHERE NOT (n:Connection)
-          AND NOT (m:Connection)
+        WHERE ic:Item OR ic:Connection
 
-        // 2. Collapsing Connections
-        MATCH   (n1:Item)
-               -[:CONNECTION_ORIGIN]
-              ->(r:Connection)
-               -[:CONNECTION_DESTINATION]
-              ->(n2:Item),
-              (r)-[:CONNECTED_BY]-(u:User)
+        WITH ic, SUM(v.points) AS TOTAL_POINTS, n, r, m
+        
+        SET ic.points = TOTAL_POINTS
 
-        WITH n, rell, m,
-             u, n1, n2,
-             // 3. Aggregating collapsed data
-             apoc.create.vRelationship(
-               n1, 
-               "CONNECTION", 
-               apoc.map.merge(
-                 properties(r), 
-                 { connected_by: u.id }
-               ), 
-               n2
-             ) AS rel
-
-        RETURN n, rell, m,
-               u, n1, n2,
-               apoc.path.create(n1, [rel]) AS CONNECTION
+        RETURN ic, n, r, m
       `);
-    });
+      }
+    );
 
     const nodes = getAllNodes(results);
     const links = getAllRelationships(results);
