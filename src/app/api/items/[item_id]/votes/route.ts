@@ -52,7 +52,7 @@ export async function GET(
 type PostVoteParams = GetItemVotesParams;
 
 /**
- * Get Item Votes
+ * Post Item Votes
  */
 export async function POST(
   req: NextRequest,
@@ -65,38 +65,42 @@ export async function POST(
 
     const { points } = await req.json();
 
-    const itemsResults = await neo4jSession.executeWrite(
+    const voteResults = await neo4jSession.executeWrite(
       (tx) => {
         return tx.run(
           /* cypher */ `
-            MATCH (voter:User), (ic),
-                  (creator:User)-[r]->(ic)
-
-            WHERE (ic:Item OR ic:Connection)
-              AND id(voter) = $userId
-              AND id(ic) = $itemId
-              AND (r:CREATED OR r:CONNECTED_BY)
+            MATCH (voter:User), 
+                  (creator)-[created:CREATED]->(item:Item)
+            
+            WHERE id(voter) = $userId
+              AND id(item)  = $itemId
 
             CREATE   (voter)
-                    -[vote:VOTES_ON{
-                         created_at: timestamp(),
-                         points:     $points,
-                         deleted:    FALSE
-                     }]
-                   ->(ic)
-            
-            SET ic.points = COALESCE(ic.points, 0) + $points
+                    -[vote:VOTES_ON{ points: $points }]
+                   ->(item)
+
+            WITH voter, vote, item, creator, created
+
+            CALL apoc.do.when(
+              $points > 0,
+              'SET i.points_up   = COALESCE(i.points_up, 0)   + points RETURN i',
+              'SET i.points_down = COALESCE(i.points_down, 0) + points RETURN i',
+              { i: item, points: $points }
+            )
+            YIELD value AS _
+
+            SET item.points    = COALESCE(item.points, 0)    + $points
             SET creator.points = COALESCE(creator.points, 0) + $points
-                   
-            RETURN voter, vote, ic
+
+            RETURN voter, vote, item, creator, created
           `,
           { itemId, userId, points }
         );
       }
     );
 
-    const nodes = getAllNodes(itemsResults);
-    const links = getAllRelationships(itemsResults);
+    const nodes = getAllNodes(voteResults);
+    const links = getAllRelationships(voteResults);
 
     return NextResponse.json({ nodes, links });
   } catch (e) {

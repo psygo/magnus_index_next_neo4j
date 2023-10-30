@@ -50,6 +50,10 @@ type GraphProps = {
   data: GraphData<OutNodeBase, OutLinkBase>;
 };
 
+function collapseConnectionsPaths() {
+  
+}
+
 export function Graph2d({ data }: GraphProps) {
   const [gData, setGData] = useState(data);
 
