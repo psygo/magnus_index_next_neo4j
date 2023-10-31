@@ -15,7 +15,11 @@ import {
   OutLinkBase,
   OutNodeBase,
   stringToNeoLinkLabel,
-} from "../models/graph";
+} from "@/lib/models/graph";
+
+export function extractNeo4jId(s: string) {
+  return s.split(":").last();
+}
 
 export function flattenRecords(
   results: QueryResult<RecordShape>
@@ -36,7 +40,7 @@ export function getAllNodes(
 
   const remappedNodes = allNodes.map<OutNodeBase>((n) => ({
     type: n.labels.first(),
-    id: n.elementId,
+    id: extractNeo4jId(n.elementId),
     properties: n.properties,
   }));
 
@@ -67,9 +71,9 @@ export function getAllRelationships(
   const remappedRelationships =
     allRelationships.map<OutLinkBase>((r) => ({
       type: stringToNeoLinkLabel(r.type),
-      id: r.elementId,
-      source: r.startNodeElementId,
-      target: r.endNodeElementId,
+      id: extractNeo4jId(r.elementId),
+      source: extractNeo4jId(r.startNodeElementId),
+      target: extractNeo4jId(r.endNodeElementId),
       properties: r.properties as LinkProperties,
     }));
 
