@@ -79,7 +79,7 @@ export async function POST() {
     // 4. Items
 
     // #1
-    await fetch(`${API_URL}/items`, {
+    const designingRes = await fetch(`${API_URL}/items`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -92,7 +92,7 @@ export async function POST() {
       }),
     });
     // #2
-    await fetch(`${API_URL}/items`, {
+    const pyongYangRes = await fetch(`${API_URL}/items`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -105,7 +105,7 @@ export async function POST() {
       }),
     });
     // #3
-    await fetch(`${API_URL}/items`, {
+    const shenzhenRes = await fetch(`${API_URL}/items`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -118,7 +118,7 @@ export async function POST() {
       }),
     });
     // #4
-    await fetch(`${API_URL}/items`, {
+    const burmaRes = await fetch(`${API_URL}/items`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -131,7 +131,7 @@ export async function POST() {
       }),
     });
     // #5
-    await fetch(`${API_URL}/items`, {
+    const chroniquesRes = await fetch(`${API_URL}/items`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -144,7 +144,7 @@ export async function POST() {
       }),
     });
     // #6
-    await fetch(`${API_URL}/items`, {
+    const papierRes = await fetch(`${API_URL}/items`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -157,7 +157,7 @@ export async function POST() {
       }),
     });
     // #7
-    await fetch(`${API_URL}/items`, {
+    const systemRes = await fetch(`${API_URL}/items`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -197,12 +197,172 @@ export async function POST() {
       }),
     });
 
+    const designingBody = await designingRes.json();
+    const systemBody = await systemRes.json();
+    const pyongYangBody = await pyongYangRes.json();
+    const burmaBody = await burmaRes.json();
+    const shenzhenBody = await shenzhenRes.json();
+    const chroniquesBody = await chroniquesRes.json();
+    const papierBody = await papierRes.json();
+
+    const designingId = designingBody.nodes.first().id;
+    const systemId = systemBody.nodes.first().id;
+    const pyongYangId = pyongYangBody.nodes.first().id;
+    const burmaId = burmaBody.nodes.first().id;
+    const shenzhenId = shenzhenBody.nodes.first().id;
+    const chroniquesId = chroniquesBody.nodes.first().id;
+    const papierId = papierBody.nodes.first().id;
+
     ////////////////////////////////////////////////////////
-    
+
     // 5. Connections
 
+    // #1
+    const relationConnection1Res = await fetch(
+      `${API_URL}/items/${designingId}/connections/${systemId}`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          user_id: philippeFanaroId,
+        },
+        body: JSON.stringify({
+          title: "Relation",
+        }),
+      }
+    );
+    // #2
+    await fetch(
+      `${API_URL}/items/${systemId}/connections/${designingId}`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          user_id: johnDoeId,
+        },
+        body: JSON.stringify({
+          title: "Citation",
+        }),
+      }
+    );
+    // #3
+    await fetch(
+      `${API_URL}/items/${pyongYangId}/connections/${shenzhenId}`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          user_id: johnDoeId,
+        },
+        body: JSON.stringify({
+          title: "Same Author",
+        }),
+      }
+    );
+    // #4
+    await fetch(
+      `${API_URL}/items/${pyongYangId}/connections/${shenzhenId}`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          user_id: johnDoeId,
+        },
+        body: JSON.stringify({
+          title: "Both in Asia",
+        }),
+      }
+    );
+    // #5
+    await fetch(
+      `${API_URL}/items/${burmaId}/connections/${pyongYangId}`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          user_id: johnDoeId,
+        },
+        body: JSON.stringify({
+          title: "Same Author",
+        }),
+      }
+    );
+    // #6
+    await fetch(
+      `${API_URL}/items/${shenzhenId}/connections/${chroniquesId}`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          user_id: johnDoeId,
+        },
+        body: JSON.stringify({
+          title: "Same Author",
+        }),
+      }
+    );
+    // #7
+    await fetch(
+      `${API_URL}/items/${chroniquesId}/connections/${papierId}`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          user_id: johnDoeId,
+        },
+        body: JSON.stringify({
+          title: "Same Author",
+        }),
+      }
+    );
 
-    
+    const relationConnection1Body =
+      await relationConnection1Res.json();
+
+    const relationConnection1Id =
+      relationConnection1Body.nodes.first().id;
+
+    ////////////////////////////////////////////////////////
+
+    // 6. Votes
+
+    // #1
+    await fetch(`${API_URL}/items/${designingId}/votes`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        user_id: philippeFanaroId,
+      },
+      body: JSON.stringify({
+        points: 1,
+      }),
+    });
+    // #2
+    await fetch(`${API_URL}/items/${designingId}/votes`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        user_id: johnDoeId,
+      },
+      body: JSON.stringify({
+        points: 1,
+      }),
+    });
+    // #3
+    await fetch(
+      `${API_URL}/connections/${relationConnection1Id}/votes`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          user_id: johnDoeId,
+        },
+        body: JSON.stringify({
+          points: 1,
+        }),
+      }
+    );
+
     ////////////////////////////////////////////////////////
 
     return new NextResponse("Reset DB Successfully", {

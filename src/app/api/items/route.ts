@@ -43,7 +43,7 @@ export async function POST(req: NextRequest) {
 
     const createdItem = getAllNodes(results);
 
-    return NextResponse.json({ created_item: createdItem });
+    return NextResponse.json({ nodes: createdItem });
   } catch (e) {
     console.error(e);
 
