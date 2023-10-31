@@ -84,6 +84,22 @@ Content-Type: "application/json"
     "points": 7
 }
 
+### 2.7. Post Comment
+
+@POST_COMMENT_ITEM=44
+
+POST {{API_URL}}/items/{{POST_COMMENT_ITEM}}/comments
+user_id: 43
+Content-Type: "application/json"
+
+{
+    "content": "Test Comment 2"
+}
+
+### 2.8. Get Item's Comments
+
+GET {{API_URL}}/items/{{POST_COMMENT_ITEM}}/comments
+
 ############################################################
 
 # 3. Users

@@ -7,6 +7,7 @@ export enum NeoNodeLabel {
   User = "User",
   Item = "Item",
   Connection = "Connection",
+  Comment = "Comment",
 }
 
 export function stringToNeoNodeLabel(
@@ -24,6 +25,8 @@ export enum NeoLinkLabel {
   ConnectionOrigin = "CONNECTION_ORIGIN",
   ConnectionDestination = "CONNECTION_DESTINATION",
   Created = "CREATED",
+  CreatedComment = "CREATED_COMMENT",
+  CommentsOn = "COMMENTS_ON",
 }
 
 export function stringToNeoLinkLabel(
