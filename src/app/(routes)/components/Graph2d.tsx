@@ -28,6 +28,7 @@ import {
 
 import { HoverBubble, NodePos } from "./Floating";
 import { CreateConnection } from "./CreateConnections";
+import { collapseConnectionsPaths } from "../../lib/utils/neo4j_utils";
 
 const NODE_R = 8;
 
@@ -50,7 +51,8 @@ export function Graph2d({ data }: GraphProps) {
   const [gData, setGData] = useState(data);
 
   const dataMemo = useMemo(() => {
-    const dataWithNeighbors = gData;
+    const dataWithNeighbors =
+      collapseConnectionsPaths(gData);
 
     dataWithNeighbors.links.forEach((link) => {
       const a = dataWithNeighbors.nodes
