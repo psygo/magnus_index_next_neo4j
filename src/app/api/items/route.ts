@@ -3,6 +3,10 @@ import { NextRequest, NextResponse } from "next/server";
 import { neo4jSession } from "@/lib/config/db";
 
 import { getAllNodes } from "@/lib/utils/neo4j_utils";
+import {
+  createHashtagMentions,
+  extractHashtags,
+} from "@/lib/api_secondary/hashtags";
 
 /**
  * Create Item
@@ -41,9 +45,16 @@ export async function POST(req: NextRequest) {
       }
     );
 
-    const createdItem = getAllNodes(results);
+    const nodes = getAllNodes(results);
 
-    return NextResponse.json({ nodes: createdItem });
+    const hashtags = extractHashtags(content);
+    if (hashtags.length > 0) {
+      const itemId = parseInt(nodes.first().id as string);
+
+      await createHashtagMentions(hashtags, userId, itemId);
+    }
+
+    return NextResponse.json({ nodes });
   } catch (e) {
     console.error(e);
 

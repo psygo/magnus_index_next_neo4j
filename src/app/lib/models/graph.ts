@@ -1,7 +1,7 @@
 //----------------------------------------------------------
 // Aux
 
-export type Id = string;
+export type Id = string | number;
 
 export enum NeoNodeLabel {
   User = "User",
