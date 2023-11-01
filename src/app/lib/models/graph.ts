@@ -72,8 +72,8 @@ export type OutNodeBase = {
 export type OutLinkBase = {
   type: NeoLinkLabel;
   id: Id;
-  source: Id;
-  target: Id;
+  source: Id | OutNodeBase;
+  target: Id | OutNodeBase;
   properties: LinkProperties;
 };
 

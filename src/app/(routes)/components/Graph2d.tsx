@@ -1,4 +1,4 @@
-import _, { merge } from "lodash";
+import _ from "lodash";
 
 import {
   useCallback,
@@ -11,12 +11,14 @@ import {
 import { Box } from "@mui/material";
 
 import ForceGraph2D, {
+  ForceGraphMethods,
   GraphData,
   LinkObject,
   NodeObject,
 } from "react-force-graph-2d";
 
 import {} from "@/lib/utils/array";
+import { collapseConnectionsPaths } from "@/lib/utils/neo4j_utils";
 
 import { API_URL } from "@/lib/config/api_config";
 
@@ -28,7 +30,6 @@ import {
 
 import { HoverBubble, NodePos } from "./Floating";
 import { CreateConnection } from "./CreateConnections";
-import { collapseConnectionsPaths } from "../../lib/utils/neo4j_utils";
 
 const NODE_R = 8;
 
@@ -58,15 +59,15 @@ export function Graph2d({ data }: GraphProps) {
       const a = dataWithNeighbors.nodes
         .filter(
           (n) =>
-            // @ts-ignore
-            n.id === link.source || n.id === link.source.id
+            n.id === link.source ||
+            n.id === (link.source as OutNodeBase).id
         )
         .first();
       const b = dataWithNeighbors.nodes
         .filter(
           (n) =>
-            // @ts-ignore
-            n.id === link.target || n.id === link.source.id
+            n.id === link.target ||
+            n.id === (link.source as OutNodeBase).id
         )
         .first();
 
@@ -218,16 +219,15 @@ export function Graph2d({ data }: GraphProps) {
     setGData(mergedData);
   }, [clickedNodes, gData, setGData]);
 
-  // const [connectionTitle, setConnectionTitle] =
-  //   useState("");
-
-  const fgRef = useRef();
+  const fgRef =
+    useRef<ForceGraphMethods<NodeObj, LinkObj>>();
 
   useEffect(() => {
     const fg = fgRef.current;
     if (fg)
-      // @ts-ignore
-      fg.d3Force("charge").strength(-100).distanceMax(1000);
+      fg.d3Force("charge")!
+        .strength(-100)
+        .distanceMax(1000);
   }, []);
 
   return (
