@@ -86,10 +86,10 @@ Content-Type: "application/json"
 
 ### 2.7. Post Comment
 
-@POST_COMMENT_ITEM=44
+@POST_COMMENT_ITEM=8
 
 POST {{API_URL}}/items/{{POST_COMMENT_ITEM}}/comments
-user_id: 43
+user_id: 7
 Content-Type: "application/json"
 
 {

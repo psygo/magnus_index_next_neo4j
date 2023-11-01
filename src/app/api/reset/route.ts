@@ -348,9 +348,27 @@ export async function POST() {
         points: 1,
       }),
     });
-    // #3
+    // // #3
+    // await fetch(
+    //   `${API_URL}/connections/${relationConnection1Id}/votes`,
+    //   {
+    //     method: "POST",
+    //     headers: {
+    //       "Content-Type": "application/json",
+    //       user_id: johnDoeId,
+    //     },
+    //     body: JSON.stringify({
+    //       points: 1,
+    //     }),
+    //   }
+    // );
+
+    ////////////////////////////////////////////////////////
+    // 7. Comments
+
+    // #1
     await fetch(
-      `${API_URL}/connections/${relationConnection1Id}/votes`,
+      `${API_URL}/items/${designingId}/comments`,
       {
         method: "POST",
         headers: {
@@ -358,7 +376,23 @@ export async function POST() {
           user_id: johnDoeId,
         },
         body: JSON.stringify({
-          points: 1,
+          content:
+            "Amazing and essential book, should be mandatory to software engineers and developers.",
+        }),
+      }
+    );
+    // #2
+    await fetch(
+      `${API_URL}/items/${designingId}/comments`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          user_id: philippeFanaroId,
+        },
+        body: JSON.stringify({
+          content:
+            "I wish I had found this book earlier, it is useful not only to newbies but to very experienced pros as well.",
         }),
       }
     );
