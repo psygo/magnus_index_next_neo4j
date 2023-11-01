@@ -3,6 +3,7 @@ import { NextResponse } from "next/server";
 import { neo4jSession } from "@/lib/config/db";
 
 import {
+  collapseConnectionsPaths,
   getAllNodes,
   getAllRelationships,
 } from "@/lib/utils/neo4j_utils";
@@ -40,7 +41,9 @@ export async function GET() {
     const nodes = getAllNodes(results);
     const links = getAllRelationships(results);
 
-    return NextResponse.json({ nodes, links });
+    const out = collapseConnectionsPaths({ nodes, links });
+
+    return NextResponse.json(out);
   } catch (e) {
     console.error(e);
 

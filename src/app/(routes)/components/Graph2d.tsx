@@ -1,4 +1,4 @@
-import _ from "lodash";
+import _, { merge } from "lodash";
 
 import {
   useCallback,
@@ -26,11 +26,7 @@ import {
   OutNodeBase,
 } from "@/lib/models/graph";
 
-import {
-  FloatingText,
-  HoverBubble,
-  NodePos,
-} from "./Floating";
+import { HoverBubble, NodePos } from "./Floating";
 import { CreateConnection } from "./CreateConnections";
 
 const NODE_R = 8;
@@ -50,14 +46,9 @@ type GraphProps = {
   data: GraphData<OutNodeBase, OutLinkBase>;
 };
 
-function collapseConnectionsPaths() {
-  
-}
-
 export function Graph2d({ data }: GraphProps) {
   const [gData, setGData] = useState(data);
 
-  // TODO: Create Context for `dataMemo`
   const dataMemo = useMemo(() => {
     const dataWithNeighbors = gData;
 
@@ -66,14 +57,14 @@ export function Graph2d({ data }: GraphProps) {
         .filter(
           (n) =>
             // @ts-ignore
-            n.id === link.source || n.id === link.source!.id
+            n.id === link.source || n.id === link.source.id
         )
         .first();
       const b = dataWithNeighbors.nodes
         .filter(
           (n) =>
             // @ts-ignore
-            n.id === link.target || n.id === link.source!.id
+            n.id === link.target || n.id === link.source.id
         )
         .first();
 
@@ -196,12 +187,8 @@ export function Graph2d({ data }: GraphProps) {
   );
 
   const handleConnectTwoItems = useCallback(async () => {
-    const id1 = (clickedNodes.first()!.id as string)
-      .split(":")
-      .last();
-    const id2 = (clickedNodes.second()!.id as string)
-      .split(":")
-      .last();
+    const id1 = clickedNodes.first()!.id;
+    const id2 = clickedNodes.second()!.id;
 
     const body = {
       title: "Test from Frontend",

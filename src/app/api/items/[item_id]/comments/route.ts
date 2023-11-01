@@ -31,8 +31,6 @@ export async function GET(
       }
     );
 
-    console.log(commentsResults.records);
-
     const nodes = getAllNodes(commentsResults);
     const links = getAllRelationships(commentsResults);
 

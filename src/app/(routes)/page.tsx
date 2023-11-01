@@ -6,7 +6,7 @@ import dynamic from "next/dynamic";
 
 /**
  * References:
- * 
+ *
  * - [React Force Graph Issue #136](https://github.com/vasturiano/react-force-graph/issues/136)
  * - [NextJS Issue #33848](https://github.com/vercel/next.js/issues/33848)
  */

@@ -40,13 +40,13 @@ export async function POST(
               AND id(connectee) = $connecteeId
             
             CREATE   (i)
-                    -[connected:CONNECTED]
+                    -[connected:CONNECTION_ORIGIN]
                    ->(c:Connection{
                         created_at: timestamp(),
                         deleted:    FALSE,
                         title:      $title
                      })
-                    -[connected_to:CONNECTED_TO]
+                    -[connected_to:CONNECTION_DESTINATION]
                    ->(connectee),
                      (c)
                     -[c_by:CONNECTED_BY]

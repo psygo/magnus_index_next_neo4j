@@ -24,6 +24,7 @@ export enum NeoLinkLabel {
   ConnectedBy = "CONNECTED_BY",
   ConnectionOrigin = "CONNECTION_ORIGIN",
   ConnectionDestination = "CONNECTION_DESTINATION",
+  Connection = "CONNECTION",
   Created = "CREATED",
   CreatedComment = "CREATED_COMMENT",
   CommentsOn = "COMMENTS_ON",
