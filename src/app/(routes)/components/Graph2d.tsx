@@ -202,7 +202,7 @@ export function Graph2d({ data }: GraphProps) {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          user_id: "4",
+          user_id: "7",
         },
         body: JSON.stringify(body),
       }

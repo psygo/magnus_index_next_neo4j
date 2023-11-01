@@ -55,12 +55,12 @@ user_id: 0
 
 ### 2.4. Connect Items
 
-@CONNECTED_ITEM_ID=20
-@CONNECTEE_ITEM_ID=21
+@CONNECTED_ITEM_ID=8
+@CONNECTEE_ITEM_ID=43
 
 POST {{API_URL}}/items/{{CONNECTED_ITEM_ID}}/connections/{{CONNECTEE_ITEM_ID}}
 Content-Type: "application/json"
-user_id: 4
+user_id: 7
 
 {
     "title": "Test Connection"
