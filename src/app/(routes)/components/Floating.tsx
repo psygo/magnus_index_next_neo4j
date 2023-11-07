@@ -13,6 +13,7 @@ import {
   ConnectionProperties,
   ItemProperties,
   NeoNodeLabel,
+  PointsProperties,
   UserProperties,
 } from "@/lib/models/graph";
 import {
@@ -39,6 +40,7 @@ export function HoverBubble({
 }: HoverBubbleProps) {
   return (
     <Paper
+      variant="outlined"
       sx={{
         position: "absolute",
         display: hoverNode ? "block" : "none",
@@ -46,7 +48,7 @@ export function HoverBubble({
         left: nodePos.x + 15,
         zIndex: 10,
         maxWidth: "300px",
-        p: 2,
+        p: 1.5,
       }}
     >
       <FloatingText hoverNode={hoverNode} />
@@ -80,6 +82,43 @@ export function FloatingText({
   }
 }
 
+export function PointsStats({
+  pointsProperties,
+}: {
+  pointsProperties: PointsProperties;
+}) {
+  return (
+    <Stack direction="row" spacing={1}>
+      <Stack direction="row" spacing={0.5}>
+        <Icon>
+          <ModeStandbyIcon />
+        </Icon>
+        <Typography fontWeight="bold">
+          {pointsProperties.points}
+        </Typography>
+      </Stack>
+
+      <Stack direction="row" spacing={0.5}>
+        <Icon>
+          <ArrowUpward sx={{ color: "green" }} />
+        </Icon>
+        <Typography color="green">
+          {pointsProperties.points_up}
+        </Typography>
+      </Stack>
+
+      <Stack direction="row" spacing={0.5}>
+        <Icon>
+          <ArrowDownward sx={{ color: "red" }} />
+        </Icon>
+        <Typography color="red">
+          {pointsProperties.points_down}
+        </Typography>
+      </Stack>
+    </Stack>
+  );
+}
+
 export function UserFloatingText({
   userProperties,
 }: {
@@ -91,34 +130,13 @@ export function UserFloatingText({
         {userProperties.name}
       </Typography>
 
-      <Stack direction="row" spacing={1}>
-        <Stack direction="row" spacing={0.5}>
-          <Icon>
-            <ModeStandbyIcon />
-          </Icon>
-          <Typography fontWeight="bold">
-            {userProperties.points}
-          </Typography>
-        </Stack>
-
-        <Stack direction="row" spacing={0.5}>
-          <Icon>
-            <ArrowUpward sx={{ color: "green" }} />
-          </Icon>
-          <Typography color="green">
-            {userProperties.points_up}
-          </Typography>
-        </Stack>
-
-        <Stack direction="row" spacing={0.5}>
-          <Icon>
-            <ArrowDownward sx={{ color: "red" }} />
-          </Icon>
-          <Typography color="red">
-            {userProperties.points_down}
-          </Typography>
-        </Stack>
-      </Stack>
+      <PointsStats
+        pointsProperties={{
+          points: userProperties.points,
+          points_up: userProperties.points_up,
+          points_down: userProperties.points_down,
+        }}
+      />
     </Stack>
   );
 }
@@ -129,11 +147,17 @@ export function ItemFloatingText({
   itemProperties: ItemProperties;
 }) {
   return (
-    <Box>
+    <Stack spacing={1}>
       <Typography>{itemProperties.title}</Typography>
-      <Typography>{itemProperties.content}</Typography>
-      <Typography>{itemProperties.points}</Typography>
-    </Box>
+
+      <PointsStats
+        pointsProperties={{
+          points: itemProperties.points,
+          points_up: itemProperties.points_up,
+          points_down: itemProperties.points_down,
+        }}
+      />
+    </Stack>
   );
 }
 
