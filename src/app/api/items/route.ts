@@ -6,6 +6,7 @@ import { getAllNodes } from "@/lib/utils/neo4j_utils";
 
 import { createHashtagMentions } from "@/lib/api_helpers/hashtags";
 import { createHyperlinkMention } from "@/lib/api_helpers/hyperlinks";
+import { createUserMentions } from "@/lib/api_helpers/user_mentions";
 
 /**
  * Create Item
@@ -50,6 +51,7 @@ export async function POST(req: NextRequest) {
 
     await createHashtagMentions(content, userId, itemId);
     await createHyperlinkMention(content, userId, itemId);
+    await createUserMentions(content, itemId);
 
     return NextResponse.json({ nodes });
   } catch (e) {

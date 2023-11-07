@@ -1,6 +1,6 @@
-import { neo4jSession } from "../config/db";
+import { neo4jSession } from "@/lib/config/db";
 
-import { Id } from "../models/graph";
+import { Id } from "@/lib/models/graph";
 
 const tagRegex =
   /(^|\B)#(?![0-9_]+\b)([a-zA-Z0-9_]{1,30})(\b|\r)/g;
@@ -27,10 +27,9 @@ export async function createHashtagMentions(
               WHERE ID(u) = $userId
                 AND ID(i) = $itemId
 
-              MERGE (t:Tag{ 
-                title:      $hashtag,
-                created_at: TIMESTAMP()
-              })
+              MERGE (t:Tag{ title: $hashtag })
+              
+              SET t.created_at = TIMESTAMP()
 
               CREATE   (t)
                       -[:TAG_MENTIONS_BY]

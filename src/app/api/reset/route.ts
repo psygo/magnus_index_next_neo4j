@@ -88,7 +88,7 @@ export async function POST() {
       body: JSON.stringify({
         title: "Designing Data-Intensive Applications",
         content:
-          "#software #books \n https://www.goodreads.com/book/show/23463279-designing-data-intensive-applications?ac=1&from_search=true&qid=VUDacXlSQb&rank=1 \n Data is at the center of many challenges in system design today. Difficult issues need to be figured out, such as scalability, consistency, reliability, efficiency, and maintainability. In addition, we have an overwhelming variety of tools, including relational databases, NoSQL datastores, stream or batch processors, and message brokers. What are the right choices for your application? How do you make sense of all these buzzwords?",
+          "#software #books @philippe_fanaro \n https://www.goodreads.com/book/show/23463279-designing-data-intensive-applications?ac=1&from_search=true&qid=VUDacXlSQb&rank=1 \n Data is at the center of many challenges in system design today. Difficult issues need to be figured out, such as scalability, consistency, reliability, efficiency, and maintainability. In addition, we have an overwhelming variety of tools, including relational databases, NoSQL datastores, stream or batch processors, and message brokers. What are the right choices for your application? How do you make sense of all these buzzwords?",
       }),
     });
     // #2

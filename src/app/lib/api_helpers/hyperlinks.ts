@@ -1,6 +1,6 @@
-import { neo4jSession } from "../config/db";
+import { neo4jSession } from "@/lib/config/db";
 
-import { Id } from "../models/graph";
+import { Id } from "@/lib/models/graph";
 
 const urlRegex =
   /(https?:\/\/(?:www\.|(?!www))[^\s\.]+\.[^\s]{2,}|www\.[^\s]+\.[^\s]{2,})/gi;
@@ -27,18 +27,17 @@ export async function createHyperlinkMention(
               WHERE ID(u) = $userId
                 AND ID(i) = $itemId
 
-              MERGE (t:Hyperlink{ 
-                link:      $hyperlink,
-                created_at: TIMESTAMP()
-              })
+              MERGE (h:Hyperlink{ link: $hyperlink })
 
-              CREATE   (t)
+              SET h.created_at = TIMESTAMP()
+
+              CREATE   (h)
                       -[:HYPERLINK_MENTIONS_BY]
                      ->(u)
                       -[:HYPERLINK_MENTIONS{ item_id: $itemId }]
                      ->(i)
                      
-              RETURN t, u, i
+              RETURN h, u, i
             `,
             { hyperlink, userId, itemId }
           );
