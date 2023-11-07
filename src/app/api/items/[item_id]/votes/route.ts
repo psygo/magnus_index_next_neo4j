@@ -66,11 +66,11 @@ export async function POST(
     const { points } = await req.json();
 
     const voteResults = await neo4jSession.executeWrite(
-      (tx) => {
-        return tx.run(
+      (tx) =>
+        tx.run(
           /* cypher */ `
             MATCH (voter:User), 
-                  (creator)-[created:CREATED]->(item:Item)
+                  (creator:User)-[created:CREATED]->(item:Item)
             
             WHERE id(voter) = $userId
               AND id(item)  = $itemId
@@ -83,20 +83,27 @@ export async function POST(
 
             CALL apoc.do.when(
               $points > 0,
-              'SET i.points_up   = COALESCE(i.points_up, 0)   + points RETURN i',
-              'SET i.points_down = COALESCE(i.points_down, 0) + points RETURN i',
+              'SET i.points_up   = i.points_up   + points RETURN i',
+              'SET i.points_down = i.points_down + points RETURN i',
               { i: item, points: $points }
             )
-            YIELD value AS _
+            YIELD value AS _value1
 
-            SET item.points    = COALESCE(item.points, 0)    + $points
-            SET creator.points = COALESCE(creator.points, 0) + $points
+            CALL apoc.do.when(
+              $points > 0,
+              'SET c.points_up   = c.points_up   + points RETURN c',
+              'SET c.points_down = c.points_down + points RETURN c',
+              { c: creator, points: $points }
+            )
+            YIELD value AS _value2
+
+            SET item.points    = item.points    + $points
+            SET creator.points = creator.points + $points
 
             RETURN voter, vote, item, creator, created
           `,
           { itemId, userId, points }
-        );
-      }
+        )
     );
 
     const nodes = getAllNodes(voteResults);

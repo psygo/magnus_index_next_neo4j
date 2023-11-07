@@ -41,23 +41,24 @@ export async function POST(req: NextRequest) {
   const { name, email } = await req.json();
 
   try {
-    const results = await neo4jSession.executeWrite(
-      (tx) => {
-        return tx.run(
-          /* cypher */ `
-            CREATE (u:User{
-              created_at: timestamp(),
-              deleted:    FALSE,
-              is_admin:   FALSE,
-              name:       $name,
-              email:      $email
-            })
-            
-            RETURN u
-          `,
-          { name, email }
-        );
-      }
+    const results = await neo4jSession.executeWrite((tx) =>
+      tx.run(
+        /* cypher */ `
+          CREATE (u:User{
+            created_at:  TIMESTAMP(),
+            deleted:     FALSE,
+            is_admin:    FALSE,
+            name:        $name,
+            email:       $email,
+            points_up:   0,
+            points_down: 0,
+            points:      0
+          })
+          
+          RETURN u
+        `,
+        { name, email }
+      )
     );
 
     const nodes = getAllNodes(results);

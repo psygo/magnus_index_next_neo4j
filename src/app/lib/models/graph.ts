@@ -78,6 +78,13 @@ export type OutLinkBase = {
 };
 
 //----------------------------------------------------------
+// Aux Properties
+
+export type PointsProperties = {
+  points?: number;
+};
+
+//----------------------------------------------------------
 // Node Properties
 
 export type NodeProperties =
@@ -85,17 +92,17 @@ export type NodeProperties =
   | ItemProperties
   | ConnectionProperties;
 
-export type UserProperties = {
+export type UserProperties = PointsProperties & {
   email: string;
   name: string;
 };
 
-export type ItemProperties = {
+export type ItemProperties = PointsProperties & {
   title: string;
   content: string;
 };
 
-export type ConnectionProperties = {
+export type ConnectionProperties = PointsProperties & {
   title: string;
 };
 

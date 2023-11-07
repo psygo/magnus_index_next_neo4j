@@ -15,32 +15,33 @@ export async function POST(req: NextRequest) {
 
     const userId = parseInt(req.headers.get("user_id")!);
 
-    const results = await neo4jSession.executeWrite(
-      (tx) => {
-        return tx.run(
-          /* cypher */ `
-            MATCH (u:User)
-            
-            WHERE ID(u) = $userId
+    const results = await neo4jSession.executeWrite((tx) =>
+      tx.run(
+        /* cypher */ `
+          MATCH (u:User)
+          
+          WHERE ID(u) = $userId
 
-            CREATE (u)-[:CREATED]->(
-                i:Item{
-                    created_at: timestamp(),
-                    deleted:    FALSE,
-                    title:      $title,
-                    content:    $content
-                }
-            )
-            
-            RETURN i
-          `,
-          {
-            userId,
-            title,
-            content,
-          }
-        );
-      }
+          CREATE (u)-[:CREATED]->(
+              i:Item{
+                  created_at:  TIMESTAMP(),
+                  deleted:     FALSE,
+                  title:       $title,
+                  content:     $content,
+                  points_up:   0,
+                  points_down: 0,
+                  points:      0
+              }
+          )
+          
+          RETURN i
+        `,
+        {
+          userId,
+          title,
+          content,
+        }
+      )
     );
 
     const nodes = getAllNodes(results);

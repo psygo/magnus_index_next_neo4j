@@ -30,8 +30,8 @@ export async function POST(
     const { title } = await req.json();
 
     const itemsResults = await neo4jSession.executeWrite(
-      (tx) => {
-        return tx.run(
+      (tx) =>
+        tx.run(
           /* cypher */ `
             MATCH (u:User), (i:Item), (connectee:Item)
 
@@ -42,9 +42,12 @@ export async function POST(
             CREATE   (i)
                     -[connected:CONNECTION_ORIGIN]
                    ->(c:Connection{
-                        created_at: timestamp(),
-                        deleted:    FALSE,
-                        title:      $title
+                        created_at:  TIMESTAMP(),
+                        deleted:     FALSE,
+                        title:       $title,
+                        points_up:   0,
+                        points_down: 0,
+                        points:      0
                      })
                     -[connected_to:CONNECTION_DESTINATION]
                    ->(connectee),
@@ -61,8 +64,7 @@ export async function POST(
                    c_by
           `,
           { userId, itemId, connecteeId, title }
-        );
-      }
+        )
     );
 
     const nodes = getAllNodes(itemsResults);

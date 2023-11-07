@@ -28,7 +28,6 @@ export async function GET() {
     const links = getAllRelationships(results);
 
     return NextResponse.json({ nodes, links });
-    // return NextResponse.json(out);
   } catch (e) {
     console.error(e);
 
