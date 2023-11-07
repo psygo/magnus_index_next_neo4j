@@ -3,10 +3,9 @@ import { NextRequest, NextResponse } from "next/server";
 import { neo4jSession } from "@/lib/config/db";
 
 import { getAllNodes } from "@/lib/utils/neo4j_utils";
-import {
-  createHashtagMentions,
-  extractHashtags,
-} from "@/lib/api_secondary/hashtags";
+
+import { createHashtagMentions } from "@/lib/api_helpers/hashtags";
+import { createHyperlinkMention } from "@/lib/api_helpers/hyperlinks";
 
 /**
  * Create Item
@@ -23,7 +22,7 @@ export async function POST(req: NextRequest) {
           /* cypher */ `
             MATCH (u:User)
             
-            WHERE id(u) = $userId
+            WHERE ID(u) = $userId
 
             CREATE (u)-[:CREATED]->(
                 i:Item{
@@ -47,12 +46,10 @@ export async function POST(req: NextRequest) {
 
     const nodes = getAllNodes(results);
 
-    const hashtags = extractHashtags(content);
-    if (hashtags.length > 0) {
-      const itemId = parseInt(nodes.first().id as string);
+    const itemId = parseInt(nodes.first().id as string);
 
-      await createHashtagMentions(hashtags, userId, itemId);
-    }
+    await createHashtagMentions(content, userId, itemId);
+    await createHyperlinkMention(content, userId, itemId);
 
     return NextResponse.json({ nodes });
   } catch (e) {
