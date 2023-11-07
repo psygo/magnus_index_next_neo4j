@@ -9,7 +9,7 @@ export function extractHyperlinks(text: string) {
   return (matches as string[]) ?? [];
 }
 
-export async function createHyperlinkMention(
+export async function createHyperlinkMentions(
   content: string,
   userId: Id,
   itemId: Id

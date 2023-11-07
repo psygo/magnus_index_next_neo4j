@@ -4,9 +4,7 @@ import { neo4jSession } from "@/lib/config/db";
 
 import { getAllNodes } from "@/lib/utils/neo4j_utils";
 
-import { createHashtagMentions } from "@/lib/api_helpers/hashtags";
-import { createHyperlinkMention } from "@/lib/api_helpers/hyperlinks";
-import { createUserMentions } from "@/lib/api_helpers/user_mentions";
+import { createContentMentions } from "@/lib/api_helpers/content_mentions/create_content_mentions";
 
 /**
  * Create Item
@@ -48,10 +46,7 @@ export async function POST(req: NextRequest) {
     const nodes = getAllNodes(results);
 
     const itemId = parseInt(nodes.first().id as string);
-
-    await createHashtagMentions(content, userId, itemId);
-    await createHyperlinkMention(content, userId, itemId);
-    await createUserMentions(content, itemId);
+    await createContentMentions(content, userId, itemId);
 
     return NextResponse.json({ nodes });
   } catch (e) {
