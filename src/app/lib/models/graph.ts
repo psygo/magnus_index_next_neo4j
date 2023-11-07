@@ -8,6 +8,8 @@ export enum NeoNodeLabel {
   Item = "Item",
   Connection = "Connection",
   Comment = "Comment",
+  Tag = "Tag",
+  Hyperlink = "Hyperlink",
 }
 
 export function stringToNeoNodeLabel(
@@ -81,7 +83,9 @@ export type OutLinkBase = {
 // Aux Properties
 
 export type PointsProperties = {
-  points?: number;
+  points: number;
+  points_up: number;
+  points_down: number;
 };
 
 //----------------------------------------------------------
@@ -90,7 +94,9 @@ export type PointsProperties = {
 export type NodeProperties =
   | UserProperties
   | ItemProperties
-  | ConnectionProperties;
+  | ConnectionProperties
+  | TagProperties
+  | HyperlinkProperties;
 
 export type UserProperties = PointsProperties & {
   email: string;
@@ -104,6 +110,14 @@ export type ItemProperties = PointsProperties & {
 
 export type ConnectionProperties = PointsProperties & {
   title: string;
+};
+
+export type TagProperties = {
+  title: string;
+};
+
+export type HyperlinkProperties = {
+  link: string;
 };
 
 //----------------------------------------------------------

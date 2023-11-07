@@ -1,4 +1,11 @@
-import { Box, Paper, Typography } from "@mui/material";
+import {
+  Box,
+  Icon,
+  Paper,
+  Stack,
+  Typography,
+} from "@mui/material";
+import ModeStandbyIcon from "@mui/icons-material/ModeStandby";
 
 import { NodeObject } from "react-force-graph-2d";
 
@@ -8,6 +15,10 @@ import {
   NeoNodeLabel,
   UserProperties,
 } from "@/lib/models/graph";
+import {
+  ArrowDownward,
+  ArrowUpward,
+} from "@mui/icons-material";
 
 type FloatingTextProps = {
   hoverNode: NodeObject;
@@ -47,64 +58,94 @@ export function FloatingText({
   hoverNode,
 }: FloatingTextProps) {
   if (hoverNode.type === NeoNodeLabel.User) {
-    const userProps =
+    const userProperties =
       hoverNode.properties as UserProperties;
     return (
-      <UserFloatingText
-        name={userProps.name}
-        email={userProps.email}
-      />
+      <UserFloatingText userProperties={userProperties} />
     );
   } else if (hoverNode.type === NeoNodeLabel.Item) {
-    const itemProps =
+    const itemProperties =
       hoverNode.properties as ItemProperties;
     return (
-      <ItemFloatingText
-        title={itemProps.title}
-        content={itemProps.content}
-      />
+      <ItemFloatingText itemProperties={itemProperties} />
     );
   } else {
-    const connectionProps =
+    const connectionProperties =
       hoverNode.properties as ConnectionProperties;
     return (
       <ConnectionFloatingText
-        title={connectionProps.title}
+        connectionProperties={connectionProperties}
       />
     );
   }
 }
 
 export function UserFloatingText({
-  email,
-  name,
-}: UserProperties) {
+  userProperties,
+}: {
+  userProperties: UserProperties;
+}) {
   return (
-    <Box>
-      <Typography>{email}</Typography>
-      <Typography>{name}</Typography>
-    </Box>
+    <Stack spacing={1}>
+      <Typography sx={{ paddingLeft: "5px" }}>
+        {userProperties.name}
+      </Typography>
+
+      <Stack direction="row" spacing={1}>
+        <Stack direction="row" spacing={0.5}>
+          <Icon>
+            <ModeStandbyIcon />
+          </Icon>
+          <Typography fontWeight="bold">
+            {userProperties.points}
+          </Typography>
+        </Stack>
+
+        <Stack direction="row" spacing={0.5}>
+          <Icon>
+            <ArrowUpward sx={{ color: "green" }} />
+          </Icon>
+          <Typography color="green">
+            {userProperties.points_up}
+          </Typography>
+        </Stack>
+
+        <Stack direction="row" spacing={0.5}>
+          <Icon>
+            <ArrowDownward sx={{ color: "red" }} />
+          </Icon>
+          <Typography color="red">
+            {userProperties.points_down}
+          </Typography>
+        </Stack>
+      </Stack>
+    </Stack>
   );
 }
 
 export function ItemFloatingText({
-  title,
-  content,
-}: ItemProperties) {
+  itemProperties,
+}: {
+  itemProperties: ItemProperties;
+}) {
   return (
     <Box>
-      <Typography>{title}</Typography>
-      <Typography>{content}</Typography>
+      <Typography>{itemProperties.title}</Typography>
+      <Typography>{itemProperties.content}</Typography>
+      <Typography>{itemProperties.points}</Typography>
     </Box>
   );
 }
 
 export function ConnectionFloatingText({
-  title,
-}: ConnectionProperties) {
+  connectionProperties,
+}: {
+  connectionProperties: ConnectionProperties;
+}) {
   return (
     <Box>
-      <Typography>{title}</Typography>
+      <Typography>{connectionProperties.title}</Typography>
+      <Typography>{connectionProperties.points}</Typography>
     </Box>
   );
 }
