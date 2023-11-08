@@ -1,4 +1,3 @@
-// @ts-nocheck
 import {
   Box,
   Chip,
@@ -29,6 +28,7 @@ import {
   ArrowDownward,
   ArrowUpward,
 } from "@mui/icons-material";
+import { ItemFloatingPage } from "./ItemFloatingPage";
 
 type FloatingTextProps = {
   hoverNode: NodeObject;
@@ -63,6 +63,47 @@ export function HoverBubble({
       <FloatingText hoverNode={hoverNode} />
     </Paper>
   );
+}
+
+type FloatingPageProps = {
+  clickedNode: NodeObject;
+};
+export function PageBubble({
+  clickedNode,
+}: FloatingPageProps) {
+  return (
+    <Paper
+      variant="outlined"
+      sx={{
+        position: "absolute",
+        display: clickedNode ? "block" : "none",
+        top: 10,
+        left: 10,
+        zIndex: 10,
+        maxWidth: "275px",
+        p: 1.5,
+      }}
+    >
+      <FloatingPage clickedNode={clickedNode} />
+    </Paper>
+  );
+}
+
+export function FloatingPage({
+  clickedNode,
+}: FloatingPageProps) {
+  if (clickedNode.type === NeoNodeLabel.Item) {
+    const itemProperties =
+      clickedNode.properties as ItemProperties;
+    return (
+      <ItemFloatingPage
+        itemId={clickedNode.id!}
+        initialItemProperties={itemProperties}
+      />
+    );
+  } else {
+    return <></>;
+  }
 }
 
 export function FloatingText({
@@ -216,7 +257,10 @@ export function ItemFloatingText({
         }}
       />
 
-      <Typography variant="caption">
+      <Typography
+        variant="caption"
+        sx={{ wordWrap: "break-word" }}
+      >
         {capString(itemProperties.content)}
       </Typography>
     </Stack>

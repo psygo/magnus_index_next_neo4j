@@ -28,7 +28,11 @@ import {
   OutNodeBase,
 } from "@/lib/models/graph";
 
-import { HoverBubble, NodePos } from "./Floating";
+import {
+  HoverBubble,
+  NodePos,
+  PageBubble,
+} from "./Floating";
 import { CreateConnection } from "./CreateConnections";
 
 const NODE_R = 8;
@@ -110,8 +114,6 @@ export function Graph2d({ data }: GraphProps) {
 
   function handleNodeClick(node: NodeOrNull) {
     setLastClickedNode(node);
-
-    console.log(node);
 
     clickedNodes.push(node);
     const newClickedNodes = clickedNodes.slice(
@@ -243,6 +245,9 @@ export function Graph2d({ data }: GraphProps) {
           hoverNode={hoverNode}
           nodePos={hoverNodePos}
         />
+      )}
+      {clickedNodes[1] && (
+        <PageBubble clickedNode={clickedNodes[1]} />
       )}
       <Box sx={{ position: "absolute" }}>
         <ForceGraph2D
