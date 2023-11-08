@@ -32,7 +32,7 @@ GET {{API_URL}}/graph
 
 ### 2.1. Get Item
 
-@ITEM_ID=1
+@ITEM_ID=43
 
 GET {{API_URL}}/items/{{ITEM_ID}}
 

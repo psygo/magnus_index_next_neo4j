@@ -111,6 +111,8 @@ export function Graph2d({ data }: GraphProps) {
   function handleNodeClick(node: NodeOrNull) {
     setLastClickedNode(node);
 
+    console.log(node);
+
     clickedNodes.push(node);
     const newClickedNodes = clickedNodes.slice(
       1

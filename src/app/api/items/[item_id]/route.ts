@@ -24,18 +24,49 @@ export async function GET(
     const itemId = parseInt(params.item_id);
 
     const itemsResults = await neo4jSession.executeRead(
-      (tx) => {
-        return tx.run(
+      (tx) =>
+        tx.run(
           /* cypher */ `
-            MATCH (i:Item)
+                    // Item and Author
+            MATCH   (u:User)-[c:CREATED]->(i:Item),
+                    // Tags
+                    (t:Tag)
+                   -[tmb:TAG_MENTIONS_BY]
+                  ->(u)
+                   -[tm:TAG_MENTIONS]
+                  ->(i),
+                    // Hyperlinks
+                    (h:Hyperlink)
+                   -[hmb:HYPERLINK_MENTIONS_BY]
+                  ->(u)
+                   -[hm:HYPERLINK_MENTIONS]
+                  ->(i),
+                    // Comments
+                    (commenter:User)
+                   -[cc:CREATED_COMMENT]
+                  ->(comment:Comment)
+                   -[co:COMMENTS_ON]
+                  ->(i),
+                    // Connections
+                    (other_item:Item)
+                   -[or_dest1]
+                   -(conn:Connection)
+                   -[or_dest2]
+                   -(i),
+                    (conn)
+                   -[cby:CONNECTED_BY]
+                  ->(conn_author:User)
             
-            WHERE id(i) = $itemId
+            WHERE ID(i) = $itemId
 
-            RETURN i
+            RETURN u, c, i,
+                   t, tm, tmb,
+                   h, hm, hmb,
+                   commenter, comment, cc, co,
+                   other_item, or_dest1, or_dest2, conn, cby, conn_author
           `,
           { itemId }
-        );
-      }
+        )
     );
 
     const nodes = getAllNodes(itemsResults);

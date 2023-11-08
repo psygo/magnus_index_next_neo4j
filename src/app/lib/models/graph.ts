@@ -30,6 +30,10 @@ export enum NeoLinkLabel {
   Created = "CREATED",
   CreatedComment = "CREATED_COMMENT",
   CommentsOn = "COMMENTS_ON",
+  TagMentions = "TAG_MENTIONS",
+  TagMentionsBy = "TAG_MENTIONS_BY",
+  HyperlinkMentions = "HYPERLINK_MENTIONS",
+  HyperlinkMentionsBy = "HYPERLINK_MENTIONS_BY",
 }
 
 export function stringToNeoLinkLabel(
