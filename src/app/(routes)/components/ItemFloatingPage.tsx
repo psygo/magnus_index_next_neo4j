@@ -2,10 +2,16 @@ import { useEffect, useState } from "react";
 
 import { Stack, Typography } from "@mui/material";
 
-import { Id, ItemProperties } from "@/lib/models/graph";
+import {
+  Id,
+  ItemProperties,
+  NeoLinkLabel,
+  NeoNodeLabel,
+} from "@/lib/models/graph";
 
 import { ItemFloatingText } from "./Floating";
 import { API_URL } from "../../lib/config/api_config";
+import { Comments } from "./Comments";
 
 export function ItemFloatingPage({
   initialItemProperties,
@@ -17,8 +23,10 @@ export function ItemFloatingPage({
   const [currentItemProperties, setItemProperties] =
     useState(initialItemProperties);
 
-  const [completeItemData, setCompleteItemData] =
-    useState();
+  const [completeItemData, setCompleteItemData] = useState<{
+    links: any[];
+    nodes: any[];
+  }>();
 
   useEffect(() => {
     async function getItem() {
@@ -30,9 +38,10 @@ export function ItemFloatingPage({
         }
       );
 
-      const itemCompleteData = await itemRes.json();
-
-      console.log(itemCompleteData);
+      const itemCompleteData = (await itemRes.json()) as {
+        links: any[];
+        nodes: any[];
+      };
 
       setCompleteItemData(itemCompleteData);
     }
@@ -41,10 +50,23 @@ export function ItemFloatingPage({
   }, [itemId]);
 
   return (
-    <Stack>
+    <Stack spacing={3}>
       <ItemFloatingText
         itemProperties={currentItemProperties}
       />
+      {completeItemData && (
+        <Comments
+          comments={completeItemData?.nodes.filter(
+            (n) => n.type === NeoNodeLabel.Comment
+          )}
+          authors={completeItemData?.nodes.filter(
+            (n) => n.type === NeoNodeLabel.User
+          )}
+          createdComments={completeItemData?.links.filter(
+            (n) => n.type === NeoLinkLabel.CreatedComment
+          )}
+        />
+      )}
     </Stack>
   );
 }

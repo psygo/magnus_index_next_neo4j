@@ -116,6 +116,10 @@ export type ConnectionProperties = PointsProperties & {
   title: string;
 };
 
+export type CommentProperties = PointsProperties & {
+  content: string;
+};
+
 export type TagProperties = {
   title: string;
 };
