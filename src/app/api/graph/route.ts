@@ -17,7 +17,9 @@ export async function GET() {
         return tx.run(/* cypher */ `
           MATCH (n)-[r]-(m)
           
-          WHERE NOT (r:VOTES_ON)
+          WHERE NOT (r:VOTES_ON) 
+            AND NOT (n:Comment)
+            AND NOT (m:Comment)
             
           RETURN n, r, m
         `);

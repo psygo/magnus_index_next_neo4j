@@ -252,11 +252,17 @@ export function Graph2d({ data }: GraphProps) {
           nodeColor={(node) => {
             const n = node as NodeObject<OutNodeBase>;
 
-            return n.type === NeoNodeLabel.User
-              ? "purple"
-              : n.type === NeoNodeLabel.Item
-              ? "green"
-              : "blue";
+            if (n.type === NeoNodeLabel.User) {
+              return "purple";
+            } else if (n.type === NeoNodeLabel.Item) {
+              return "green";
+            } else if (n.type === NeoNodeLabel.Tag) {
+              return "darkcyan";
+            } else if (n.type === NeoNodeLabel.Hyperlink) {
+              return "cornflowerblue";
+            } else {
+              return "grey";
+            }
           }}
           autoPauseRedraw={false}
           linkWidth={(link) =>
