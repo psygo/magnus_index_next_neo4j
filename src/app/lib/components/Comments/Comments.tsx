@@ -1,24 +1,6 @@
-import { Stack, Typography } from "@mui/material";
+import { Stack } from "@mui/material";
 
-import {
-  CommentProperties,
-  UserProperties,
-} from "@/lib/models/graph";
-
-export function Comment({
-  commentProperties,
-  authorProperties,
-}: {
-  commentProperties: CommentProperties;
-  authorProperties: UserProperties;
-}) {
-  return (
-    <Stack spacing={1}>
-      <Typography>{authorProperties.name}</Typography>
-      <Typography>{commentProperties.content}</Typography>
-    </Stack>
-  );
-}
+import { Comment } from "./Comment";
 
 export function Comments({
   comments,
@@ -40,8 +22,6 @@ export function Comments({
 
     commentPairs.push({ author, comment });
   }
-
-  console.log(commentPairs);
 
   return (
     <Stack spacing={2}>

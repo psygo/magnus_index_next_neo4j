@@ -1,17 +1,19 @@
 import { useEffect, useState } from "react";
 
-import { Stack, Typography } from "@mui/material";
+import { Stack } from "@mui/material";
+
+import { API_URL } from "@/lib/config/api_config";
 
 import {
   Id,
   ItemProperties,
   NeoLinkLabel,
   NeoNodeLabel,
-} from "@/lib/models/graph";
+} from "@/lib/models/exports";
 
-import { ItemFloatingText } from "./Floating";
-import { API_URL } from "../../lib/config/api_config";
-import { Comments } from "./Comments";
+import { ItemFloatingText } from "@/(routes)/components/Floating";
+
+import { Comments } from "../Comments/Comments";
 
 export function ItemFloatingPage({
   initialItemProperties,

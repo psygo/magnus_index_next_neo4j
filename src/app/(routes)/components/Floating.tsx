@@ -28,7 +28,7 @@ import {
   ArrowDownward,
   ArrowUpward,
 } from "@mui/icons-material";
-import { ItemFloatingPage } from "./ItemFloatingPage";
+import { ItemFloatingPage } from "../../lib/components/Items/ItemFloatingPage";
 
 type FloatingTextProps = {
   hoverNode: NodeObject;

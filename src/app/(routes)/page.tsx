@@ -1,6 +1,6 @@
 "use client";
 
-import { useGraphData } from "./utils/use_graph_data";
+import { useGraphData } from "@/lib/hooks/exports";
 
 import dynamic from "next/dynamic";
 
@@ -12,7 +12,7 @@ import dynamic from "next/dynamic";
  */
 const NoSSRForceGraph2D = dynamic(
   () =>
-    import("./components/Graph2d").then(
+    import("../lib/components/Graph/Graph2d").then(
       (module) => module.Graph2d
     ),
   { ssr: false }
