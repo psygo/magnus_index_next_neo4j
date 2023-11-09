@@ -8,17 +8,22 @@ import {
   Relationship,
 } from "neo4j-driver";
 
+import { GraphData } from "react-force-graph-2d";
+
 import {
-  LinkProperties,
   Neo4jGraphElement,
   NeoLinkLabel,
   NeoNodeBase,
   NeoNodeLabel,
-  OutLinkBase,
-  OutNodeBase,
   stringToNeoLinkLabel,
+  stringToNeoNodeLabel,
 } from "@/lib/models/graph";
-import { GraphData } from "react-force-graph-2d";
+import {
+  LinkProperties,
+  NodeProperties,
+  OutLinkAny,
+  OutNodeAny,
+} from "@/lib/models/graph2";
 
 export function extractNeo4jId(s: string) {
   return s.split(":").last();
@@ -41,11 +46,17 @@ export function getAllNodes(
     (fr) => fr instanceof Node
   ) as NeoNodeBase[];
 
-  const remappedNodes = allNodes.map<OutNodeBase>((n) => ({
-    type: n.labels.first(),
-    id: extractNeo4jId(n.elementId),
-    properties: n.properties,
-  }));
+  const remappedNodes = allNodes.map<OutNodeAny>((n) => {
+    const type = stringToNeoNodeLabel(n.labels.first());
+
+    return {
+      type,
+      id: extractNeo4jId(n.elementId as string),
+      properties: n.properties as NodeProperties<
+        typeof type
+      >,
+    };
+  });
 
   const nodesSet = _.uniqBy(remappedNodes, "id");
 
@@ -72,13 +83,19 @@ export function getAllRelationships(
   );
 
   const remappedRelationships =
-    allRelationships.map<OutLinkBase>((r) => ({
-      type: stringToNeoLinkLabel(r.type),
-      id: extractNeo4jId(r.elementId),
-      source: extractNeo4jId(r.startNodeElementId),
-      target: extractNeo4jId(r.endNodeElementId),
-      properties: r.properties as LinkProperties,
-    }));
+    allRelationships.map<OutLinkAny>((r) => {
+      const type = stringToNeoLinkLabel(r.type);
+
+      return {
+        type,
+        id: extractNeo4jId(r.elementId),
+        source: extractNeo4jId(r.startNodeElementId),
+        target: extractNeo4jId(r.endNodeElementId),
+        properties: r.properties as LinkProperties<
+          typeof type
+        >,
+      };
+    });
 
   const relationshipsSet = _.uniqBy(
     remappedRelationships,
@@ -89,7 +106,7 @@ export function getAllRelationships(
 }
 
 export function collapseConnectionsPaths(
-  data: GraphData<OutNodeBase, OutLinkBase>
+  data: GraphData<OutNodeAny, OutLinkAny>
 ) {
   // 1. Get Connection Origins
   const connectionOrigins = data.links.filter(
@@ -97,7 +114,7 @@ export function collapseConnectionsPaths(
   );
 
   // 2. Collapse Connection Paths
-  const collapsedConnections: OutLinkBase[] = [];
+  const collapsedConnections: OutLinkAny[] = [];
   for (const connectionOrigin of connectionOrigins) {
     const destinationLink = data.links
       .filter((l) => l.source === connectionOrigin.target)
@@ -112,7 +129,7 @@ export function collapseConnectionsPaths(
       source: connectionOrigin.source,
       target: destinationLink.target,
       properties: connectionOriginTarget.properties,
-    } as OutLinkBase;
+    } as OutLinkAny;
 
     collapsedConnections.push(collapsedConnection);
   }
@@ -140,5 +157,5 @@ export function collapseConnectionsPaths(
   return {
     nodes: nodesWithoutConnections,
     links: mergedLinks,
-  } as GraphData<OutNodeBase, OutLinkBase>;
+  } as GraphData<OutNodeAny, OutLinkAny>;
 }
