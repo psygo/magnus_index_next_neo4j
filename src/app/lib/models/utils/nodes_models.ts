@@ -1,5 +1,5 @@
 import { NeoNodeLabel } from "./node_labels";
-import { Id, WithId } from "./utils";
+import { Id, WithId } from "./mixin_models";
 
 export type NeoNodeBase = {
   labels: NeoNodeLabel[];

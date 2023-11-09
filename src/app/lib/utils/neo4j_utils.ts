@@ -13,21 +13,21 @@ import { GraphData } from "react-force-graph-2d";
 import {
   NeoNodeLabel,
   stringToNeoNodeLabel,
-} from "@/lib/models/node_labels";
+} from "@/lib/models/utils/node_labels";
 import {
   NeoLinkLabel,
   stringToNeoLinkLabel,
-} from "@/lib/models/link_labels";
-import { ApiStandardRes } from "@/lib/models/react_force_graph_models";
+} from "@/lib/models/utils/link_labels";
+import { ApiStandardRes } from "@/lib/models/utils/react_force_graph_models";
 import {
   NeoNodeBase,
   NodeProperties,
   OutNodeAny,
-} from "@/lib/models/nodes_models";
+} from "@/lib/models/utils/nodes_models";
 import {
   LinkProperties,
   OutLinkAny,
-} from "@/lib/models/link_models";
+} from "@/lib/models/utils/link_models";
 
 export type Neo4jGraphElement = {
   elementId: string;

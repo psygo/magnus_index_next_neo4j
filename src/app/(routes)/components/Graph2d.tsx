@@ -21,7 +21,7 @@ import { collapseConnectionsPaths } from "@/lib/utils/neo4j_utils";
 
 import { API_URL } from "@/lib/config/api_config";
 
-import { NeoNodeLabel } from "@/lib/models/node_labels";
+import { NeoNodeLabel } from "@/lib/models/utils/node_labels";
 
 import {
   HoverBubble,
@@ -36,8 +36,8 @@ import {
   LinkOrNull,
   NodeObj,
   NodeOrNull,
-} from "@/lib/models/react_force_graph_models";
-import { OutNodeAny } from "@/lib/models/nodes_models";
+} from "@/lib/models/utils/react_force_graph_models";
+import { OutNodeAny } from "@/lib/models/utils/nodes_models";
 
 const NODE_R = 8;
 

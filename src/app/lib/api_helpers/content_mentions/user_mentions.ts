@@ -1,6 +1,6 @@
 import { neo4jSession } from "@/lib/config/db";
 
-import { Id } from "@/lib/models/utils";
+import { Id } from "@/lib/models/utils/mixin_models";
 
 const userMentionsRegex = /\B@\w+/g;
 export function extractUserMentions(text: string) {

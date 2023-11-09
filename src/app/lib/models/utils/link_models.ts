@@ -1,7 +1,7 @@
 import { NeoLinkLabel } from "./link_labels";
 import { NeoNodeLabel } from "./node_labels";
 import { OutNode, OutNodeAny } from "./nodes_models";
-import { Id, WithId } from "./utils";
+import { Id, WithId } from "./mixin_models";
 
 export type NeoLinkBase = {
   type: NeoLinkLabel;

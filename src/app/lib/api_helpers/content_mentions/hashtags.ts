@@ -1,6 +1,6 @@
 import { neo4jSession } from "@/lib/config/db";
 
-import { Id } from "@/lib/models/utils";
+import { Id } from "@/lib/models/utils/mixin_models";
 
 const tagRegex =
   /(^|\B)#(?![0-9_]+\b)([a-zA-Z0-9_]{1,30})(\b|\r)/g;
