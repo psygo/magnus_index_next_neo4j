@@ -22,17 +22,17 @@ export async function POST(req: NextRequest) {
           
           WHERE ID(u) = $userId
 
-          CREATE (u)-[:CREATED]->(
-              i:Item{
-                  created_at:  TIMESTAMP(),
-                  deleted:     FALSE,
-                  title:       $title,
-                  content:     $content,
-                  points_up:   0,
-                  points_down: 0,
-                  points:      0
-              }
-          )
+          CREATE   (u)
+                  -[:CREATED]
+                 ->(i:Item{
+                     created_at:  TIMESTAMP(),
+                     deleted:     FALSE,
+                     title:       $title,
+                     content:     $content,
+                     points_up:   0,
+                     points_down: 0,
+                     points:      0
+                   })
           
           RETURN i
         `,

@@ -35,106 +35,107 @@ export type GraphProps = {
 //----------------------------------------------------------
 // Aux
 
-export interface WithId {
+export type WithId = {
   id: Id;
-}
+};
+
+export type WithPoints = {
+  points: number;
+  points_up: number;
+  points_down: number;
+};
 
 //----------------------------------------------------------
 // Nodes
 
-export interface OutNodeAny extends WithId {
+export type OutNodeAny = WithId & {
   type: NeoNodeLabel;
   properties: NodePropertiesAny;
-}
-export interface OutNode<N extends NeoNodeLabel>
-  extends OutNodeAny {
+};
+export type OutNode<N extends NeoNodeLabel> = OutNodeAny & {
   type: N;
   properties: NodeProperties<N>;
-}
+};
 
-export interface NodePropertiesAny {}
-export interface NodeProperties<N extends NeoNodeLabel>
-  extends NodePropertiesAny {}
+export type NodePropertiesAny = {};
+export type NodeProperties<N extends NeoNodeLabel> =
+  NodePropertiesAny;
 
-export interface UserProperties
-  extends NodeProperties<NeoNodeLabel.User> {
-  email: string;
-  name: string;
-}
-export interface UserNode
-  extends OutNode<NeoNodeLabel.User> {
+export type UserProperties =
+  NodeProperties<NeoNodeLabel.User> & {
+    email: string;
+    name: string;
+  };
+export type UserNode = OutNode<NeoNodeLabel.User> & {
   properties: UserProperties;
-}
+};
 
-export interface ItemProperties
-  extends NodeProperties<NeoNodeLabel.Item> {
-  title: string;
-  content: string;
-}
-export interface ItemNode
-  extends OutNode<NeoNodeLabel.Item> {
+export type ItemProperties =
+  NodeProperties<NeoNodeLabel.Item> & {
+    title: string;
+    content: string;
+  };
+export type ItemNode = OutNode<NeoNodeLabel.Item> & {
   properties: ItemProperties;
-}
+};
 
-export interface CommentProperties
-  extends NodeProperties<NeoNodeLabel.Comment> {
-  content: string;
-}
-export interface CommentNode
-  extends OutNode<NeoNodeLabel.Comment> {
+export type CommentProperties =
+  NodeProperties<NeoNodeLabel.Comment> & {
+    content: string;
+  };
+export type CommentNode = OutNode<NeoNodeLabel.Comment> & {
   properties: CommentNode;
-}
+};
 
-export interface TagProperties
-  extends NodeProperties<NeoNodeLabel.Tag> {
-  title: string;
-}
-export interface TagNode extends OutNode<NeoNodeLabel.Tag> {
+export type TagProperties =
+  NodeProperties<NeoNodeLabel.Tag> & {
+    title: string;
+  };
+export type TagNode = OutNode<NeoNodeLabel.Tag> & {
   properties: TagProperties;
-}
+};
 
-export interface HyperlinkProperties
-  extends NodeProperties<NeoNodeLabel.Hyperlink> {
-  link: string;
-}
-export interface HyperlinkNode
-  extends OutNode<NeoNodeLabel.Hyperlink> {
-  properties: HyperlinkProperties;
-}
+export type HyperlinkProperties =
+  NodeProperties<NeoNodeLabel.Hyperlink> & {
+    link: string;
+  };
+export type HyperlinkNode =
+  OutNode<NeoNodeLabel.Hyperlink> & {
+    properties: HyperlinkProperties;
+  };
 
 //----------------------------------------------------------
 // Links
 
-export interface OutLinkAny extends WithId {
+export type OutLinkAny = WithId & {
   type: NeoLinkLabel;
   source: Id | OutNodeAny;
   target: Id | OutNodeAny;
   properties: LinkPropertiesAny;
-}
-export interface OutLink<
+};
+export type OutLink<
   L extends NeoLinkLabel,
   S extends NeoNodeLabel,
   T extends NeoNodeLabel
-> extends OutLinkAny {
+> = OutLinkAny & {
   type: L;
   source: Id | OutNode<S>;
   target: Id | OutNode<T>;
   properties: LinkProperties<L>;
-}
+};
 
-export interface LinkPropertiesAny {}
-export interface LinkProperties<L extends NeoLinkLabel>
-  extends LinkPropertiesAny {}
+export type LinkPropertiesAny = {};
+export type LinkProperties<L extends NeoLinkLabel> =
+  LinkPropertiesAny;
 
-export interface FollowsProperties
-  extends LinkProperties<NeoLinkLabel.Follows> {
-  created_at: number;
-}
-export interface FollowsLink
-  extends OutLink<
-    NeoLinkLabel.Follows,
-    NeoNodeLabel.User,
-    NeoNodeLabel.User
-  > {}
+export type FollowsProperties =
+  LinkProperties<NeoLinkLabel.Follows> & {
+    created_at: number;
+  };
+export type FollowsLink = OutLink<
+  NeoLinkLabel.Follows,
+  NeoNodeLabel.User,
+  NeoNodeLabel.User
+> & { properties: FollowsProperties };
 
 //----------------------------------------------------------
