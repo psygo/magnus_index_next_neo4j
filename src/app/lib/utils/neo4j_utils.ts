@@ -47,16 +47,16 @@ export function getAllNodesAndRelationships(
   } as ApiStandardRes;
 }
 
-export function getAllNodes(
-  results: QueryResult<RecordShape>
-) {
+export function getAllNodes<
+  N extends OutNodeAny = OutNodeAny
+>(results: QueryResult<RecordShape>) {
   const flattenedRecords = flattenRecords(results);
 
   const allNodes = flattenedRecords.filter(
     (fr) => fr instanceof Node
   ) as NeoNodeBase[];
 
-  const remappedNodes = allNodes.map<OutNodeAny>((n) => {
+  const remappedNodes = allNodes.map<N>((n) => {
     const type = stringToNeoNodeLabel(n.labels.first());
 
     return {
@@ -65,7 +65,7 @@ export function getAllNodes(
       properties: n.properties as NodeProperties<
         typeof type
       >,
-    };
+    } as N;
   });
 
   const nodesSet = _.uniqBy(remappedNodes, "id");
@@ -73,9 +73,9 @@ export function getAllNodes(
   return nodesSet;
 }
 
-export function getAllRelationships(
-  results: QueryResult<RecordShape>
-) {
+export function getAllRelationships<
+  L extends OutLinkAny = OutLinkAny
+>(results: QueryResult<RecordShape>) {
   const flattenedRecords = flattenRecords(results);
 
   const allRelationshipsAndPaths = flattenedRecords.filter(
@@ -92,8 +92,8 @@ export function getAllRelationships(
     }
   );
 
-  const remappedRelationships =
-    allRelationships.map<OutLinkAny>((r) => {
+  const remappedRelationships = allRelationships.map<L>(
+    (r) => {
       const type = stringToNeoLinkLabel(r.type);
 
       return {
@@ -104,8 +104,9 @@ export function getAllRelationships(
         properties: r.properties as LinkProperties<
           typeof type
         >,
-      };
-    });
+      } as L;
+    }
+  );
 
   const relationshipsSet = _.uniqBy(
     remappedRelationships,

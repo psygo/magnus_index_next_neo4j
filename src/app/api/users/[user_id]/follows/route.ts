@@ -2,7 +2,12 @@ import { NextRequest, NextResponse } from "next/server";
 
 import { neo4jSession } from "@/lib/config/db";
 
-import { getAllNodesAndRelationships } from "@/lib/utils/neo4j_utils";
+import { FollowsLink, UserNode } from "@/lib/models/graph2";
+
+import {
+  getAllNodes,
+  getAllRelationships,
+} from "@/lib/utils/neo4j_utils";
 
 import { UserParams } from "../route";
 
@@ -34,9 +39,10 @@ export async function GET(
       )
     );
 
-    return NextResponse.json(
-      getAllNodesAndRelationships(results)
-    );
+    const nodes = getAllNodes<UserNode>(results);
+    const links = getAllRelationships<FollowsLink>(results);
+
+    return NextResponse.json({ nodes, links });
   } catch (e) {
     console.error(e);
 
@@ -71,8 +77,8 @@ export async function POST(
 
           CREATE   (follower)
                   -[f:FOLLOWS {
-                       created_at: TIMESTAMP(),
-                       deleted:    FALSE
+                     created_at: TIMESTAMP(),
+                     deleted:    FALSE
                    }]
                  ->(followed)
                  
@@ -82,9 +88,10 @@ export async function POST(
       )
     );
 
-    return NextResponse.json(
-      getAllNodesAndRelationships(results)
-    );
+    const nodes = getAllNodes<UserNode>(results);
+    const links = getAllRelationships<FollowsLink>(results);
+
+    return NextResponse.json({ nodes, links });
   } catch (e) {
     console.error(e);
 
