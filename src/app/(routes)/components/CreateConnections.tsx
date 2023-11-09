@@ -7,8 +7,8 @@ import {
   TextField,
 } from "@mui/material";
 
-import { ClickedNodesPair } from "./Graph2d";
 import { FloatingText } from "./Floating";
+import { ClickedNodesPair } from "@/lib/models/graph";
 
 type CreateConnectionProps = {
   clickedNodes: ClickedNodesPair;

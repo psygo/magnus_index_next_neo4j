@@ -1,3 +1,9 @@
+import {
+  GraphData,
+  LinkObject,
+  NodeObject,
+} from "react-force-graph-2d";
+
 //----------------------------------------------------------
 // Aux
 
@@ -84,6 +90,24 @@ export type OutLinkBase = {
 };
 
 //----------------------------------------------------------
+// React Force Graph
+
+export type NodeObj = NodeObject<OutNodeBase>;
+export type LinkObj = LinkObject<OutNodeBase, OutLinkBase>;
+
+export type NodeOrNull = NodeObj | null;
+export type LinkOrNull = LinkObject<
+  OutNodeBase,
+  OutLinkBase
+> | null;
+
+export type ClickedNodesPair = [NodeOrNull, NodeOrNull];
+
+export type GraphProps = {
+  data: GraphData<OutNodeBase, OutLinkBase>;
+};
+
+//----------------------------------------------------------
 // Aux Properties
 
 export type PointsProperties = {
@@ -101,47 +125,77 @@ export type NodeProperties =
   | ConnectionProperties
   | TagProperties
   | HyperlinkProperties;
+export type OutNode =
+  | UserNode
+  | ItemNode
+  | ConnectionNode
+  | TagNode
+  | HyperlinkNode;
 
 export type UserProperties = PointsProperties & {
   email: string;
   name: string;
+};
+export type UserNode = OutNodeBase & {
+  type: NeoNodeLabel.User;
+  properties: UserProperties;
 };
 
 export type ItemProperties = PointsProperties & {
   title: string;
   content: string;
 };
+export type ItemNode = OutNodeBase & {
+  type: NeoNodeLabel.User;
+  properties: UserProperties;
+};
 
 export type ConnectionProperties = PointsProperties & {
   title: string;
+};
+export type ConnectionNode = OutNodeBase & {
+  type: NeoNodeLabel.Connection;
+  properties: ConnectionProperties;
 };
 
 export type CommentProperties = PointsProperties & {
   content: string;
 };
+export type CommentNode = OutNodeBase & {
+  type: NeoNodeLabel.Comment;
+  properties: CommentProperties;
+};
 
 export type TagProperties = {
   title: string;
+};
+export type TagNode = OutNodeBase & {
+  type: NeoNodeLabel.Tag;
+  properties: TagProperties;
 };
 
 export type HyperlinkProperties = {
   link: string;
 };
+export type HyperlinkNode = OutNodeBase & {
+  type: NeoNodeLabel.Hyperlink;
+  properties: HyperlinkProperties;
+};
 
 //----------------------------------------------------------
 // Link Properties
 
-export type LinkProperties =
-  | FollowsProperties
-  | ConnectionLinkProperties;
+export type LinkProperties = FollowsProperties;
+export type OutLink = FollowsLink;
 
 export type FollowsProperties = {
   created_at: number;
 };
-
-export type ConnectionLinkProperties = {
-  title: string;
-  connected_by: string;
+export type FollowsLink = OutLinkBase & {
+  type: NeoLinkLabel.Follows;
+  source: Id | UserNode;
+  target: Id | UserNode;
+  properties: FollowsProperties;
 };
 
 //----------------------------------------------------------

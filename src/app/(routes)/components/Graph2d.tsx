@@ -12,7 +12,6 @@ import { Box } from "@mui/material";
 
 import ForceGraph2D, {
   ForceGraphMethods,
-  GraphData,
   LinkObject,
   NodeObject,
 } from "react-force-graph-2d";
@@ -23,8 +22,13 @@ import { collapseConnectionsPaths } from "@/lib/utils/neo4j_utils";
 import { API_URL } from "@/lib/config/api_config";
 
 import {
+  ClickedNodesPair,
+  GraphProps,
+  LinkObj,
+  LinkOrNull,
   NeoNodeLabel,
-  OutLinkBase,
+  NodeObj,
+  NodeOrNull,
   OutNodeBase,
 } from "@/lib/models/graph";
 
@@ -36,21 +40,6 @@ import {
 import { CreateConnection } from "./CreateConnections";
 
 const NODE_R = 8;
-
-export type NodeObj = NodeObject<OutNodeBase>;
-export type LinkObj = LinkObject<OutNodeBase, OutLinkBase>;
-
-export type NodeOrNull = NodeObj | null;
-export type LinkOrNull = LinkObject<
-  OutNodeBase,
-  OutLinkBase
-> | null;
-
-export type ClickedNodesPair = [NodeOrNull, NodeOrNull];
-
-type GraphProps = {
-  data: GraphData<OutNodeBase, OutLinkBase>;
-};
 
 export function Graph2d({ data }: GraphProps) {
   const [gData, setGData] = useState(data);
