@@ -2,17 +2,13 @@ import { NextRequest, NextResponse } from "next/server";
 
 import { neo4jSession } from "@/lib/config/db";
 
-import {
-  getAllNodes,
-  getAllRelationships,
-} from "@/lib/utils/neo4j_utils";
+import { getAllNodesAndRelationships } from "@/lib/utils/neo4j_utils";
 
 type UserItemsParams = {
   params: {
     user_id: string;
   };
 };
-
 /**
  * User's Items
  */
@@ -23,25 +19,24 @@ export async function GET(
   try {
     const userId = parseInt(params.user_id);
 
-    const results = await neo4jSession.executeRead((tx) => {
-      return tx.run(
+    const results = await neo4jSession.executeRead((tx) =>
+      tx.run(
         /* cypher */ `
-            MATCH  (u      :User)
-                  -[created:CREATED]->
-                   (item   :Item)
-            
-            WHERE id(u) = $userId
+          MATCH  (u      :User)
+                -[created:CREATED]->
+                 (item   :Item)
+          
+          WHERE ID(u) = $userId
 
-            RETURN u, created, item
-          `,
+          RETURN u, created, item
+        `,
         { userId }
-      );
-    });
+      )
+    );
 
-    const nodes = getAllNodes(results);
-    const links = getAllRelationships(results);
-
-    return NextResponse.json({ nodes, links });
+    return NextResponse.json(
+      getAllNodesAndRelationships(results)
+    );
   } catch (e) {
     console.error(e);
 
