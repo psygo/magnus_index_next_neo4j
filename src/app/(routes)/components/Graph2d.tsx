@@ -26,11 +26,11 @@ import {
   GraphProps,
   LinkObj,
   LinkOrNull,
-  NeoNodeLabel,
   NodeObj,
   NodeOrNull,
-  OutNodeBase,
-} from "@/lib/models/graph";
+  OutNodeAny,
+} from "@/lib/models/graph2";
+import { NeoNodeLabel } from "@/lib/models/node_label";
 
 import {
   HoverBubble,
@@ -53,14 +53,14 @@ export function Graph2d({ data }: GraphProps) {
         .filter(
           (n) =>
             n.id === link.source ||
-            n.id === (link.source as OutNodeBase).id
+            n.id === (link.source as OutNodeAny).id
         )
         .first();
       const b = dataWithNeighbors.nodes
         .filter(
           (n) =>
             n.id === link.target ||
-            n.id === (link.source as OutNodeBase).id
+            n.id === (link.source as OutNodeAny).id
         )
         .first();
 
@@ -244,7 +244,7 @@ export function Graph2d({ data }: GraphProps) {
           graphData={dataMemo}
           nodeRelSize={NODE_R}
           nodeColor={(node) => {
-            const n = node as NodeObject<OutNodeBase>;
+            const n = node as NodeObject<OutNodeAny>;
 
             if (n.type === NeoNodeLabel.User) {
               return "purple";

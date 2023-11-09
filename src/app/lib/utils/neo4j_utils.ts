@@ -12,11 +12,7 @@ import { GraphData } from "react-force-graph-2d";
 
 import {
   Neo4jGraphElement,
-  NeoLinkLabel,
   NeoNodeBase,
-  NeoNodeLabel,
-  stringToNeoLinkLabel,
-  stringToNeoNodeLabel,
 } from "@/lib/models/graph";
 import {
   ApiStandardRes,
@@ -25,6 +21,14 @@ import {
   OutLinkAny,
   OutNodeAny,
 } from "@/lib/models/graph2";
+import {
+  NeoNodeLabel,
+  stringToNeoNodeLabel,
+} from "@/lib/models/node_label";
+import {
+  NeoLinkLabel,
+  stringToNeoLinkLabel,
+} from "@/lib/models/link_labels";
 
 export function extractNeo4jId(s: string) {
   return s.split(":").last();

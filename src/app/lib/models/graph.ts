@@ -3,52 +3,13 @@ import {
   LinkObject,
   NodeObject,
 } from "react-force-graph-2d";
+import { NeoNodeLabel } from "./node_labels";
+import { NeoLinkLabel } from "./link_labels";
 
 //----------------------------------------------------------
 // Aux
 
 export type Id = string | number;
-
-export enum NeoNodeLabel {
-  User = "User",
-  Item = "Item",
-  Connection = "Connection",
-  Comment = "Comment",
-  Tag = "Tag",
-  Hyperlink = "Hyperlink",
-}
-
-export function stringToNeoNodeLabel(
-  s: string
-): NeoNodeLabel {
-  return Object.values(NeoNodeLabel).find(
-    (nodeLabel) => nodeLabel === s
-  )!;
-}
-
-export enum NeoLinkLabel {
-  Follows = "FOLLOWS",
-  VotesOn = "VOTES_ON",
-  ConnectedBy = "CONNECTED_BY",
-  ConnectionOrigin = "CONNECTION_ORIGIN",
-  ConnectionDestination = "CONNECTION_DESTINATION",
-  Connection = "CONNECTION",
-  Created = "CREATED",
-  CreatedComment = "CREATED_COMMENT",
-  CommentsOn = "COMMENTS_ON",
-  TagMentions = "TAG_MENTIONS",
-  TagMentionsBy = "TAG_MENTIONS_BY",
-  HyperlinkMentions = "HYPERLINK_MENTIONS",
-  HyperlinkMentionsBy = "HYPERLINK_MENTIONS_BY",
-}
-
-export function stringToNeoLinkLabel(
-  s: string
-): NeoLinkLabel {
-  return Object.values(NeoLinkLabel).find(
-    (linkLabel) => linkLabel === s
-  )!;
-}
 
 export type Neo4jGraphElement = {
   elementId: string;

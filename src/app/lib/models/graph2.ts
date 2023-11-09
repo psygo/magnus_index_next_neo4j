@@ -4,7 +4,9 @@ import {
   NodeObject,
 } from "react-force-graph-2d";
 
-import { Id, NeoLinkLabel, NeoNodeLabel } from "./graph";
+import { Id } from "./graph";
+import { NeoNodeLabel } from "./node_labels";
+import { NeoLinkLabel } from "./link_labels";
 
 //----------------------------------------------------------
 // API
@@ -18,13 +20,10 @@ export type ApiStandardRes = GraphData<
 // React Force Graph
 
 export type NodeObj = NodeObject<OutNodeAny>;
-export type LinkObj = LinkObject<OutLinkAny>;
+export type LinkObj = LinkObject<OutNodeAny, OutLinkAny>;
 
 export type NodeOrNull = NodeObj | null;
-export type LinkOrNull = LinkObject<
-  OutNodeAny,
-  OutLinkAny
-> | null;
+export type LinkOrNull = LinkObj | null;
 
 export type ClickedNodesPair = [NodeOrNull, NodeOrNull];
 
@@ -45,6 +44,10 @@ export type WithPoints = {
   points_down: number;
 };
 
+export type WithCreatedAt = {
+  created_at: number;
+};
+
 //----------------------------------------------------------
 // Nodes
 
@@ -61,7 +64,7 @@ export type NodePropertiesAny = {};
 export type NodeProperties<N extends NeoNodeLabel> =
   NodePropertiesAny;
 
-export type UserProperties =
+export type UserProperties = WithCreatedAt &
   NodeProperties<NeoNodeLabel.User> & {
     email: string;
     name: string;
@@ -70,7 +73,7 @@ export type UserNode = OutNode<NeoNodeLabel.User> & {
   properties: UserProperties;
 };
 
-export type ItemProperties =
+export type ItemProperties = WithCreatedAt &
   NodeProperties<NeoNodeLabel.Item> & {
     title: string;
     content: string;
@@ -79,7 +82,7 @@ export type ItemNode = OutNode<NeoNodeLabel.Item> & {
   properties: ItemProperties;
 };
 
-export type CommentProperties =
+export type CommentProperties = WithCreatedAt &
   NodeProperties<NeoNodeLabel.Comment> & {
     content: string;
   };
@@ -87,7 +90,7 @@ export type CommentNode = OutNode<NeoNodeLabel.Comment> & {
   properties: CommentNode;
 };
 
-export type TagProperties =
+export type TagProperties = WithCreatedAt &
   NodeProperties<NeoNodeLabel.Tag> & {
     title: string;
   };
@@ -95,7 +98,7 @@ export type TagNode = OutNode<NeoNodeLabel.Tag> & {
   properties: TagProperties;
 };
 
-export type HyperlinkProperties =
+export type HyperlinkProperties = WithCreatedAt &
   NodeProperties<NeoNodeLabel.Hyperlink> & {
     link: string;
   };
@@ -128,7 +131,7 @@ export type LinkPropertiesAny = {};
 export type LinkProperties<L extends NeoLinkLabel> =
   LinkPropertiesAny;
 
-export type FollowsProperties =
+export type FollowsProperties = WithCreatedAt &
   LinkProperties<NeoLinkLabel.Follows> & {
     created_at: number;
   };
