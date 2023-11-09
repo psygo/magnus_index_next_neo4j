@@ -19,6 +19,7 @@ import {
   stringToNeoNodeLabel,
 } from "@/lib/models/graph";
 import {
+  ApiStandardRes,
   LinkProperties,
   NodeProperties,
   OutLinkAny,
@@ -35,6 +36,15 @@ export function flattenRecords(
   return results.records
     .map((record) => record.keys.map((k) => record.get(k)))
     .flat(2) as Neo4jGraphElement[];
+}
+
+export function getAllNodesAndRelationships(
+  results: QueryResult<RecordShape>
+) {
+  return {
+    nodes: getAllNodes(results),
+    links: getAllRelationships(results),
+  } as ApiStandardRes;
 }
 
 export function getAllNodes(
