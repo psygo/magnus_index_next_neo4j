@@ -19,8 +19,8 @@ export async function createHyperlinkMentions(
 
     if (hyperlinks.length > 0) {
       for await (const hyperlink of hyperlinks) {
-        await neo4jSession.executeWrite((tx) => {
-          return tx.run(
+        await neo4jSession.executeWrite((tx) =>
+          tx.run(
             /* cypher */ `
               MATCH (u:User)-[:CREATED]->(i:Item)
 
@@ -40,8 +40,8 @@ export async function createHyperlinkMentions(
               RETURN h, u, i
             `,
             { hyperlink, userId, itemId }
-          );
-        });
+          )
+        );
       }
     }
   } catch (e) {

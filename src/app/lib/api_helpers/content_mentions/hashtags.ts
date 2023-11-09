@@ -19,8 +19,8 @@ export async function createHashtagMentions(
 
     if (hashtags.length > 0) {
       for await (const hashtag of hashtags) {
-        await neo4jSession.executeWrite((tx) => {
-          return tx.run(
+        await neo4jSession.executeWrite((tx) =>
+          tx.run(
             /* cypher */ `
               MATCH (u:User)-[:CREATED]->(i:Item)
 
@@ -40,8 +40,8 @@ export async function createHashtagMentions(
               RETURN t, u, i
             `,
             { hashtag, userId, itemId }
-          );
-        });
+          )
+        );
       }
     }
   } catch (e) {
