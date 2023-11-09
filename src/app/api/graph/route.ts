@@ -9,18 +9,16 @@ import { getAllNodesAndRelationships } from "@/lib/utils/neo4j_utils";
  */
 export async function GET() {
   try {
-    const results = await neo4jSession.executeWrite(
-      (tx) => {
-        return tx.run(/* cypher */ `
-          MATCH (n)-[r]-(m)
+    const results = await neo4jSession.executeWrite((tx) =>
+      tx.run(/* cypher */ `
+        MATCH (n)-[r]-(m)
+        
+        WHERE NOT (r:VOTES_ON) 
+          AND NOT (n:Comment)
+          AND NOT (m:Comment)
           
-          WHERE NOT (r:VOTES_ON) 
-            AND NOT (n:Comment)
-            AND NOT (m:Comment)
-            
-          RETURN n, r, m
-        `);
-      }
+        RETURN n, r, m
+      `)
     );
 
     return NextResponse.json(

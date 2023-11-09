@@ -66,6 +66,42 @@ export interface UserNode
   properties: UserProperties;
 }
 
+export interface ItemProperties
+  extends NodeProperties<NeoNodeLabel.Item> {
+  title: string;
+  content: string;
+}
+export interface ItemNode
+  extends OutNode<NeoNodeLabel.Item> {
+  properties: ItemProperties;
+}
+
+export interface CommentProperties
+  extends NodeProperties<NeoNodeLabel.Comment> {
+  content: string;
+}
+export interface CommentNode
+  extends OutNode<NeoNodeLabel.Comment> {
+  properties: CommentNode;
+}
+
+export interface TagProperties
+  extends NodeProperties<NeoNodeLabel.Tag> {
+  title: string;
+}
+export interface TagNode extends OutNode<NeoNodeLabel.Tag> {
+  properties: TagProperties;
+}
+
+export interface HyperlinkProperties
+  extends NodeProperties<NeoNodeLabel.Hyperlink> {
+  link: string;
+}
+export interface HyperlinkNode
+  extends OutNode<NeoNodeLabel.Hyperlink> {
+  properties: HyperlinkProperties;
+}
+
 //----------------------------------------------------------
 // Links
 
