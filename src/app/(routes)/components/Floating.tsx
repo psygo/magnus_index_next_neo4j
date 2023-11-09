@@ -1,34 +1,31 @@
 import {
-  Box,
   Chip,
-  Icon,
   Link,
   Paper,
   Stack,
   Typography,
 } from "@mui/material";
-import ModeStandbyIcon from "@mui/icons-material/ModeStandby";
-import LinkIcon from "@mui/icons-material/Link";
-import AccountCircleIcon from "@mui/icons-material/AccountCircle";
-import TagIcon from "@mui/icons-material/Tag";
-import DescriptionIcon from "@mui/icons-material/Description";
+import {
+  AccountCircle,
+  Description,
+  Link as LinkIcon,
+  Tag as TagIcon,
+} from "@mui/icons-material";
 
 import { NodeObject } from "react-force-graph-2d";
 
 import {
-  ConnectionProperties,
   HyperlinkProperties,
   ItemProperties,
   NeoNodeLabel,
-  PointsProperties,
   TagProperties,
   UserProperties,
-} from "@/lib/models/graph";
+} from "@/lib/models/exports";
+
 import {
-  ArrowDownward,
-  ArrowUpward,
-} from "@mui/icons-material";
-import { ItemFloatingPage } from "../../lib/components/Items/ItemFloatingPage";
+  ItemFloatingPage,
+  PointsStats,
+} from "@/lib/components/exports";
 
 type FloatingTextProps = {
   hoverNode: NodeObject;
@@ -140,43 +137,6 @@ export function FloatingText({
   }
 }
 
-export function PointsStats({
-  pointsProperties,
-}: {
-  pointsProperties: PointsProperties;
-}) {
-  return (
-    <Stack direction="row" spacing={1}>
-      <Stack direction="row" spacing={0.5}>
-        <Icon>
-          <ModeStandbyIcon />
-        </Icon>
-        <Typography fontWeight="bold">
-          {pointsProperties.points}
-        </Typography>
-      </Stack>
-
-      <Stack direction="row" spacing={0.5}>
-        <Icon>
-          <ArrowUpward sx={{ color: "green" }} />
-        </Icon>
-        <Typography color="green">
-          {pointsProperties.points_up}
-        </Typography>
-      </Stack>
-
-      <Stack direction="row" spacing={0.5}>
-        <Icon>
-          <ArrowDownward sx={{ color: "red" }} />
-        </Icon>
-        <Typography color="red">
-          {pointsProperties.points_down}
-        </Typography>
-      </Stack>
-    </Stack>
-  );
-}
-
 export function UserFloatingText({
   userProperties,
 }: {
@@ -185,7 +145,7 @@ export function UserFloatingText({
   return (
     <Stack spacing={1}>
       <Chip
-        icon={<AccountCircleIcon />}
+        icon={<AccountCircle />}
         color="primary"
         label="User"
         size="small"
@@ -230,7 +190,7 @@ export function ItemFloatingText({
   return (
     <Stack spacing={1}>
       <Chip
-        icon={<DescriptionIcon />}
+        icon={<Description />}
         color="primary"
         label="Item"
         size="small"

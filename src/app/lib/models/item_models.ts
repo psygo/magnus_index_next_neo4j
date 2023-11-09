@@ -3,9 +3,10 @@ import {
   NodeProperties,
   OutNode,
   WithCreatedAt,
+  WithPoints,
 } from "./utils/exports";
 
-export type ItemProperties = WithCreatedAt &
+export type ItemProperties = WithPoints & WithCreatedAt &
   NodeProperties<NeoNodeLabel.Item> & {
     title: string;
     content: string;
