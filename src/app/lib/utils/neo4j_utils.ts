@@ -11,24 +11,28 @@ import {
 import { GraphData } from "react-force-graph-2d";
 
 import {
-  Neo4jGraphElement,
-  NeoNodeBase,
-} from "@/lib/models/graph";
-import {
-  ApiStandardRes,
-  LinkProperties,
-  NodeProperties,
-  OutLinkAny,
-  OutNodeAny,
-} from "@/lib/models/graph2";
-import {
   NeoNodeLabel,
   stringToNeoNodeLabel,
-} from "@/lib/models/node_label";
+} from "@/lib/models/node_labels";
 import {
   NeoLinkLabel,
   stringToNeoLinkLabel,
 } from "@/lib/models/link_labels";
+import { ApiStandardRes } from "@/lib/models/react_force_graph_models";
+import {
+  NeoNodeBase,
+  NodeProperties,
+  OutNodeAny,
+} from "@/lib/models/nodes_models";
+import {
+  LinkProperties,
+  OutLinkAny,
+} from "@/lib/models/link_models";
+
+export type Neo4jGraphElement = {
+  elementId: string;
+  [key: string]: any;
+};
 
 export function extractNeo4jId(s: string) {
   return s.split(":").last();

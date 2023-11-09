@@ -1,68 +1,15 @@
-import {
-  GraphData,
-  LinkObject,
-  NodeObject,
-} from "react-force-graph-2d";
-
-import { Id } from "./graph";
+import { Id, WithCreatedAt, WithId } from "./utils";
 import { NeoNodeLabel } from "./node_labels";
 import { NeoLinkLabel } from "./link_labels";
-
-//----------------------------------------------------------
-// API
-
-export type ApiStandardRes = GraphData<
+import {
+  NodeProperties,
+  OutNode,
   OutNodeAny,
-  OutLinkAny
->;
-
-//----------------------------------------------------------
-// React Force Graph
-
-export type NodeObj = NodeObject<OutNodeAny>;
-export type LinkObj = LinkObject<OutNodeAny, OutLinkAny>;
-
-export type NodeOrNull = NodeObj | null;
-export type LinkOrNull = LinkObj | null;
-
-export type ClickedNodesPair = [NodeOrNull, NodeOrNull];
-
-export type GraphProps = {
-  data: ApiStandardRes;
-};
-
-//----------------------------------------------------------
-// Aux
-
-export type WithId = {
-  id: Id;
-};
-
-export type WithPoints = {
-  points: number;
-  points_up: number;
-  points_down: number;
-};
-
-export type WithCreatedAt = {
-  created_at: number;
-};
+} from "./nodes_models";
+import { LinkProperties, OutLink } from "./link_models";
 
 //----------------------------------------------------------
 // Nodes
-
-export type OutNodeAny = WithId & {
-  type: NeoNodeLabel;
-  properties: NodePropertiesAny;
-};
-export type OutNode<N extends NeoNodeLabel> = OutNodeAny & {
-  type: N;
-  properties: NodeProperties<N>;
-};
-
-export type NodePropertiesAny = {};
-export type NodeProperties<N extends NeoNodeLabel> =
-  NodePropertiesAny;
 
 export type UserProperties = WithCreatedAt &
   NodeProperties<NeoNodeLabel.User> & {
@@ -110,26 +57,6 @@ export type HyperlinkNode =
 //----------------------------------------------------------
 // Links
 
-export type OutLinkAny = WithId & {
-  type: NeoLinkLabel;
-  source: Id | OutNodeAny;
-  target: Id | OutNodeAny;
-  properties: LinkPropertiesAny;
-};
-export type OutLink<
-  L extends NeoLinkLabel,
-  S extends NeoNodeLabel,
-  T extends NeoNodeLabel
-> = OutLinkAny & {
-  type: L;
-  source: Id | OutNode<S>;
-  target: Id | OutNode<T>;
-  properties: LinkProperties<L>;
-};
-
-export type LinkPropertiesAny = {};
-export type LinkProperties<L extends NeoLinkLabel> =
-  LinkPropertiesAny;
 
 export type FollowsProperties = WithCreatedAt &
   LinkProperties<NeoLinkLabel.Follows> & {

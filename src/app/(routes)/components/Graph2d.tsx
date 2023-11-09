@@ -21,16 +21,7 @@ import { collapseConnectionsPaths } from "@/lib/utils/neo4j_utils";
 
 import { API_URL } from "@/lib/config/api_config";
 
-import {
-  ClickedNodesPair,
-  GraphProps,
-  LinkObj,
-  LinkOrNull,
-  NodeObj,
-  NodeOrNull,
-  OutNodeAny,
-} from "@/lib/models/graph2";
-import { NeoNodeLabel } from "@/lib/models/node_label";
+import { NeoNodeLabel } from "@/lib/models/node_labels";
 
 import {
   HoverBubble,
@@ -38,6 +29,15 @@ import {
   PageBubble,
 } from "./Floating";
 import { CreateConnection } from "./CreateConnections";
+import {
+  ClickedNodesPair,
+  GraphProps,
+  LinkObj,
+  LinkOrNull,
+  NodeObj,
+  NodeOrNull,
+} from "@/lib/models/react_force_graph_models";
+import { OutNodeAny } from "@/lib/models/nodes_models";
 
 const NODE_R = 8;
 
