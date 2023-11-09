@@ -1,10 +1,12 @@
 import { NextRequest, NextResponse } from "next/server";
-import {
-  getAllNodes,
-  getAllRelationships,
-} from "../../../../lib/utils/neo4j_utils";
-import { neo4jSession } from "../../../../lib/config/db";
 
+import { neo4jSession } from "@/lib/config/db";
+
+import { getAllNodesAndRelationships } from "@/lib/utils/neo4j_utils";
+
+/**
+ * Get the item's comments
+ */
 export async function GET(
   _: NextRequest,
   { params }: PostCommentParams
@@ -12,10 +14,9 @@ export async function GET(
   try {
     const itemId = parseInt(params.item_id);
 
-    const commentsResults = await neo4jSession.executeRead(
-      (tx) => {
-        return tx.run(
-          /* cypher */ `
+    const results = await neo4jSession.executeRead((tx) =>
+      tx.run(
+        /* cypher */ `
             MATCH    (u:User)
                     -[cc:CREATED_COMMENT]
                    ->(c:Comment)
@@ -26,15 +27,13 @@ export async function GET(
             
             RETURN u, cc, c, c_on, i
           `,
-          { itemId }
-        );
-      }
+        { itemId }
+      )
     );
 
-    const nodes = getAllNodes(commentsResults);
-    const links = getAllRelationships(commentsResults);
-
-    return NextResponse.json({ nodes, links });
+    return NextResponse.json(
+      getAllNodesAndRelationships(results)
+    );
   } catch (e) {
     console.error(e);
 
@@ -52,7 +51,6 @@ type PostCommentParams = {
     item_id: string;
   };
 };
-
 /**
  * Post a comment
  */
@@ -67,36 +65,33 @@ export async function POST(
 
     const { content } = await req.json();
 
-    const commentResults = await neo4jSession.executeWrite(
-      (tx) => {
-        return tx.run(
-          /* cypher */ `
-            MATCH (u:User), (i:Item)
+    const results = await neo4jSession.executeWrite((tx) =>
+      tx.run(
+        /* cypher */ `
+          MATCH (u:User), (i:Item)
 
-            WHERE ID(u) = $userId
-              AND ID(i) = $itemId
+          WHERE ID(u) = $userId
+            AND ID(i) = $itemId
 
-            CREATE   (u)
-                    -[cc:CREATED_COMMENT]
-                   ->(c:Comment{ 
-                       created_at: timestamp(),
-                       deleted: FALSE,
-                       content: $content
-                     })
-                    -[c_on:COMMENTS_ON]
-                   ->(i)
+          CREATE   (u)
+                  -[cc:CREATED_COMMENT]
+                 ->(c:Comment{ 
+                     created_at: TIMESTAMP(),
+                     deleted: FALSE,
+                     content: $content
+                   })
+                  -[c_on:COMMENTS_ON]
+                 ->(i)
 
-            RETURN u, i, cc, c, c_on
-          `,
-          { itemId, userId, content }
-        );
-      }
+          RETURN u, i, cc, c, c_on
+        `,
+        { itemId, userId, content }
+      )
     );
 
-    const nodes = getAllNodes(commentResults);
-    const links = getAllRelationships(commentResults);
-
-    return NextResponse.json({ nodes, links });
+    return NextResponse.json(
+      getAllNodesAndRelationships(results)
+    );
   } catch (e) {
     console.error(e);
 

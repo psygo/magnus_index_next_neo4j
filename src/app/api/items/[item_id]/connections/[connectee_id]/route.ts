@@ -2,24 +2,20 @@ import { NextRequest, NextResponse } from "next/server";
 
 import { neo4jSession } from "@/lib/config/db";
 
-import {
-  getAllNodes,
-  getAllRelationships,
-} from "@/lib/utils/neo4j_utils";
+import { getAllNodesAndRelationships } from "@/lib/utils/neo4j_utils";
 
-type GetItemParams = {
+type PostItemParams = {
   params: {
     item_id: string;
     connectee_id: string;
   };
 };
-
 /**
  * Connect Item
  */
 export async function POST(
   req: NextRequest,
-  { params }: GetItemParams
+  { params }: PostItemParams
 ) {
   try {
     const itemId = parseInt(params.item_id);
@@ -29,53 +25,51 @@ export async function POST(
 
     const { title } = await req.json();
 
-    const itemsResults = await neo4jSession.executeWrite(
-      (tx) =>
-        tx.run(
-          /* cypher */ `
-            MATCH (u:User), (i:Item), (connectee:Item)
+    const results = await neo4jSession.executeWrite((tx) =>
+      tx.run(
+        /* cypher */ `
+          MATCH (u:User), (i:Item), (connectee:Item)
 
-            WHERE id(u)         = $userId
-              AND id(i)         = $itemId
-              AND id(connectee) = $connecteeId
-            
-            CREATE   (i)
-                    -[connected:CONNECTION_ORIGIN]
-                   ->(c:Connection{
-                        created_at:  TIMESTAMP(),
-                        deleted:     FALSE,
-                        title:       $title,
-                        points_up:   0,
-                        points_down: 0,
-                        points:      0
-                     })
-                    -[connected_to:CONNECTION_DESTINATION]
-                   ->(connectee),
-                     (c)
-                    -[c_by:CONNECTED_BY]
-                   ->(u)
-                   
-            RETURN u,
-                   i,
-                   connectee,
-                   connected,
-                   c,
-                   connected_to,
-                   c_by
-          `,
-          { userId, itemId, connecteeId, title }
-        )
+          WHERE ID(u)         = $userId
+            AND ID(i)         = $itemId
+            AND ID(connectee) = $connecteeId
+          
+          CREATE   (i)
+                  -[connected:CONNECTION_ORIGIN]
+                 ->(c:Connection{
+                      created_at:  TIMESTAMP(),
+                      deleted:     FALSE,
+                      title:       $title,
+                      points_up:   0,
+                      points_down: 0,
+                      points:      0
+                   })
+                  -[connected_to:CONNECTION_DESTINATION]
+                 ->(connectee),
+                   (c)
+                  -[c_by:CONNECTED_BY]
+                 ->(u)
+                 
+          RETURN u,
+                 i,
+                 connectee,
+                 connected,
+                 c,
+                 connected_to,
+                 c_by
+        `,
+        { userId, itemId, connecteeId, title }
+      )
     );
 
-    const nodes = getAllNodes(itemsResults);
-    const links = getAllRelationships(itemsResults);
-
-    return NextResponse.json({ nodes, links });
+    return NextResponse.json(
+      getAllNodesAndRelationships(results)
+    );
   } catch (e) {
     console.error(e);
 
     return new NextResponse(
-      "Couldn't get the user's items",
+      "Couldn't create a new item connection",
       { status: 500 }
     );
   }
