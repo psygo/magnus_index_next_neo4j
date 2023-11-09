@@ -1,6 +1,9 @@
-import { NeoNodeLabel } from "./utils/node_labels";
-import { NodeProperties, OutNode } from "./utils/nodes_models";
-import { WithCreatedAt } from "./utils/mixin_models";
+import {
+  NeoNodeLabel,
+  NodeProperties,
+  OutNode,
+  WithCreatedAt,
+} from "./utils/exports";
 
 export type ItemProperties = WithCreatedAt &
   NodeProperties<NeoNodeLabel.Item> & {

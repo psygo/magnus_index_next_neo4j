@@ -1,7 +1,10 @@
-import { NeoLinkLabel } from "./utils/link_labels";
-import { LinkProperties, OutLink } from "./utils/link_models";
-import { NeoNodeLabel } from "./utils/node_labels";
-import { WithCreatedAt } from "./utils/mixin_models";
+import {
+  LinkProperties,
+  NeoLinkLabel,
+  NeoNodeLabel,
+  OutLink,
+  WithCreatedAt,
+} from "./utils/exports";
 
 export type FollowsProperties = WithCreatedAt &
   LinkProperties<NeoLinkLabel.Follows> & {
