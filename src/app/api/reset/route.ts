@@ -12,12 +12,12 @@ export async function POST() {
     ////////////////////////////////////////////////////////
 
     // 1. Delete Everything
-    await neo4jSession.executeWrite((tx) => {
-      return tx.run(/* cypher */ `
+    await neo4jSession.executeWrite((tx) =>
+      tx.run(/* cypher */ `
         MATCH (n)
         DETACH DELETE n
-      `);
-    });
+      `)
+    );
 
     ////////////////////////////////////////////////////////
 
@@ -405,6 +405,9 @@ export async function POST() {
   } catch (e) {
     console.error(e);
 
-    return new NextResponse("Error retrieving graph");
+    return new NextResponse(
+      "Error trying to reset the DB",
+      { status: 500 }
+    );
   }
 }

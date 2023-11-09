@@ -27,6 +27,8 @@ export async function GET() {
   } catch (e) {
     console.error(e);
 
-    return new NextResponse("Error retrieving graph");
+    return new NextResponse("Error retrieving graph", {
+      status: 500,
+    });
   }
 }
