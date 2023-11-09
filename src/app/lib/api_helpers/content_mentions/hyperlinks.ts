@@ -1,6 +1,6 @@
 import { neo4jSession } from "@/lib/config/db";
 
-import { Id } from "@/lib/models/utils/mixin_models";
+import { Id } from "@/lib/models/utils/exports";
 
 const urlRegex =
   /(https?:\/\/(?:www\.|(?!www))[^\s\.]+\.[^\s]{2,}|www\.[^\s]+\.[^\s]{2,})/gi;
