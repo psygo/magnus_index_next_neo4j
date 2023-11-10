@@ -7,8 +7,9 @@ import {
   TextField,
 } from "@mui/material";
 
-import { FloatingText } from "../../../(routes)/components/Floating";
-import { ClickedNodesPair } from "@/lib/models/exports";
+import { ClickedNodesPair } from "@models/exports";
+
+import { FloatingText } from "@components/common/exports";
 
 type CreateConnectionProps = {
   clickedNodes: ClickedNodesPair;

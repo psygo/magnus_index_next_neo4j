@@ -1,14 +1,14 @@
+import { NodeObject } from "react-force-graph-2d";
+
 import {
   ItemProperties,
   NeoNodeLabel,
-} from "@/lib/models/exports";
+} from "@models/exports";
 
-import { NodeObject } from "react-force-graph-2d";
-
-import { ItemFloatingPage } from "../exports";
+import { ItemFloatingPage } from "@components/Items/exports";
 
 export type FloatingPageProps = {
-  clickedNode: NodeObject
+  clickedNode: NodeObject;
 };
 
 export function FloatingPage({

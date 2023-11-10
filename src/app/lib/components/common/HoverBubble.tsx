@@ -1,10 +1,11 @@
 import { Paper } from "@mui/material";
 
-import { NodePos } from "@/lib/components/utils";
+import { NodePos } from "@components/utils";
+
 import {
   FloatingText,
   FloatingTextProps,
-} from "../../../(routes)/components/Floating";
+} from "./FloatingText";
 
 type HoverBubbleProps = FloatingTextProps & {
   nodePos: NodePos;

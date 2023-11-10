@@ -51,7 +51,7 @@
     "**/*.ts",
     "**/*.tsx",
     ".next/types/**/*.ts"
-  ],
+, "src/app/lib/components/Hyperlinks"  ],
   "exclude": [
     "node_modules"
   ]

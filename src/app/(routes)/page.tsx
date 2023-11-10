@@ -1,6 +1,6 @@
 "use client";
 
-import { useGraphData } from "@/lib/hooks/exports";
+import { useGraphData } from "@hooks/exports";
 
 import dynamic from "next/dynamic";
 

@@ -9,11 +9,10 @@ import {
   ItemProperties,
   NeoLinkLabel,
   NeoNodeLabel,
-} from "@/lib/models/exports";
+} from "@models/exports";
 
-import { ItemFloatingText } from "@/(routes)/components/Floating";
-
-import { Comments } from "../Comments/Comments";
+import { Comments } from "@components/Comments/exports";
+import { ItemFloatingText } from "@components/Items/exports";
 
 export function ItemFloatingPage({
   initialItemProperties,
