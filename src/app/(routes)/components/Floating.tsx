@@ -1,7 +1,6 @@
 import {
   Chip,
   Link,
-  Paper,
   Stack,
   Typography,
 } from "@mui/material";
@@ -22,37 +21,12 @@ import {
   UserProperties,
 } from "@/lib/models/exports";
 
-import {
-  FloatingPageProps,
-  ItemFloatingPage,
-  PointsStats,
-} from "@/lib/components/exports";
+import { PointsStats } from "@/lib/components/exports";
 
 export type FloatingTextProps = {
   hoverNode: NodeObject;
 };
 
-export type NodePos = {
-  x: number;
-  y: number;
-};
-
-export function FloatingPage({
-  clickedNode,
-}: FloatingPageProps) {
-  if (clickedNode.type === NeoNodeLabel.Item) {
-    const itemProperties =
-      clickedNode.properties as ItemProperties;
-    return (
-      <ItemFloatingPage
-        itemId={clickedNode.id!}
-        initialItemProperties={itemProperties}
-      />
-    );
-  } else {
-    return <></>;
-  }
-}
 
 export function FloatingText({
   hoverNode,
