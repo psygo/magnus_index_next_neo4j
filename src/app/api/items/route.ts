@@ -4,6 +4,11 @@ import { neo4jSession } from "@config/db";
 
 import { getAllNodes } from "@utils/neo4j_utils";
 
+import {
+  CreateItemReqSchema,
+  UserIdSchema,
+} from "@models/exports";
+
 import { createContentMentions } from "@middleware/content_mentions/exports";
 
 /**
@@ -11,9 +16,13 @@ import { createContentMentions } from "@middleware/content_mentions/exports";
  */
 export async function POST(req: NextRequest) {
   try {
-    const { title, content } = await req.json();
+    const { title, content } = CreateItemReqSchema.parse(
+      await req.json()
+    );
 
-    const userId = parseInt(req.headers.get("user_id")!);
+    const userId = UserIdSchema.parse(
+      req.headers.get("user_id")
+    );
 
     const results = await neo4jSession.executeWrite((tx) =>
       tx.run(

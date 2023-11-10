@@ -2,11 +2,16 @@ import { NextRequest, NextResponse } from "next/server";
 
 import { neo4jSession } from "@config/db";
 
+import {
+  GetUsersItem,
+  GetUsersItemSchema,
+} from "@models/exports";
+
 import { getAllNodesAndRelationships } from "@utils/neo4j_utils";
 
 type UserItemsParams = {
   params: {
-    user_id: string;
+    user_id: GetUsersItem;
   };
 };
 /**
@@ -17,7 +22,7 @@ export async function GET(
   { params }: UserItemsParams
 ) {
   try {
-    const userId = parseInt(params.user_id);
+    const userId = GetUsersItemSchema.parse(params.user_id);
 
     const results = await neo4jSession.executeRead((tx) =>
       tx.run(

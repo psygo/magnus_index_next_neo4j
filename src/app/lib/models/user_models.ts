@@ -1,3 +1,5 @@
+import { z } from "zod";
+
 import {
   NeoNodeLabel,
   NodeProperties,
@@ -15,3 +17,15 @@ export type UserProperties = WithPoints &
 export type UserNode = OutNode<NeoNodeLabel.User> & {
   properties: UserProperties;
 };
+
+//----------------------------------------------------------
+// API
+
+export const UserIdSchema = z
+  .number()
+  .int()
+  .positive()
+  .or(z.string())
+  .transform(Number);
+
+//----------------------------------------------------------
