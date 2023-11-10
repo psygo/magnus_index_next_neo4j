@@ -1,1 +1,1 @@
-export * from "./TagFloatingText"
+export * from "./TagFloatingText";

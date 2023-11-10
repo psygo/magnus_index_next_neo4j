@@ -5,7 +5,7 @@ import {
   ModeStandby,
 } from "@mui/icons-material";
 
-import { WithPoints } from "@/lib/models/exports";
+import { WithPoints } from "@models/exports";
 
 export function PointsStats({
   pointsProperties,

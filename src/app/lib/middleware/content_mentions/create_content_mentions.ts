@@ -1,4 +1,4 @@
-import { Id } from "@/lib/models/utils/exports";
+import { Id } from "@models/utils/exports";
 
 import { createHashtagMentions } from "./hashtags";
 import { createHyperlinkMentions } from "./hyperlinks";

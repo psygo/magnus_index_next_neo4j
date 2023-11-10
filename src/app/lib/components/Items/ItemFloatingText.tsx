@@ -3,8 +3,8 @@ import { Description } from "@mui/icons-material";
 
 import { ItemProperties } from "@models/exports";
 
-import { PointsStats } from "@components/Votes/exports";
 import { capString } from "@components/utils";
+import { PointsStats } from "@components/Votes/exports";
 
 export function ItemFloatingText({
   itemProperties,

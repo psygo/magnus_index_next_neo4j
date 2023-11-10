@@ -16,10 +16,10 @@ import ForceGraph2D, {
   NodeObject,
 } from "react-force-graph-2d";
 
-import {} from "@/lib/utils/array";
-import { collapseConnectionsPaths } from "@/lib/utils/neo4j_utils";
+import {} from "@utils/array";
+import { collapseConnectionsPaths } from "@utils/neo4j_utils";
 
-import { API_URL } from "@/lib/config/api_config";
+import { API_URL } from "@config/api_config";
 
 import {
   ClickedNodesPair,
@@ -30,14 +30,14 @@ import {
   NodeObj,
   NodeOrNull,
   OutNodeAny,
-} from "@/lib/models/exports";
+} from "@models/exports";
 
-import { CreateConnection } from "@/lib/components/Connections/exports";
 import {
   HoverBubble,
   PageBubble,
-} from "@/lib/components/common/exports";
-import { NodePos } from "@/lib/components/utils";
+} from "@components/common/exports";
+import { CreateConnection } from "@components/Connections/exports";
+import { NodePos } from "@components/utils";
 
 const NODE_R = 8;
 

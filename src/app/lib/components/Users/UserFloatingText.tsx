@@ -1,8 +1,9 @@
 import { Chip, Stack, Typography } from "@mui/material";
 import { AccountCircle } from "@mui/icons-material";
 
-import { UserProperties } from "@/lib/models/exports";
-import { PointsStats } from "@/lib/components/Votes/exports";
+import { UserProperties } from "@models/exports";
+
+import { PointsStats } from "@components/Votes/exports";
 
 export function UserFloatingText({
   userProperties,

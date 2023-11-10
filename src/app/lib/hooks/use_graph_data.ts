@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 
-import { API_URL } from "@/lib/config/api_config";
+import { API_URL } from "@config/api_config";
 
 export function useGraphData() {
   const [data, setData] = useState();

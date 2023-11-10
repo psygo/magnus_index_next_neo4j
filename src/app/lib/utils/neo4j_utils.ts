@@ -21,7 +21,7 @@ import {
   OutNodeAny,
   stringToNeoLinkLabel,
   stringToNeoNodeLabel,
-} from "@/lib/models/utils/exports";
+} from "@models/utils/exports";
 
 export type Neo4jGraphElement = {
   elementId: string;

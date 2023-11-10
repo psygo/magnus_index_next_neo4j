@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 
 import { Stack } from "@mui/material";
 
-import { API_URL } from "@/lib/config/api_config";
+import { API_URL } from "@config/api_config";
 
 import {
   Id,

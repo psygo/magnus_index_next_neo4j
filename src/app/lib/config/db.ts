@@ -2,7 +2,7 @@ import * as neo4j from "neo4j-driver";
 
 import { Env } from "./env";
 
-import {} from "../utils/array";
+import {} from "@utils/array";
 
 function getUriUserAndPassword(env: Env = Env.Dev) {
   switch (env) {

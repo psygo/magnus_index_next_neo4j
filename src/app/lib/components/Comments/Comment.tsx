@@ -3,7 +3,7 @@ import { Stack, Typography } from "@mui/material";
 import {
   CommentProperties,
   UserProperties,
-} from "@/lib/models/exports";
+} from "@models/exports";
 
 export function Comment({
   commentProperties,
