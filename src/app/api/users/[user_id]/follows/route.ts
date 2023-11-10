@@ -1,16 +1,13 @@
 import { NextRequest, NextResponse } from "next/server";
 
-import { neo4jSession } from "@/lib/config/db";
+import { neo4jSession } from "@config/db";
 
 import {
   getAllNodes,
   getAllRelationships,
-} from "@/lib/utils/neo4j_utils";
+} from "@utils/neo4j_utils";
 
-import {
-  FollowsLink,
-  UserNode,
-} from "@/lib/models/exports";
+import { FollowsLink, UserNode } from "@models/exports";
 
 import { UserParams } from "../route";
 

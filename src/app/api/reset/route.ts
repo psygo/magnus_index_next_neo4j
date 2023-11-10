@@ -1,8 +1,8 @@
 import { NextResponse } from "next/server";
 
-import { neo4jSession } from "@/lib/config/db";
+import { neo4jSession } from "@config/db";
 
-import { API_URL } from "@/lib/config/api_config";
+import { API_URL } from "@config/api_config";
 
 /**
  * Reset Dev DB

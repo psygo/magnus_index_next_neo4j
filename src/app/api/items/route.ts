@@ -1,10 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
 
-import { neo4jSession } from "@/lib/config/db";
+import { neo4jSession } from "@config/db";
 
-import { getAllNodes } from "@/lib/utils/neo4j_utils";
+import { getAllNodes } from "@utils/neo4j_utils";
 
-import { createContentMentions } from "@/lib/middleware/content_mentions/exports";
+import { createContentMentions } from "@middleware/content_mentions/exports";
 
 /**
  * Create Item

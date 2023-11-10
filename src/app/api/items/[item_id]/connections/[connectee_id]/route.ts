@@ -1,8 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 
-import { neo4jSession } from "@/lib/config/db";
+import { neo4jSession } from "@config/db";
 
-import { getAllNodesAndRelationships } from "@/lib/utils/neo4j_utils";
+import { getAllNodesAndRelationships } from "@utils/neo4j_utils";
 
 type PostItemParams = {
   params: {
