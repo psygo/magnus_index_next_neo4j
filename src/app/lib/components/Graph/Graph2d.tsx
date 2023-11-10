@@ -32,13 +32,11 @@ import {
   OutNodeAny,
 } from "@/lib/models/exports";
 
-import {
-  HoverBubble,
-  NodePos,
-  PageBubble,
-} from "@/(routes)/components/Floating";
+import { NodePos } from "@/(routes)/components/Floating";
 
 import { CreateConnection } from "@/lib/components/Connections/exports";
+import { HoverBubble } from "../exports";
+import { PageBubble } from "../common/PageBubble";
 
 const NODE_R = 8;
 

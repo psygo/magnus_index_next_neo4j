@@ -23,11 +23,12 @@ import {
 } from "@/lib/models/exports";
 
 import {
+  FloatingPageProps,
   ItemFloatingPage,
   PointsStats,
 } from "@/lib/components/exports";
 
-type FloatingTextProps = {
+export type FloatingTextProps = {
   hoverNode: NodeObject;
 };
 
@@ -35,56 +36,6 @@ export type NodePos = {
   x: number;
   y: number;
 };
-
-type HoverBubbleProps = FloatingTextProps & {
-  nodePos: NodePos;
-};
-
-export function HoverBubble({
-  hoverNode,
-  nodePos,
-}: HoverBubbleProps) {
-  return (
-    <Paper
-      variant="outlined"
-      sx={{
-        position: "absolute",
-        display: hoverNode ? "block" : "none",
-        top: nodePos.y - 60,
-        left: nodePos.x + 15,
-        zIndex: 10,
-        maxWidth: "300px",
-        p: 1.5,
-      }}
-    >
-      <FloatingText hoverNode={hoverNode} />
-    </Paper>
-  );
-}
-
-type FloatingPageProps = {
-  clickedNode: NodeObject;
-};
-export function PageBubble({
-  clickedNode,
-}: FloatingPageProps) {
-  return (
-    <Paper
-      variant="outlined"
-      sx={{
-        position: "absolute",
-        display: clickedNode ? "block" : "none",
-        top: 10,
-        left: 10,
-        zIndex: 10,
-        maxWidth: "275px",
-        p: 1.5,
-      }}
-    >
-      <FloatingPage clickedNode={clickedNode} />
-    </Paper>
-  );
-}
 
 export function FloatingPage({
   clickedNode,
