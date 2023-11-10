@@ -7,6 +7,7 @@ import {
   WithCreatedAt,
   WithPoints,
 } from "./utils/exports";
+
 import { UserIdSchema } from "./user_models";
 
 export type ItemProperties = WithPoints &
@@ -22,16 +23,26 @@ export type ItemNode = OutNode<NeoNodeLabel.Item> & {
 //----------------------------------------------------------
 // API
 
+export const ItemIdSchema = UserIdSchema;
+
+// 1. Create Item
 export const CreateItemReqSchema = z.object({
   title: z.string(),
   content: z.string(),
 });
 
-export const GetUsersItemSchema = z.object({
+// 2. Get Item
+export const GetItemReqSchema = z.object({
+  item_id: ItemIdSchema,
+});
+export type GetItemReq = z.infer<typeof GetItemReqSchema>
+
+// 3. Get User's Items
+export const GetUsersItemsReqSchema = z.object({
   user_id: UserIdSchema,
 });
-export type GetUsersItem = z.infer<
-  typeof GetUsersItemSchema
+export type GetUsersItemsReq = z.infer<
+  typeof GetUsersItemsReqSchema
 >;
 
 //----------------------------------------------------------

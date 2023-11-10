@@ -3,16 +3,14 @@ import { NextRequest, NextResponse } from "next/server";
 import { neo4jSession } from "@config/db";
 
 import {
-  GetUsersItem,
-  GetUsersItemSchema,
+  GetUsersItemsReq,
+  GetUsersItemsReqSchema,
 } from "@models/exports";
 
 import { getAllNodesAndRelationships } from "@utils/neo4j_utils";
 
 type UserItemsParams = {
-  params: {
-    user_id: GetUsersItem;
-  };
+  params: GetUsersItemsReq;
 };
 /**
  * User's Items
@@ -22,7 +20,8 @@ export async function GET(
   { params }: UserItemsParams
 ) {
   try {
-    const userId = GetUsersItemSchema.parse(params.user_id);
+    const { user_id: userId } =
+      GetUsersItemsReqSchema.parse(params);
 
     const results = await neo4jSession.executeRead((tx) =>
       tx.run(
