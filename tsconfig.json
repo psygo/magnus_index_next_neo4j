@@ -25,6 +25,24 @@
     "paths": {
       "@/*": [
         "./src/app/*"
+      ],
+      "@components/*": [
+        "./src/app/lib/components/*"
+      ],
+      "@config/*": [
+        "./src/app/lib/config/*"
+      ],
+      "@hooks/*": [
+        "./src/app/lib/hooks/*"
+      ],
+      "@middleware/*": [
+        "./src/app/lib/middleware/*"
+      ],
+      "@models/*": [
+        "./src/app/lib/models/*"
+      ],
+      "@utils/*": [
+        "./src/app/lib/utils/*"
       ]
     }
   },

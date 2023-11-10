@@ -5,8 +5,6 @@ import {
   Typography,
 } from "@mui/material";
 import {
-  AccountCircle,
-  Description,
   Link as LinkIcon,
   Tag as TagIcon,
 } from "@mui/icons-material";
@@ -21,12 +19,15 @@ import {
   UserProperties,
 } from "@/lib/models/exports";
 
-import { PointsStats } from "@/lib/components/exports";
+import {
+  ItemFloatingText,
+  UserFloatingText,
+} from "@/lib/components/exports";
+import { capString } from "@/lib/components/utils";
 
 export type FloatingTextProps = {
   hoverNode: NodeObject;
 };
-
 
 export function FloatingText({
   hoverNode,
@@ -60,96 +61,6 @@ export function FloatingText({
   } else {
     return <></>;
   }
-}
-
-export function UserFloatingText({
-  userProperties,
-}: {
-  userProperties: UserProperties;
-}) {
-  return (
-    <Stack spacing={1}>
-      <Chip
-        icon={<AccountCircle />}
-        color="primary"
-        label="User"
-        size="small"
-        sx={{
-          p: "5px",
-          maxWidth: "max-content",
-          backgroundColor: "purple",
-          "& .MuiChip-label": {
-            fontSize: 16,
-            fontWeight: "bold",
-          },
-        }}
-      />
-
-      <Typography
-        fontWeight="bold"
-        sx={{ paddingLeft: "5px" }}
-      >
-        {userProperties.name}
-      </Typography>
-
-      <PointsStats
-        pointsProperties={{
-          points: userProperties.points,
-          points_up: userProperties.points_up,
-          points_down: userProperties.points_down,
-        }}
-      />
-    </Stack>
-  );
-}
-
-export function capString(s: string, max: number = 150) {
-  return s.length > max ? s.substring(0, max) + "..." : s;
-}
-
-export function ItemFloatingText({
-  itemProperties,
-}: {
-  itemProperties: ItemProperties;
-}) {
-  return (
-    <Stack spacing={1}>
-      <Chip
-        icon={<Description />}
-        color="primary"
-        label="Item"
-        size="small"
-        sx={{
-          p: "5px",
-          maxWidth: "max-content",
-          backgroundColor: "green",
-          "& .MuiChip-label": {
-            fontSize: 16,
-            fontWeight: "bold",
-          },
-        }}
-      />
-
-      <Typography fontWeight="bold">
-        {itemProperties.title}
-      </Typography>
-
-      <PointsStats
-        pointsProperties={{
-          points: itemProperties.points,
-          points_up: itemProperties.points_up,
-          points_down: itemProperties.points_down,
-        }}
-      />
-
-      <Typography
-        variant="caption"
-        sx={{ wordWrap: "break-word" }}
-      >
-        {capString(itemProperties.content)}
-      </Typography>
-    </Stack>
-  );
 }
 
 export function TagFloatingText({
