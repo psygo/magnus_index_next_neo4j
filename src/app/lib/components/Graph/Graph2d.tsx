@@ -37,7 +37,8 @@ import {
   NodePos,
   PageBubble,
 } from "@/(routes)/components/Floating";
-import { CreateConnection } from "@/(routes)/components/CreateConnections";
+
+import { CreateConnection } from "@/lib/components/Connections/exports";
 
 const NODE_R = 8;
 
