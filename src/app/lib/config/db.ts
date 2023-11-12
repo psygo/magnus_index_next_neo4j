@@ -4,6 +4,8 @@ import { Env } from "./env";
 
 import {} from "@utils/array";
 
+export const NANOID_SIZE = 10;
+
 function getUriUserAndPassword(env: Env = Env.Dev) {
   switch (env) {
     case Env.Dev:

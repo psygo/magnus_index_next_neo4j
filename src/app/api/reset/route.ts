@@ -348,20 +348,20 @@ export async function POST() {
         points: 1,
       }),
     });
-    // // #3
-    // await fetch(
-    //   `${API_URL}/connections/${relationConnection1Id}/votes`,
-    //   {
-    //     method: "POST",
-    //     headers: {
-    //       "Content-Type": "application/json",
-    //       user_id: johnDoeId,
-    //     },
-    //     body: JSON.stringify({
-    //       points: 1,
-    //     }),
-    //   }
-    // );
+    // #3
+    await fetch(
+      `${API_URL}/connections/${relationConnection1Id}/votes`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          user_id: johnDoeId,
+        },
+        body: JSON.stringify({
+          points: 1,
+        }),
+      }
+    );
 
     ////////////////////////////////////////////////////////
     // 7. Comments

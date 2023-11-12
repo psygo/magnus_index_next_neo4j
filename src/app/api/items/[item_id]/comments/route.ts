@@ -1,6 +1,8 @@
+import { nanoid } from "nanoid";
+
 import { NextRequest, NextResponse } from "next/server";
 
-import { neo4jSession } from "@config/db";
+import { NANOID_SIZE, neo4jSession } from "@config/db";
 
 import { getAllNodesAndRelationships } from "@utils/neo4j_utils";
 
@@ -76,6 +78,8 @@ export async function POST(
       await req.json()
     );
 
+    const extId = nanoid(NANOID_SIZE);
+
     const results = await neo4jSession.executeWrite((tx) =>
       tx.run(
         /* cypher */ `
@@ -88,15 +92,16 @@ export async function POST(
                   -[cc:CREATED_COMMENT]
                  ->(c:Comment{ 
                      created_at: TIMESTAMP(),
-                     deleted: FALSE,
-                     content: $content
+                     deleted:    FALSE,
+                     ext_id:     $extId,
+                     content:    $content
                    })
                   -[c_on:COMMENTS_ON]
                  ->(i)
 
           RETURN u, i, cc, c, c_on
         `,
-        { itemId, userId, content }
+        { extId, itemId, userId, content }
       )
     );
 

@@ -1,6 +1,8 @@
+import { nanoid } from "nanoid";
+
 import { NextRequest, NextResponse } from "next/server";
 
-import { neo4jSession } from "@config/db";
+import { NANOID_SIZE, neo4jSession } from "@config/db";
 
 import { getAllNodes } from "@utils/neo4j_utils";
 
@@ -24,6 +26,8 @@ export async function POST(req: NextRequest) {
       req.headers.get("user_id")
     );
 
+    const extId = nanoid(NANOID_SIZE);
+
     const results = await neo4jSession.executeWrite((tx) =>
       tx.run(
         /* cypher */ `
@@ -36,6 +40,7 @@ export async function POST(req: NextRequest) {
                  ->(i:Item{
                      created_at:  TIMESTAMP(),
                      deleted:     FALSE,
+                     ext_id:      $extId,
                      title:       $title,
                      content:     $content,
                      points_up:   0,
@@ -45,11 +50,7 @@ export async function POST(req: NextRequest) {
           
           RETURN i
         `,
-        {
-          userId,
-          title,
-          content,
-        }
+        { extId, userId, title, content }
       )
     );
 

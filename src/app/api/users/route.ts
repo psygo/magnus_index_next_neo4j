@@ -1,9 +1,12 @@
+import { nanoid } from "nanoid";
+
 import { NextRequest, NextResponse } from "next/server";
 
-import { neo4jSession } from "@config/db";
+import { NANOID_SIZE, neo4jSession } from "@config/db";
 
 import { getAllNodesAndRelationships } from "@utils/neo4j_utils";
-import { PostUserReqBodySchema } from "../../lib/models/user_models";
+
+import { PostUserReqBodySchema } from "@models/user_models";
 
 /**
  * Get Users
@@ -38,6 +41,8 @@ export async function POST(req: NextRequest) {
     await req.json()
   );
 
+  const extId = nanoid(NANOID_SIZE);
+
   try {
     const results = await neo4jSession.executeWrite((tx) =>
       tx.run(
@@ -46,6 +51,7 @@ export async function POST(req: NextRequest) {
             created_at:  TIMESTAMP(),
             deleted:     FALSE,
             is_admin:    FALSE,
+            ext_id:      $extId,
             name:        $name,
             email:       $email,
             points_up:   0,
@@ -55,7 +61,7 @@ export async function POST(req: NextRequest) {
           
           RETURN u
         `,
-        { name, email }
+        { extId, name, email }
       )
     );
 

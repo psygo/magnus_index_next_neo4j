@@ -1,6 +1,8 @@
+import { nanoid } from "nanoid";
+
 import { NextRequest, NextResponse } from "next/server";
 
-import { neo4jSession } from "@config/db";
+import { NANOID_SIZE, neo4jSession } from "@config/db";
 
 import {
   getAllNodes,
@@ -9,7 +11,6 @@ import {
 
 import {
   FollowsLink,
-  GetUserReqParamsSchema,
   PostFollowReqParamsSchema,
   UserIdSchema,
   UserNode,
@@ -75,6 +76,8 @@ export async function POST(
     const { user_id: followedId } =
       PostFollowReqParamsSchema.parse(params);
 
+    const extId = nanoid(NANOID_SIZE);
+
     const results = await neo4jSession.executeWrite((tx) =>
       tx.run(
         /* cypher */ `
@@ -87,13 +90,14 @@ export async function POST(
           CREATE   (follower)
                   -[f:FOLLOWS {
                      created_at: TIMESTAMP(),
-                     deleted:    FALSE
+                     deleted:    FALSE,
+                     ext_id:     $extId
                    }]
                  ->(followed)
                  
           RETURN followed, follower, f
         `,
-        { followedId, followerId }
+        { followedId, followerId, extId }
       )
     );
 

@@ -1,6 +1,8 @@
+import { nanoid } from "nanoid";
+
 import { NextRequest, NextResponse } from "next/server";
 
-import { neo4jSession } from "@config/db";
+import { NANOID_SIZE, neo4jSession } from "@config/db";
 
 import { getAllNodesAndRelationships } from "@utils/neo4j_utils";
 
@@ -71,17 +73,22 @@ export async function POST(
       await req.json()
     );
 
+    const extId = nanoid(NANOID_SIZE);
+
     const results = await neo4jSession.executeWrite((tx) =>
       tx.run(
         /* cypher */ `
           MATCH (voter:User), 
                 (creator:User)-[created:CREATED]->(item:Item)
           
-          WHERE id(voter) = $userId
-            AND id(item)  = $itemId
+          WHERE ID(voter) = $userId
+            AND ID(item)  = $itemId
 
           CREATE   (voter)
-                  -[vote:VOTES_ON{ points: $points }]
+                  -[vote:VOTES_ON{
+                     points: $points,
+                     ext_id: $extId
+                   }]
                  ->(item)
 
           WITH voter, vote, item, creator, created
@@ -107,7 +114,7 @@ export async function POST(
 
           RETURN voter, vote, item, creator, created
         `,
-        { itemId, userId, points }
+        { itemId, userId, points, extId }
       )
     );
 
