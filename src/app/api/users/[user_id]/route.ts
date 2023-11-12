@@ -4,10 +4,13 @@ import { neo4jSession } from "@config/db";
 
 import { getAllNodesAndRelationships } from "@utils/neo4j_utils";
 
+import {
+  GetUserReqParams,
+  GetUserReqParamsSchema,
+} from "@models/exports";
+
 export type UserParams = {
-  params: {
-    user_id: string;
-  };
+  params: GetUserReqParams;
 };
 /**
  * Get User
@@ -17,7 +20,8 @@ export async function GET(
   { params }: UserParams
 ) {
   try {
-    const userId = parseInt(params.user_id);
+    const { user_id: userId } =
+      GetUserReqParamsSchema.parse(params);
 
     const results = await neo4jSession.executeRead((tx) =>
       tx.run(

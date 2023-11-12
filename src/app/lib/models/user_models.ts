@@ -7,6 +7,7 @@ import {
   WithCreatedAt,
   WithPoints,
 } from "./utils/exports";
+import { GetItemReqSchema } from "./item_models";
 
 export type UserProperties = WithPoints &
   WithCreatedAt &
@@ -28,5 +29,27 @@ export const UserIdSchema = z
   .positive()
   .or(z.string())
   .transform(Number);
+
+// 2. Create User
+export const PostUserReqBodySchema = z.object({
+  name: z.string(),
+  email: z.string().email(),
+});
+
+// 3. Get User
+export const GetUserReqParamsSchema = z.object({
+  user_id: UserIdSchema,
+});
+export type GetUserReqParams = z.infer<
+  typeof GetUserReqParamsSchema
+>;
+
+// 4. Create Follow
+export const PostFollowReqParamsSchema =
+  GetUserReqParamsSchema;
+
+// 5. Get Follow
+export const GetFollowReqParamsSchema =
+  PostFollowReqParamsSchema;
 
 //----------------------------------------------------------

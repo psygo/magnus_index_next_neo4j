@@ -7,7 +7,13 @@ import {
   getAllRelationships,
 } from "@utils/neo4j_utils";
 
-import { FollowsLink, UserNode } from "@models/exports";
+import {
+  FollowsLink,
+  GetUserReqParamsSchema,
+  PostFollowReqParamsSchema,
+  UserIdSchema,
+  UserNode,
+} from "@models/exports";
 
 import { UserParams } from "../route";
 
@@ -20,7 +26,8 @@ export async function GET(
   { params }: FollowsParams
 ) {
   try {
-    const userId = parseInt(params.user_id);
+    const { user_id: userId } =
+      PostFollowReqParamsSchema.parse(params);
 
     const results = await neo4jSession.executeRead((tx) =>
       tx.run(
@@ -61,10 +68,12 @@ export async function POST(
   { params }: FollowsParams
 ) {
   try {
-    const followerId = parseInt(
-      req.headers.get("user_id")!
+    const followerId = UserIdSchema.parse(
+      req.headers.get("user_id")
     );
-    const followedId = parseInt(params.user_id);
+
+    const { user_id: followedId } =
+      PostFollowReqParamsSchema.parse(params);
 
     const results = await neo4jSession.executeWrite((tx) =>
       tx.run(

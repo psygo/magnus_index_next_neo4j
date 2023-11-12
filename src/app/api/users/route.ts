@@ -3,6 +3,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { neo4jSession } from "@config/db";
 
 import { getAllNodesAndRelationships } from "@utils/neo4j_utils";
+import { PostUserReqBodySchema } from "../../lib/models/user_models";
 
 /**
  * Get Users
@@ -33,7 +34,9 @@ export async function GET() {
  * Create User
  */
 export async function POST(req: NextRequest) {
-  const { name, email } = await req.json();
+  const { name, email } = PostUserReqBodySchema.parse(
+    await req.json()
+  );
 
   try {
     const results = await neo4jSession.executeWrite((tx) =>
