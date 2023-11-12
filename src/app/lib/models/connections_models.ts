@@ -1,6 +1,9 @@
 import { z } from "zod";
 
-import { GetItemReqSchema } from "./item_models";
+import {
+  GetItemReqSchema,
+  ItemIdSchema,
+} from "./item_models";
 
 //----------------------------------------------------------
 // API
@@ -8,7 +11,7 @@ import { GetItemReqSchema } from "./item_models";
 // 1. Create Connection
 export const PostConnectionReqParamsSchema =
   GetItemReqSchema.merge(
-    z.object({ connectee_id: z.string() })
+    z.object({ connectee_id: ItemIdSchema })
   );
 export type PostConnectionReqParams = z.infer<
   typeof PostConnectionReqParamsSchema
