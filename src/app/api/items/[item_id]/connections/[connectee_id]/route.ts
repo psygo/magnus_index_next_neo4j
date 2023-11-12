@@ -4,26 +4,34 @@ import { neo4jSession } from "@config/db";
 
 import { getAllNodesAndRelationships } from "@utils/neo4j_utils";
 
-type PostItemParams = {
-  params: {
-    item_id: string;
-    connectee_id: string;
-  };
+import {
+  PostConnectionReqBodySchema,
+  PostConnectionReqParams,
+  PostConnectionReqParamsSchema,
+  UserIdSchema,
+} from "@models/exports";
+
+type PostConnectionParams = {
+  params: PostConnectionReqParams;
 };
 /**
  * Connect Item
  */
 export async function POST(
   req: NextRequest,
-  { params }: PostItemParams
+  { params }: PostConnectionParams
 ) {
   try {
-    const itemId = parseInt(params.item_id);
-    const connecteeId = parseInt(params.connectee_id);
+    const { item_id: itemId, connectee_id: connecteeId } =
+      PostConnectionReqParamsSchema.parse(params);
 
-    const userId = parseInt(req.headers.get("user_id")!);
+    const userId = UserIdSchema.parse(
+      req.headers.get("user_id")
+    );
 
-    const { title } = await req.json();
+    const { title } = PostConnectionReqBodySchema.parse(
+      await req.json()
+    );
 
     const results = await neo4jSession.executeWrite((tx) =>
       tx.run(
