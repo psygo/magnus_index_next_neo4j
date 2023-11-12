@@ -269,7 +269,7 @@ export function Graph2d({ data }: GraphProps) {
           nodeCanvasObjectMode={(node) => {
             if (highlightNodes.has(node)) return "before";
             else if (lastClickedNode) return "after";
-            else return "undefined";
+            else return undefined;
           }}
           nodeCanvasObject={paintRing}
           onNodeHover={handleNodeHover}

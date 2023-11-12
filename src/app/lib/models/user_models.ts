@@ -21,6 +21,7 @@ export type UserNode = OutNode<NeoNodeLabel.User> & {
 //----------------------------------------------------------
 // API
 
+// 1. User ID
 export const UserIdSchema = z
   .number()
   .int()

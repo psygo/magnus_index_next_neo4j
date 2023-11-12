@@ -4,6 +4,15 @@ import { neo4jSession } from "@config/db";
 
 import { getAllNodesAndRelationships } from "@utils/neo4j_utils";
 
+import {
+  CreateCommentReqSchema,
+  GetCommentReqSchema,
+  GetItemReqSchema,
+  UserIdSchema,
+} from "@models/exports";
+
+import { GetItemParams } from "../route";
+
 /**
  * Get the item's comments
  */
@@ -12,7 +21,8 @@ export async function GET(
   { params }: PostCommentParams
 ) {
   try {
-    const itemId = parseInt(params.item_id);
+    const { item_id: itemId } =
+      GetCommentReqSchema.parse(params);
 
     const results = await neo4jSession.executeRead((tx) =>
       tx.run(
@@ -46,11 +56,7 @@ export async function GET(
   }
 }
 
-type PostCommentParams = {
-  params: {
-    item_id: string;
-  };
-};
+type PostCommentParams = GetItemParams;
 /**
  * Post a comment
  */
@@ -59,11 +65,16 @@ export async function POST(
   { params }: PostCommentParams
 ) {
   try {
-    const itemId = parseInt(params.item_id);
+    const { item_id: itemId } =
+      GetItemReqSchema.parse(params);
 
-    const userId = parseInt(req.headers.get("user_id")!);
+    const userId = UserIdSchema.parse(
+      req.headers.get("user_id")
+    );
 
-    const { content } = await req.json();
+    const { content } = CreateCommentReqSchema.parse(
+      await req.json()
+    );
 
     const results = await neo4jSession.executeWrite((tx) =>
       tx.run(
