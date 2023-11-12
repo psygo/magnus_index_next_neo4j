@@ -4,6 +4,13 @@ import { neo4jSession } from "@config/db";
 
 import { getAllNodesAndRelationships } from "@utils/neo4j_utils";
 
+import {
+  GetItemVotesReqParamsSchema,
+  PostItemVoteReqBodySchema,
+  PostItemVoteReqParamsSchema,
+  UserIdSchema,
+} from "@models/exports";
+
 import { GetItemParams } from "../route";
 
 type GetItemVotesParams = GetItemParams;
@@ -15,7 +22,8 @@ export async function GET(
   { params }: GetItemVotesParams
 ) {
   try {
-    const itemId = parseInt(params.item_id);
+    const { item_id: itemId } =
+      GetItemVotesReqParamsSchema.parse(params);
 
     const results = await neo4jSession.executeRead((tx) =>
       tx.run(
@@ -43,20 +51,25 @@ export async function GET(
   }
 }
 
-type PostVoteParams = GetItemVotesParams;
+type PostItemVoteParams = GetItemVotesParams;
 /**
  * Post Item Votes
  */
 export async function POST(
   req: NextRequest,
-  { params }: PostVoteParams
+  { params }: PostItemVoteParams
 ) {
   try {
-    const itemId = parseInt(params.item_id);
+    const { item_id: itemId } =
+      PostItemVoteReqParamsSchema.parse(params);
 
-    const userId = parseInt(req.headers.get("user_id")!);
+    const userId = UserIdSchema.parse(
+      req.headers.get("user_id")
+    );
 
-    const { points } = await req.json();
+    const { points } = PostItemVoteReqBodySchema.parse(
+      await req.json()
+    );
 
     const results = await neo4jSession.executeWrite((tx) =>
       tx.run(
