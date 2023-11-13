@@ -33,10 +33,8 @@ export async function GET(
                     -[cc:CREATED_COMMENT]
                    ->(c:Comment)
                     -[c_on:COMMENTS_ON]
-                   ->(i:Item)
+                   ->(i:Item{ ext_id: $itemId })
 
-            WHERE ID(i) = $itemId
-            
             RETURN u, cc, c, c_on, i
           `,
         { itemId }
@@ -83,10 +81,8 @@ export async function POST(
     const results = await neo4jSession.executeWrite((tx) =>
       tx.run(
         /* cypher */ `
-          MATCH (u:User), (i:Item)
-
-          WHERE ID(u) = $userId
-            AND ID(i) = $itemId
+          MATCH (u:User{ ext_id: $userId }), 
+                (i:Item{ ext_id: $itemId })
 
           CREATE   (u)
                   -[cc:CREATED_COMMENT]

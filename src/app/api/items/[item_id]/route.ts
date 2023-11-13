@@ -27,7 +27,9 @@ export async function GET(
       tx.run(
         /* cypher */ `
                   // Item and Author
-          MATCH   (u:User)-[c:CREATED]->(i:Item),
+          MATCH   (u:User)
+                 -[c:CREATED]
+                ->(i:Item{ ext_id: $itemId }),
                   // Tags
                   (t:Tag)
                  -[tmb:TAG_MENTIONS_BY]
@@ -55,8 +57,6 @@ export async function GET(
                   (conn)
                  -[cby:CONNECTED_BY]
                 ->(conn_author:User)
-          
-          WHERE ID(i) = $itemId
 
           RETURN u, c, i,
                  t, tm, tmb,

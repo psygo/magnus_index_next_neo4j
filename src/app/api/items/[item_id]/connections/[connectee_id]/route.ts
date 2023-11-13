@@ -40,12 +40,10 @@ export async function POST(
     const results = await neo4jSession.executeWrite((tx) =>
       tx.run(
         /* cypher */ `
-          MATCH (u:User), (i:Item), (connectee:Item)
+          MATCH (u:User{ ext_id: $userId }),
+                (i:Item{ ext_id: $itemId }),
+                (connectee:Item{ ext_id: $connecteeId })
 
-          WHERE ID(u)         = $userId
-            AND ID(i)         = $itemId
-            AND ID(connectee) = $connecteeId
-          
           CREATE   (i)
                   -[connected:CONNECTION_ORIGIN]
                  ->(c:Connection{

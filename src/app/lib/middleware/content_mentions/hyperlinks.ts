@@ -22,10 +22,9 @@ export async function createHyperlinkMentions(
         await neo4jSession.executeWrite((tx) =>
           tx.run(
             /* cypher */ `
-              MATCH (u:User)-[:CREATED]->(i:Item)
-
-              WHERE ID(u) = $userId
-                AND ID(i) = $itemId
+              MATCH   (u:User{ ext_id: $userId })
+                     -[:CREATED]
+                    ->(i:Item{ ext_id: $itemId })
 
               MERGE (h:Hyperlink{ link: $hyperlink })
 

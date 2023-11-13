@@ -206,13 +206,13 @@ export async function POST() {
     const chroniquesBody = await chroniquesRes.json();
     const papierBody = await papierRes.json();
 
-    const designingId = designingBody.nodes.first().id;
-    const systemId = systemBody.nodes.first().id;
-    const pyongYangId = pyongYangBody.nodes.first().id;
-    const burmaId = burmaBody.nodes.first().id;
-    const shenzhenId = shenzhenBody.nodes.first().id;
-    const chroniquesId = chroniquesBody.nodes.first().id;
-    const papierId = papierBody.nodes.first().id;
+    const designingId = designingBody.nodes.first().properties.ext_id;
+    const systemId = systemBody.nodes.first().properties.ext_id;
+    const pyongYangId = pyongYangBody.nodes.first().properties.ext_id;
+    const burmaId = burmaBody.nodes.first().properties.ext_id;
+    const shenzhenId = shenzhenBody.nodes.first().properties.ext_id;
+    const chroniquesId = chroniquesBody.nodes.first().properties.ext_id;
+    const papierId = papierBody.nodes.first().properties.ext_id;
 
     ////////////////////////////////////////////////////////
 
@@ -321,7 +321,7 @@ export async function POST() {
       await relationConnection1Res.json();
 
     const relationConnection1Id =
-      relationConnection1Body.nodes.first().id;
+      relationConnection1Body.nodes.first().properties.ext_id;
 
     ////////////////////////////////////////////////////////
 

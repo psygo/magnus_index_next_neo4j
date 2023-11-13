@@ -20,9 +20,8 @@ export async function createUserMentions(
         await neo4jSession.executeWrite((tx) =>
           tx.run(
             /* cypher */ `
-              MATCH (i:Item), (u:User{ name: $userMention })
-
-              WHERE ID(i) = $itemId
+              MATCH (i:Item{ ext_id: $itemId }),
+                    (u:User{ name: $userMention })
 
               CREATE (i)-[:USER_MENTIONS]->(u)
             `,

@@ -26,9 +26,7 @@ export async function GET(
     const results = await neo4jSession.executeRead((tx) =>
       tx.run(
         /* cypher */ `
-          MATCH  (u:User)
-          
-          WHERE ID(u) = $userId
+          MATCH (u:User{ ext_id: $userId })
 
           RETURN u
         `,

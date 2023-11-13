@@ -25,6 +25,8 @@ export async function POST(req: NextRequest) {
     const userId = UserIdSchema.parse(
       req.headers.get("user_id")
     );
+    
+    console.log(userId)
 
     const extId = nanoid(NANOID_SIZE);
 

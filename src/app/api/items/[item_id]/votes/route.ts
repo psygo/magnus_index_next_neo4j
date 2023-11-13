@@ -30,10 +30,10 @@ export async function GET(
     const results = await neo4jSession.executeRead((tx) =>
       tx.run(
         /* cypher */ `
-          MATCH (u:User)-[v:VOTES_ON]->(i:Item)
+          MATCH   (u:User)
+                 -[v:VOTES_ON]
+                ->(i:Item{ ext_id: $itemId })
           
-          WHERE ID(i) = $itemId
-
           RETURN u, v, i
         `,
         { itemId }
@@ -78,12 +78,11 @@ export async function POST(
     const results = await neo4jSession.executeWrite((tx) =>
       tx.run(
         /* cypher */ `
-          MATCH (voter:User), 
-                (creator:User)-[created:CREATED]->(item:Item)
+          MATCH   (voter:User{ ext_id: $userId }), 
+                  (creator:User)
+                 -[created:CREATED]
+                ->(item:Item{ ext_id: $itemId })
           
-          WHERE ID(voter) = $userId
-            AND ID(item)  = $itemId
-
           CREATE   (voter)
                   -[vote:VOTES_ON{
                      points: $points,

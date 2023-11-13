@@ -180,9 +180,6 @@ export function Graph2d({ data }: GraphProps) {
       }
       ctx.fill();
 
-      // ctx.beginPath();
-      // ctx.arc(node.x!, node.y!, 20, 0, 2 * Math.PI, false);
-      // ctx.lineTo(node.x!, node.y!);
       ctx.stroke();
       ctx.fillStyle = "red";
       ctx.fillText(node.id!.toString(), node.x!, node.y!);

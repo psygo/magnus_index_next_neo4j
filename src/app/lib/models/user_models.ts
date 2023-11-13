@@ -7,7 +7,6 @@ import {
   WithCreatedAt,
   WithPoints,
 } from "./utils/exports";
-import { GetItemReqSchema } from "./item_models";
 
 export type UserProperties = WithPoints &
   WithCreatedAt &
@@ -27,8 +26,7 @@ export const UserIdSchema = z
   .number()
   .int()
   .positive()
-  .or(z.string())
-  .transform(Number);
+  .or(z.string());
 
 // 2. Create User
 export const PostUserReqBodySchema = z.object({

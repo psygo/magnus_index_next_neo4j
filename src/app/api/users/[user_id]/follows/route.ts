@@ -33,15 +33,11 @@ export async function GET(
     const results = await neo4jSession.executeRead((tx) =>
       tx.run(
         /* cypher */ `
-          MATCH  (u:User)
-                -[follows:FOLLOWS{ deleted: FALSE }]
+          MATCH  (u       :User{ ext_id: $userId })
+                -[follows :FOLLOWS{ deleted: FALSE }]
                 -(followed:User)
-          
-          WHERE ID(u) = $userId
 
-          RETURN u,
-                 follows,
-                 followed
+          RETURN u, follows, followed
         `,
         { userId }
       )
@@ -81,12 +77,9 @@ export async function POST(
     const results = await neo4jSession.executeWrite((tx) =>
       tx.run(
         /* cypher */ `
-          MATCH (followed:User),
-                (follower:User)
+          MATCH (followed:User{ ext_id: $followedId }),
+                (follower:User{ ext_id: $followerId })
                 
-          WHERE ID(followed) = $followedId
-            AND ID(follower) = $followerId
-
           CREATE   (follower)
                   -[f:FOLLOWS {
                      created_at: TIMESTAMP(),
