@@ -31,9 +31,7 @@ export async function POST(req: NextRequest) {
     const results = await neo4jSession.executeWrite((tx) =>
       tx.run(
         /* cypher */ `
-          MATCH (u:User)
-          
-          WHERE ID(u) = $userId
+          MATCH (u:User{ ext_id: $userId })
 
           CREATE   (u)
                   -[:CREATED]

@@ -54,8 +54,9 @@ export async function POST() {
     const johnDoeBody = await johnDoeRes.json();
 
     const philippeFanaroId =
-      philippeFanaroBody.nodes.first().id;
-    const johnDoeId = johnDoeBody.nodes.first().id;
+      philippeFanaroBody.nodes.first().properties.ext_id;
+    const johnDoeId =
+      johnDoeBody.nodes.first().properties.ext_id;
 
     ////////////////////////////////////////////////////////
 

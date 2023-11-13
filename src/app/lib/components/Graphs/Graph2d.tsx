@@ -39,7 +39,7 @@ import {
 import { CreateConnection } from "@components/Connections/exports";
 import { NodePos } from "@components/utils";
 
-const NODE_R = 8;
+const NODE_RADIUS = 8;
 
 export function Graph2d({ data }: GraphProps) {
   const [gData, setGData] = useState(data);
@@ -165,19 +165,27 @@ export function Graph2d({ data }: GraphProps) {
       ctx.arc(
         node.x!,
         node.y!,
-        NODE_R * 1.4,
+        NODE_RADIUS * 1.4,
         0,
         2 * Math.PI,
         false
       );
-      if (lastClickedNode)
+      if (lastClickedNode) {
         ctx.fillStyle = clickedNodes.includes(node)
           ? "black"
           : "transparent";
-      else
+      } else {
         ctx.fillStyle =
           node === hoverNode ? "red" : "orange";
+      }
       ctx.fill();
+
+      // ctx.beginPath();
+      // ctx.arc(node.x!, node.y!, 20, 0, 2 * Math.PI, false);
+      // ctx.lineTo(node.x!, node.y!);
+      ctx.stroke();
+      ctx.fillStyle = "red";
+      ctx.fillText(node.id!.toString(), node.x!, node.y!);
     },
     [hoverNode, lastClickedNode, clickedNodes]
   );
@@ -242,7 +250,7 @@ export function Graph2d({ data }: GraphProps) {
         <ForceGraph2D
           ref={fgRef}
           graphData={dataMemo}
-          nodeRelSize={NODE_R}
+          nodeRelSize={NODE_RADIUS}
           nodeColor={(node) => {
             const n = node as NodeObject<OutNodeAny>;
 
@@ -266,10 +274,11 @@ export function Graph2d({ data }: GraphProps) {
           linkDirectionalParticleWidth={(link) =>
             highlightLinks.has(link) ? 4 : 0
           }
+          // nodeCanvasObjectMode={(node) => "after"}
           nodeCanvasObjectMode={(node) => {
             if (highlightNodes.has(node)) return "before";
             else if (lastClickedNode) return "after";
-            else return undefined;
+            else return "after";
           }}
           nodeCanvasObject={paintRing}
           onNodeHover={handleNodeHover}
