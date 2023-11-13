@@ -13,3 +13,7 @@ export type WithPoints = {
 export type WithCreatedAt = {
   created_at: number;
 };
+
+export type WithExtId = {
+  ext_id: string;
+};
